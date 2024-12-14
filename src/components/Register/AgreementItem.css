@@ -1,0 +1,60 @@
+.register__agreement-all {
+  font-size: var(--text-xl);
+  font-weight: var(--font-semibold);
+  line-height: var(--text-xl);
+  color: var(--content);
+  flex-direction: column;
+  gap: 0.3125rem;
+}
+
+.register__agreement-desc {
+  color: var(--gray--400);
+  font-size: var(--text-xs);
+  font-weight: var(--font-regular);
+  line-height: var(--line-height-relaxed);
+  margin-block: 0;
+}
+
+.register__agreement-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.register__link {
+  margin-left: auto;
+  margin-top: 0.3125rem;
+  text-decoration: none;
+  color: var(--primary);
+  font-size: var(--text-xs);
+  font-weight: var(--font-regular);
+}
+
+/* 이용약관동의 체크박스 */
+.register__checkbox {
+  position: absolute;
+  appearance: none;
+}
+
+.register__icon-check {
+  display: inline-block;
+  width: 1.5rem;
+  height: 1.5rem;
+  background: url('../../assets/icons/isChecked=false.svg') no-repeat
+    center/cover;
+  margin-right: 0.625rem;
+}
+
+.register__checkbox:checked + label .register__icon-check {
+  background: url('../../assets/icons/isChecked=true.svg');
+}
+
+.register__checkbox-label {
+  display: flex;
+}
+
+.register__checkbox {
+  width: 1.25rem;
+  height: 1.25rem;
+}

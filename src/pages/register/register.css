@@ -1,0 +1,162 @@
+@import url('/src/styles/a11y.css');
+
+/* 전체 크기 & 가운데 배치 */
+.register {
+  width: 40rem;
+  margin: 0 auto;
+}
+
+.register__legend {
+  text-align: center;
+  font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  font-size: var(--text-2xl);
+  font-weight: var(--font-semibold);
+  line-height: var(--line-height-loose);
+  margin-top: 5rem;
+  margin-bottom: 2.75rem;
+}
+
+.register__required-info {
+  color: var(--content);
+  font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  padding: 0 0.625rem 0.625rem 0.625rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.register__required-info::before {
+  content: '*';
+  color: var(--info---error);
+}
+/* 회원가입 폼 */
+.register__form {
+  border-top: 0.125rem solid var(--content);
+  border-bottom: 0.0625rem solid var(--content);
+  display: grid;
+  padding-block: 1.25rem;
+}
+
+.register__form-group {
+  padding-block: 1.25rem;
+  padding-left: 0.3125rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.register__label,
+.register__span {
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  line-height: var(--line-height-normal);
+  width: 8.75rem;
+  text-align: left;
+}
+
+.register__button {
+  border: 0.0625rem solid var(--primary);
+  border-radius: 0.25rem;
+  background-color: transparent;
+  font-size: var(--text-base);
+  color: var(--primary);
+  font-weight: var(--font-semibold);
+  line-height: var(--line-height-normal);
+  width: 8.125rem;
+  height: 2.75rem;
+  cursor: pointer;
+}
+
+/* 생년월일 입력창 */
+.register__birthday-wrapper {
+  border: 0.0625rem solid var(--gray--300);
+  border-radius: 0.25rem;
+  padding: 0;
+  width: 21.375rem;
+  display: flex;
+  justify-content: center;
+
+  .register__input--birthday {
+    width: 3.125rem;
+    text-align: center;
+    border: none;
+    padding: 0;
+  }
+}
+
+.register__birthday-separator::after {
+  content: '/';
+  color: var(--gray--300);
+}
+
+/* input[type='number'] 기본 화살표 속성 제거 */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* 입력창 */
+.register__input {
+  font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  font-size: var(--text-base);
+  font-weight: var(--font-regular);
+  line-height: var(--line-height-semirelaxed);
+  color: var(--gray--400);
+  width: 18.75rem;
+  height: 2.5rem;
+  border-radius: 0.25rem;
+  border: 0.0625rem solid var(--gray--300);
+  padding-inline: 1.25rem;
+}
+/* 라디오 버튼 */
+.register__radio-group {
+  color: var(--content);
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  line-height: var(--line-height-normal);
+}
+
+.register__radio {
+  appearance: none;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 0.0625rem solid var(--gray--200);
+  border-radius: 50%;
+}
+
+.register__radio:checked {
+  border: 0.4375rem solid var(--primary);
+}
+
+/* 추천인 입력란 */
+.register__inviter {
+  display: flex;
+  gap: 0.5rem;
+  margin-left: 9.5625rem;
+  margin-top: 0.625rem;
+  /* display: none; */
+}
+
+.is--valid + .register__inviter {
+  display: block;
+}
+
+/* 가입하기 버튼 */
+.register__submit {
+  background-color: var(--primary);
+  color: var(--white);
+  width: 21.25rem;
+  height: 3.375rem;
+  border: none;
+  border-radius: 0.25rem;
+  font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  line-height: var(--line-height-normal);
+  display: block;
+  margin: 2.5rem auto;
+  cursor: pointer;
+}
