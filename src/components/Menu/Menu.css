@@ -1,0 +1,49 @@
+/* 전체 스타일 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 500;
+}
+
+body {
+    background-color: #f9f9f9;
+}
+
+.menu-container {
+    width: 247px;
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* 메뉴 아이템 스타일 */
+.menu-item {
+    display: flex;
+    align-items: center;
+    width: 247px;
+    height: 40px;
+    padding: 8px;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.menu-item img {
+    width: 24px;  /* 아이콘 너비 */
+    height: 24px; /* 아이콘 높이 */
+}
+
+/* 메뉴 항목 스타일 */
+.menu-item {
+    display: flex;
+    align-items: center;
+    width: 247px;
+    height: 40px;
+    padding: 8px;
+    gap: 10px;
+    cursor: pointer;
+}
