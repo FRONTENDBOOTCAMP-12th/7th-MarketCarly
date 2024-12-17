@@ -68,11 +68,11 @@ export class MainBanner extends LitElement {
   constructor() {
     super();
     this.images = [
-      '/src/assets/images/banner01.webp',
-      '/src/assets/images/banner02.webp',
-      '/src/assets/images/banner03.webp',
-      '/src/assets/images/banner05.webp',
-      '/src/assets/images/banner02.webp',
+      '/assets/images/banner01.webp',
+      '/assets/images/banner02.webp',
+      '/assets/images/banner03.webp',
+      '/assets/images/banner05.webp',
+      '/assets/images/banner02.webp',
     ];
     this.currentSlide = 1;
   }
@@ -108,7 +108,7 @@ export class MainBanner extends LitElement {
           >
             <img
               class="main-banner__button-icon"
-              src="/src/assets/icons/PrevArrow.svg"
+              src="/assets/icons/PrevArrow.svg"
               alt=""
               aria-hidden="true"
             />
@@ -120,7 +120,7 @@ export class MainBanner extends LitElement {
           >
             <img
               class="main-banner__button-icon"
-              src="/src/assets/icons/NextArrow.svg"
+              src="/assets/icons/NextArrow.svg"
               alt=""
               aria-hidden="true"
             />

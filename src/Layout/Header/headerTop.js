@@ -115,7 +115,7 @@ export class HeaderTop extends LitElement {
           gap: 1.25rem;
           align-items: center;
         }
-        
+
         .top__icons-list {  
           list-style: none; 
           padding: 0;    
@@ -156,7 +156,7 @@ export class HeaderTop extends LitElement {
             <h1 class="top__logo">
               <a href="/" class="logo__link" aria-label="메인페이지로 이동">
                 <img
-                  src="/src/assets/icons/logo.svg"
+                  src="/assets/icons/logo.svg"
                   alt="마켓칼리"
                   class="logo__image"
                 />
@@ -169,7 +169,7 @@ export class HeaderTop extends LitElement {
                 <a href="/beauty" class="logo__link">
                   뷰티칼리
                   <img
-                    src="/src/assets/icons/new1.svg"
+                    src="/assets/icons/new1.svg"
                     alt="New"
                     class="logo__badge"
                   />
@@ -184,7 +184,7 @@ export class HeaderTop extends LitElement {
                 <li>
                   <button class="top__icons-button" aria-label="배송지 등록">
                     <img
-                      src="/src/assets/icons/Location.svg"
+                      src="/assets/icons/Location.svg"
                       alt=""
                       aria-hidden="true"
                     />
@@ -193,7 +193,7 @@ export class HeaderTop extends LitElement {
                 <li>
                   <button class="top__icons-button" aria-label="찜하기">
                     <img
-                      src="/src/assets/icons/Heart.svg"
+                      src="/assets/icons/Heart.svg"
                       alt=""
                       aria-hidden="true"
                     />
@@ -202,7 +202,7 @@ export class HeaderTop extends LitElement {
                 <li>
                   <button class="top__icons-button" aria-label="장바구니">
                     <img
-                      src="/src/assets/icons/Cart2.svg"
+                      src="/assets/icons/Cart2.svg"
                       alt=""
                       aria-hidden="true"
                     />

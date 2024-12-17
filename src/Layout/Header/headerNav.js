@@ -1,7 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import resetCSS from '../resetCSS.ts';
 import baseCSS from '../base.ts';
-import './categoryMenu.js';
 
 export class HeaderNav extends LitElement {
   static get styles() {
