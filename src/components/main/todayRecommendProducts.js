@@ -1,9 +1,7 @@
 import { LitElement, html, css } from 'lit';
-import { property } from 'lit/decorators.js';
 import '../ProductCard/ProductCard.js';
 
 export class TodayRecommendProducts extends LitElement {
-  @property({ type: Array })
   products = [];
 
   static get styles() {
