@@ -1,5 +1,6 @@
 import {LitElement, html} from 'lit';
 import styles from '/src/components/PopupAd/PopupAd.css?inline';
+import resetCSS from '/src/styles/reset.css?inline';
 
 class PopupAd extends LitElement {
 
@@ -15,7 +16,7 @@ class PopupAd extends LitElement {
 
     render() {
         return html`
-        <style>${styles}</style>
+        <style>${styles}, ${resetCSS}</style>
         <div class="popup">
         <div class="popup-content">
             <div class="popup-image"></div>
