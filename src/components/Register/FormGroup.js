@@ -12,37 +12,60 @@ class FormGroup extends LitElement {
     errorMessage: { type: String },
     errorId: { type: String },
     showAuthInput: { type: Boolean },
+    isValid: { type: Object },
   };
 
   constructor() {
     super();
     this.showAuthInput = false;
+    this.isValid = {
+      isIdValid: false,
+      isPwValid: false,
+      isEmailValid: false,
+    };
+  }
+
+  dispatchValidationEvent() {
+    const validationEvent = new CustomEvent('validation-updated', {
+      detail: {
+        isIdValid: this.isValid.isIdValid,
+        isPwValid: this.isValid.isPwValid,
+        isEmailValid: this.isValid.isEmailValid,
+      },
+      bubbles: true,
+      composed: true,
+    });
+    this.dispatchEvent(validationEvent);
   }
 
   idValidation() {
     const idInput = this.shadowRoot.querySelector('#user-id');
-    const pwRegex = /^(?=.*[a-zA-Z])(?=.*[0-9]).{6,16}$/;
-    const isValid = pwRegex.test(idInput.value);
+    const idRegex = /^(?=.*[a-zA-Z])(?=.*[0-9]).{6,16}$/;
+    this.isValid.isIdValid = idRegex.test(idInput.value);
     const error = this.shadowRoot.querySelector('#id-error');
 
-    if (!isValid) {
+    if (!this.isValid.isIdValid) {
       error.classList.add('is--valid');
     } else {
       error.classList.remove('is--valid');
     }
+
+    this.dispatchValidationEvent();
   }
 
   pwValidation() {
     const pwInput = this.shadowRoot.querySelector('#user-pw');
     const pwRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^&*?-_=+]).{6,16}$/;
-    const isValid = pwRegex.test(pwInput.value);
+    this.isValid.isPwValid = pwRegex.test(pwInput.value);
     const error = this.shadowRoot.querySelector('#pw-error');
 
-    if (!isValid) {
+    if (!this.isValid.isPwValid) {
       error.classList.add('is--valid');
     } else {
       error.classList.remove('is--valid');
     }
+
+    this.dispatchValidationEvent();
   }
 
   pwCheck() {
@@ -61,14 +84,16 @@ class FormGroup extends LitElement {
   emailValidation() {
     const emailInput = this.shadowRoot.querySelector('#user-email');
     const emailRegex = /^[\w.-]+@[\w.-]+\.[a-zA-Z]{2,}$/;
-    const isValid = emailRegex.test(emailInput.value);
+    this.isValid.isEmailValid = emailRegex.test(emailInput.value);
     const error = this.shadowRoot.querySelector('#email-error');
 
-    if (!isValid) {
+    if (!this.isValid.isEmailValid) {
       error.classList.add('is--valid');
     } else {
       error.classList.remove('is--valid');
     }
+
+    this.dispatchValidationEvent();
   }
 
   showErrorMessage() {
@@ -89,8 +114,12 @@ class FormGroup extends LitElement {
 
     if (this.id === 'user-phone' && input && value) {
       this.showAuthInput = true;
+    } else if (this.id === 'user-id' && input) {
+      console.log('user-id');
+    } else if (this.id === 'user-email' && input) {
+      console.log('user-email');
     } else {
-      alert('휴대폰 번호를 입력해주세요');
+      console.log('다시 입력');
     }
   }
 
