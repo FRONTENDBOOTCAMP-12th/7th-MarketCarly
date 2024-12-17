@@ -53,7 +53,7 @@ class AgreementSection extends LitElement {
           ></agreement-item>
 
           <agreement-item
-            value="tos"
+            value="ToS"
             required
             label="이용약관 동의"
             link

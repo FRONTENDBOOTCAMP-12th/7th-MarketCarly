@@ -1,5 +1,5 @@
 import { LitElement, html } from 'lit';
-import '/src/components/register/FormGroup.js';
+import '/src/components/Register/FormGroup.js';
 import '/src/components/Register/AgreementSection.js';
 import resetCSS from '/src/styles/reset.css?inline';
 import style from '/src/pages/register/register.css?inline';
@@ -7,11 +7,21 @@ import style from '/src/pages/register/register.css?inline';
 class Register extends LitElement {
   static properties = {
     showInviterInput: { type: Boolean },
+    isFormValid: { type: Boolean },
+    isAgreementValid: { type: Boolean },
+    isIdValid: { type: Boolean },
+    isPwValid: { type: Boolean },
+    isEmailValid: { type: Boolean },
   };
 
   constructor() {
     super();
     this.showInviterInput = false;
+    this.isFormValid = false;
+    this.isAgreementValid = false;
+    this.isIdValid = false;
+    this.isPwValid = false;
+    this.isEmailValid = false;
   }
 
   formGroupList = [
@@ -72,9 +82,57 @@ class Register extends LitElement {
     },
   ];
 
-  HandleMoreInfo(e) {
+  handleInputChange() {
+    const formGroups = this.shadowRoot.querySelectorAll('form-group');
+    const inputs = [];
+
+    for (let i = 0; i < formGroups.length - 1; i++) {
+      const input = formGroups[i].shadowRoot.querySelector('input');
+      inputs.push(input);
+    }
+
+    for (let i = 0; i < inputs.length; i++) {
+      if (!inputs[i].value) {
+        this.isFormValid = false;
+      } else {
+        this.isFormValid = true;
+      }
+    }
+  }
+
+  handleValidation(e) {
+    const { isIdValid, isPwValid, isEmailValid } = e.detail;
+    const input = e.target.shadowRoot.querySelector('input');
+    if (input.id === 'user-id') {
+      this.isIdValid = isIdValid;
+    } else if (input.id === 'user-pw') {
+      this.isPwValid = isPwValid;
+    } else if (input.id === 'user-email') {
+      this.isEmailValid = isEmailValid;
+    }
+  }
+
+  handleMoreInfo(e) {
     if (e.target.id === 'more-info-inviter') {
       this.showInviterInput = true;
+    }
+  }
+
+  handleAgreementChange(e) {
+    const { value, checked } = e.detail;
+
+    if (value === 'agree-all' && checked) {
+      this.isAgreementValid = true;
+    } else if (value !== 'agree-all') {
+      const requiredValues = ['ToS', 'personal-info', 'age'];
+      this.agreementStates = this.agreementStates || {};
+      this.agreementStates[value] = checked;
+
+      this.isAgreementValid = requiredValues.every(
+        (val) => this.agreementStates[val] === true
+      );
+    } else {
+      this.isAgreementValid = false;
     }
   }
 
@@ -100,6 +158,8 @@ class Register extends LitElement {
                 .buttonClass=${group.buttonClass || ''}
                 .errorMessage=${group.errorMessage || ''}
                 .errorId=${group.errorId || ''}
+                @input=${this.handleInputChange}
+                @validation-updated=${this.handleValidation}
               ></form-group>
             `;
           })}
@@ -179,7 +239,7 @@ class Register extends LitElement {
             id="more-info-inviter"
             class="register__radio"
             value="친구초대"
-            @change=${this.HandleMoreInfo}
+            @change=${this.handleMoreInfo}
           />
           <label for="more-info-inviter" class="register__radio-label"
             >친구초대 추천인 아이디</label
@@ -190,7 +250,7 @@ class Register extends LitElement {
             id="more-info-event"
             class="register__radio"
             value="참여이벤트명"
-            @change=${this.HandleMoreInfo}
+            @change=${this.handleMoreInfo}
           />
           <label for="more-info-event" class="register__radio-label"
             >참여 이벤트명</label
@@ -225,9 +285,17 @@ class Register extends LitElement {
     </div>
         </fieldset>
 
-        <agreement-section></agreement-section>
+        <agreement-section @agreement-change=${
+          this.handleAgreementChange
+        }></agreement-section>
 
-        <button type="submit" class="register__submit">가입하기</button>
+        <button type="submit" class="register__submit" ?disabled="${!(
+          this.isFormValid &&
+          this.isAgreementValid &&
+          this.isIdValid &&
+          this.isPwValid &&
+          this.isEmailValid
+        )}">가입하기</button>
       </form>`;
   }
 }
