@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit';
-import resetCSS from '../resetCSS';
-import baseCSS from '../base';
+import resetCSS from '../resetCSS.ts';
+import baseCSS from '../base.ts';
+import './searchBar.js';
 
 export class HeaderTop extends LitElement {
   static get styles() {
@@ -86,40 +87,27 @@ export class HeaderTop extends LitElement {
         .logo__link {
           font-size: var(--text-lg);
           font-weight: var(--font-bold);
-          color: var(--primary);
+          color: #c4c4c4;
           display: flex; 
           align-items: center; 
+        }
+
+        .logo__link--active{
+          color: #5f0080;
         }
 
         .logo__divide {
           width: 1px;
           height: 14px;
-          background-color: var(--gray--200);
+          background-color: #c4c4c4;
         }
 
-        .search__form {
+        .logo__badge {
           position: relative;
-          width: 400px;
-        }
-
-        .search__input {
-          width: 100%;
-          padding: 0.875rem 1rem;
-          border: 1px solid var(--primary, #5F0080);
-          border-radius: 4px;
-          font-size: var(--text-base);
-        }
-
-        .search__button {
-          position: absolute;
-          right: 1rem;
-          top: 50%;
-          transform: translateY(-50%);
-          background: none;
-          border: none;
-          cursor: pointer;
-          padding: 0;
-          align-items: center; 
+          width: 7px;
+          height: 7px;
+          top: -5px;
+          right: -5px
         }
 
         .top__icons, .top__icons-list {
@@ -127,6 +115,7 @@ export class HeaderTop extends LitElement {
           gap: 1.25rem;
           align-items: center;
         }
+        
         .top__icons-list {  
           list-style: none; 
           padding: 0;    
@@ -172,29 +161,23 @@ export class HeaderTop extends LitElement {
                   class="logo__image"
                 />
               </a>
-
               <nav class="logo__links" aria-label="마켓 선택">
-                <a href="/market" class="logo__link">마켓칼리</a>
+                <a href="/market" class="logo__link logo__link--active"
+                  >마켓칼리</a
+                >
                 <span class="logo__divide" aria-hidden="true"></span>
-                <a href="/beauty" class="logo__link">뷰티칼리</a>
+                <a href="/beauty" class="logo__link">
+                  뷰티칼리
+                  <img
+                    src="/src/assets/icons/new1.svg"
+                    alt="New"
+                    class="logo__badge"
+                  />
+                </a>
               </nav>
             </h1>
 
-            <form class="search__form" role="search">
-              <input
-                id="searchInput"
-                type="search"
-                class="search__input"
-                placeholder="검색어를 입력해주세요"
-              />
-              <button type="submit" class="search__button" aria-label="검색">
-                <img
-                  src="/src/assets/icons/Search.svg"
-                  alt=""
-                  aria-hidden="true"
-                />
-              </button>
-            </form>
+            <search-bar></search-bar>
 
             <nav class="top__icons" aria-label="사용자 도구">
               <ul class="top__icons-list" role="list">
