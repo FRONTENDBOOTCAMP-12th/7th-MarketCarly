@@ -1,5 +1,6 @@
-import { LitElement, html } from 'lit';
-import styles from '@/components/PopupAd/PopupAd.css?inline';
+import {LitElement, html} from 'lit';
+import styles from '/src/components/PopupAd/PopupAd.css?inline';
+import resetCSS from '/src/styles/reset.css?inline';
 
 class PopupAd extends LitElement {
   handleCloseToday() {
@@ -12,11 +13,16 @@ class PopupAd extends LitElement {
     popup.style.display = 'none';
   }
 
-  render() {
-    return html` <style>
-        ${styles}
-      </style>
-      <div class="popup">
+
+    handleClosePopUp(){
+        const popup = this.shadowRoot.querySelector('.popup');
+        popup.style.display = 'none'; 
+    }
+
+    render() {
+        return html`
+        <style>${styles}, ${resetCSS}</style>
+        <div class="popup">
         <div class="popup-content">
           <div class="popup-image"></div>
           <div class="popup-text">
