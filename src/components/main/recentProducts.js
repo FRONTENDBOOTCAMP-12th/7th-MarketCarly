@@ -1,6 +1,6 @@
 // src/components/main/RecentProducts.js
 import { LitElement, html, css } from 'lit';
-import resetCSS from '../../Layout/resetCSS';
+import resetCSS from '@/Layout/resetCSS';
 
 export class RecentProducts extends LitElement {
   static get styles() {
@@ -96,10 +96,10 @@ export class RecentProducts extends LitElement {
   constructor() {
     super();
     this.products = [
-      { src: '/src/assets/images/product1.jpg', alt: '상품 1', href: '#' },
-      { src: '/src/assets/images/product2.jpg', alt: '상품 2', href: '#' },
-      { src: '/src/assets/images/product3.jpg', alt: '상품 3', href: '#' },
-      { src: '/src/assets/images/product3.jpg', alt: '상품 4', href: '#' },
+      { src: '/assets/images/banner01.webp', alt: '상품 1', href: '#' },
+      { src: '/assets/images/banner02.webp', alt: '상품 2', href: '#' },
+      { src: '/assets/images/banner03.webp', alt: '상품 3', href: '#' },
+      { src: '/assets/images/banner05.webp', alt: '상품 4', href: '#' },
     ];
   }
 
@@ -109,7 +109,7 @@ export class RecentProducts extends LitElement {
         <button class="recent__button" aria-label="이전 상품 보기">
           <img
             class="recent__button-icon"
-            src="/src/assets/icons/Direction=Up.svg"
+            src="/assets/icons/Direction=Up.svg"
             alt=""
             aria-hidden="true"
           />
@@ -140,7 +140,7 @@ export class RecentProducts extends LitElement {
         <button class="recent__button" aria-label="다음 상품 보기">
           <img
             class="recent__button-icon"
-            src="/src/assets/icons/Direction=Down.svg"
+            src="/assets/icons/Direction=Down.svg"
             alt=""
             aria-hidden="true"
           />

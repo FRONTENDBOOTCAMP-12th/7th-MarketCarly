@@ -40,7 +40,7 @@ export class LineBanner extends LitElement {
 
   constructor() {
     super();
-    this.imageUrl = '/src/assets/images/line-banner-1.webp';
+    this.imageUrl = '/assets/images/line-banner-1.webp';
     this.altText = '더 풍성해진 10월의 퍼플위크';
   }
 

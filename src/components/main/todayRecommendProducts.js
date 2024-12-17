@@ -28,16 +28,7 @@ export class TodayRecommendProducts extends LitElement {
               ${this.products.map(
                 (product) => html`
                   <li>
-                    <product-card
-                      .image=${product.image}
-                      .delivery=${product.delivery}
-                      .title=${product.title}
-                      .price=${product.price}
-                      .originalPrice=${product.originalPrice}
-                      .isDiscounted=${product.isDiscounted}
-                      .discount=${product.discount}
-                      .badges=${product.badges}
-                    ></product-card>
+                    <product-card></product-card>
                   </li>
                 `
               )}
