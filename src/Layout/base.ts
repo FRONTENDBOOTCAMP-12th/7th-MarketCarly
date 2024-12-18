@@ -1,0 +1,74 @@
+import { css } from 'lit';
+
+export default css`
+  @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
+
+  :root {
+    /*  --------------------------- 색상 ---------------------------  */
+    --black: #000000;
+    --white: #ffffff;
+    --primary: #5f0080;
+    --secondary: #bd76ff;
+    --content: #333;
+    --gray--50: #f9f9f9;
+    --gray--100: #e1e1e1;
+    --gray--200: #c4c4c4;
+    --gray--300: #a6a6a6;
+    --gray--400: #898989;
+    --gray--500: #6b6b6b;
+    --gray--600: #565656;
+    --gray--700: #404040;
+    --gray--800: #2b2b2b;
+    --gray--900: #151515;
+    --accent--yellow: #fa622f;
+    --blue--100: #cce0ff;
+    --blue--200: #99c2ff;
+    --blue--300: #66a3ff;
+    --blue--400: #3385ff;
+    --blue--500: #0066ff;
+    --blue--600: #0052cc;
+    --blue--700: #003d99;
+    --blue--800: #002966;
+    --blue--900: #001433;
+    --info---error: #f03f40;
+
+    /* -------------------------------- 폰트 크기 ------------------------------- */
+    --text-xs: 0.75rem;
+    --text-sm: 0.875rem;
+    --text-base: 1rem;
+    --text-lg: 1.125rem;
+    --text-xl: 1.25rem;
+    --text-2xl: 1.5rem;
+    --text-3xl: 1.875rem;
+    --text-4xl: 2.5rem;
+    --text-5xl: 3rem;
+
+    /* -------------------------------- 폰트 굵기 ------------------------------- */
+    --font-light: 300;
+    --font-regular: 400;
+    --font-medium: 500;
+    --font-semibold: 600;
+    --font-bold: 700;
+
+    /* -------------------------------- 줄 간격 ------------------------------- */
+    --line-height-tight: 1.25;
+    --line-height-semitight: 1.4;
+    --line-height-normal: 1.5;
+    --line-height-semirelaxed: 1.6;
+    --line-height-relaxed: 1.7;
+    --line-height-loose: 2;
+
+    /* Effect styles */
+    --text: inset 1px 1px 0px rgba(0, 0, 0, 1);
+    --above---high: 0px -16px 48px rgba(0, 0, 0, 0.3);
+    --above---medium: 0px -8px 36px rgba(0, 0, 0, 0.2);
+    --above---low: 0px -4px 24px rgba(0, 0, 0, 0.1);
+    --below---high: 0px 16px 48px rgba(0, 0, 0, 0.3);
+    --below---medium: 0px 8px 36px rgba(0, 0, 0, 0.2);
+    --below---low: 0px 4px 24px rgba(0, 0, 0, 0.1);
+  }
+
+  body {
+    font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  }
+`;
