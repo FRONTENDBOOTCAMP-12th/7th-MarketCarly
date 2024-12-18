@@ -28,16 +28,17 @@ class FormGroup extends LitElement {
   }
 
   dispatchValidationEvent() {
-    const validationEvent = new CustomEvent('validation-updated', {
-      detail: {
-        isIdValid: this.isValid.isIdValid,
-        isPwValid: this.isValid.isPwValid,
-        isEmailValid: this.isValid.isEmailValid,
-      },
-      bubbles: true,
-      composed: true,
-    });
-    this.dispatchEvent(validationEvent);
+    this.dispatchEvent(
+      new CustomEvent('validation-updated', {
+        detail: {
+          isIdValid: this.isValid.isIdValid,
+          isPwValid: this.isValid.isPwValid,
+          isEmailValid: this.isValid.isEmailValid,
+        },
+        bubbles: true,
+        composed: true,
+      })
+    );
   }
 
   idValidation() {

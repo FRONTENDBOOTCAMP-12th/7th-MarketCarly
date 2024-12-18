@@ -1,5 +1,37 @@
 @import url('/src/styles/a11y.css');
 
+.register__legend {
+  text-align: center;
+  font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  font-size: var(--text-2xl);
+  font-weight: var(--font-semibold);
+  line-height: var(--line-height-loose);
+  margin-top: 5rem;
+  margin-bottom: 2.75rem;
+}
+
+.register__required-info {
+  color: var(--content);
+  font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  padding: 0 0.625rem 0.625rem 0.625rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.register__required-info::before {
+  content: '*';
+  color: var(--info---error);
+}
+/* 회원가입 폼 */
+.register__form {
+  border-top: 0.125rem solid var(--content);
+  border-bottom: 0.0625rem solid var(--content);
+  display: grid;
+  padding-block: 1.25rem;
+}
+
 .register__form-group {
   padding-block: 1.25rem;
   padding-left: 0.3125rem;
@@ -18,27 +50,7 @@
   text-align: left;
 }
 
-.register__label--required::after {
-  content: '*';
-  color: var(--info---error);
-}
-
-/* 입력창 */
-.register__input {
-  font-family: 'Pretendard Variable', Pretendard, sans-serif;
-  font-size: var(--text-base);
-  font-weight: var(--font-regular);
-  line-height: var(--line-height-semirelaxed);
-  color: var(--gray--400);
-  width: 18.75rem;
-  height: 2.5rem;
-  border-radius: 0.25rem;
-  border: 0.0625rem solid var(--gray--300);
-  padding-inline: 1.25rem;
-}
-
 .register__button {
-  font-family: 'Pretendard Variable', Pretendard, sans-serif;
   border: 0.0625rem solid var(--primary);
   border-radius: 0.25rem;
   background-color: transparent;
@@ -73,6 +85,26 @@
   color: var(--gray--300);
 }
 
+/* input[type='number'] 기본 화살표 속성 제거 */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* 입력창 */
+.register__input {
+  font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  font-size: var(--text-base);
+  font-weight: var(--font-regular);
+  line-height: var(--line-height-semirelaxed);
+  color: var(--gray--400);
+  width: 18.75rem;
+  height: 2.5rem;
+  border-radius: 0.25rem;
+  border: 0.0625rem solid var(--gray--300);
+  padding-inline: 1.25rem;
+}
 /* 라디오 버튼 */
 .register__radio-group {
   color: var(--content);
@@ -93,38 +125,15 @@
   border: 0.4375rem solid var(--primary);
 }
 
-/* input[type='number'] 기본 화살표 속성 제거 */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-/* 에러 메시지 */
-.register__error-message {
-  color: var(--info---error);
-  margin-left: 9.375rem;
-  font-size: var(--text-sm);
-  font-weight: var(--font-regular);
-  line-height: var(--line-height-relaxed);
-  display: none;
-}
-
-.is--valid {
-  display: block;
-}
-
-/* 인증번호 확인란, 주소 입력란 */
-.register__auth,
-.register__address {
-  margin-top: 0.625rem;
-  margin-left: 9.5625rem;
-  display: flex;
-  gap: 0.5rem;
-}
-
 /* 추천인 입력란 */
 .register__inviter {
-  margin-left: 9.375rem;
+  display: flex;
+  gap: 0.5rem;
+  margin-left: 9.5625rem;
   margin-top: 0.625rem;
+  /* display: none; */
+}
+
+.is--valid + .register__inviter {
+  display: block;
 }
