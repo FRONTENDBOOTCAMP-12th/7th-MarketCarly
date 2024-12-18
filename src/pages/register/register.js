@@ -11,6 +11,7 @@ class Register extends LitElement {
     isIdValid: { type: Boolean },
     isPwValid: { type: Boolean },
     isEmailValid: { type: Boolean },
+    isAuthValid: { type: Boolean },
   };
 
   constructor() {
@@ -20,6 +21,7 @@ class Register extends LitElement {
     this.isIdValid = false;
     this.isPwValid = false;
     this.isEmailValid = false;
+    this.isAuthValid = false;
   }
 
   handleAgreementChange(e) {
@@ -50,6 +52,10 @@ class Register extends LitElement {
     this.isEmailValid = e.target.isEmailValid;
   }
 
+  handleAuthValidationChange(e) {
+    this.isAuthValid = e.target.isAuthValid;
+  }
+
   render() {
     return html` <style>
         ${resetCSS}
@@ -59,6 +65,7 @@ class Register extends LitElement {
         <form-field
           @form-validation=${this.handleFormValidationChange}
           @input-validation=${this.handleInputValidationChange}
+          @auth-validation=${this.handleAuthValidationChange}
         ></form-field>
         <agreement-section
           @agreement-change=${this.handleAgreementChange}
@@ -72,7 +79,8 @@ class Register extends LitElement {
             this.isAgreementValid &&
             this.isIdValid &&
             this.isPwValid &&
-            this.isEmailValid
+            this.isEmailValid &&
+            this.isAuthValid
           )}"
         >
           가입하기

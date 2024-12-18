@@ -15,6 +15,7 @@ class FormGroup extends LitElement {
     showAuthInput: { type: Boolean },
     isValid: { type: Object },
     showDetailAddress: { type: Boolean },
+    isAuthValid: { type: Boolean },
   };
 
   constructor() {
@@ -26,6 +27,7 @@ class FormGroup extends LitElement {
       isEmailValid: false,
     };
     this.showDetailAddress = false;
+    this.isAuthValid = false;
   }
 
   dispatchValidationEvent() {
@@ -145,6 +147,30 @@ class FormGroup extends LitElement {
     }).open();
   }
 
+  authComplete() {
+    const authInput = this.shadowRoot.querySelector('#auth-number');
+    const authInputValue = authInput.value;
+    const authNumber = '12345';
+
+    if (authInputValue === authNumber) {
+      this.isAuthValid = true;
+      alert('인증 완료!');
+    } else {
+      alert('인증 실패..');
+      authInput.value = '';
+    }
+
+    this.dispatchEvent(
+      new CustomEvent('auth-validation', {
+        detail: {
+          isAuthValid: this.isAuthValid,
+        },
+        bubbles: true,
+        composed: true,
+      })
+    );
+  }
+
   handleButtonClick() {
     const phoneButton = this.shadowRoot.querySelector(
       '.register__button--phone-check'
@@ -159,8 +185,9 @@ class FormGroup extends LitElement {
 
       if (phoneNumber) {
         this.showAuthInput = true;
+        this.updateComplete.then(() => this.authComplete);
       } else {
-        console.log('input error');
+        alert('휴대폰 번호를 입력해주세요');
       }
     } else if (addressButton) {
       this.kakaoAddressApi();
@@ -223,6 +250,7 @@ class FormGroup extends LitElement {
             <button
               type="button"
               class="register__button register__button--check-auth"
+              @click=${this.authComplete}
             >
               인증번호 확인
             </button>

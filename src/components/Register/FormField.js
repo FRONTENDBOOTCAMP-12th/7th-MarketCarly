@@ -10,6 +10,7 @@ class FormField extends LitElement {
     isPwValid: { type: Boolean },
     isEmailValid: { type: Boolean },
     isFormValid: { type: Boolean },
+    isAuthValid: { type: Boolean },
   };
 
   constructor() {
@@ -19,6 +20,7 @@ class FormField extends LitElement {
     this.isPwValid = false;
     this.isEmailValid = false;
     this.isFormValid = false;
+    this.isAuthValid = false;
   }
 
   formGroupList = [
@@ -140,6 +142,20 @@ class FormField extends LitElement {
     );
   }
 
+  authValidation(e) {
+    this.isAuthValid = e.target.isAuthValid;
+
+    this.dispatchEvent(
+      new CustomEvent('auth-validation', {
+        detail: {
+          isAuthValid: this.isAuthValid,
+        },
+        bubbles: true,
+        composed: true,
+      })
+    );
+  }
+
   render() {
     return html`
     <style>
@@ -164,6 +180,7 @@ class FormField extends LitElement {
                 .errorId=${group.errorId || ''}
                 @input=${this.handleInputChange}
                 @validation-updated=${this.handleValidation}
+                @auth-validation=${this.authValidation}
               ></form-group>
             `;
           })}
