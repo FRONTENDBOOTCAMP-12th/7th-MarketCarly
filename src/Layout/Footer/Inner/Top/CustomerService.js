@@ -74,12 +74,6 @@ export class CustomerService extends LitElement {
           line-height: 1.5;
         }
 
-        .service-inquiry__time + .service-inquiry__time,
-        .service-inquiry__description + .service-inquiry__description {
-          margin-top: 8px;
-        }
-
-        /* Email Area */
         .service__email {
           margin-top: 24px;
         }
@@ -143,29 +137,27 @@ export class CustomerService extends LitElement {
             <article class="service-inquiry">
               <div class="service-inquiry__wrapper">
                 <button class="service-inquiry__button" type="button">
-                  카카오톡 문의
+                  1:1 문의
                 </button>
                 <div class="service-inquiry__content">
-                  <time class="service-inquiry__time"
-                    >월~토요일 | 오전 7시 - 오후 6시</time
-                  >
-                  <time class="service-inquiry__time"
-                    >일/공휴일 | 오전 7시 - 오후 1시</time
-                  >
+                  <time class="service-inquiry__time">365일</time>
+                  <p class="service-inquiry__time">
+                    고객센터 운영시간에 순차적으로 답변드리겠습니다.
+                  </p>
                 </div>
               </div>
             </article>
             <article class="service-inquiry">
               <div class="service-inquiry__wrapper">
                 <button class="service-inquiry__button" type="button">
-                  카카오톡 문의
+                  대량주문 문의
                 </button>
                 <div class="service-inquiry__content">
                   <time class="service-inquiry__time"
-                    >월~토요일 | 오전 7시 - 오후 6시</time
+                    >월~금요일 | 오전9시 - 오후 6시</time
                   >
                   <time class="service-inquiry__time"
-                    >일/공휴일 | 오전 7시 - 오후 1시</time
+                    >점심시간 | 낮 12시 - 오후 1시</time
                   >
                 </div>
               </div>
