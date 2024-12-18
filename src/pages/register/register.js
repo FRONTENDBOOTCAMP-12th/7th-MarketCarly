@@ -76,7 +76,10 @@ class Register extends LitElement {
       buttonClass: 'register__button--phone-check',
     },
     {
+      type: 'text',
+      id: 'user-address',
       label: '주소',
+      placeholder: '주소 입력란',
       button: '주소 검색',
       buttonClass: 'register__button--address-search',
     },
