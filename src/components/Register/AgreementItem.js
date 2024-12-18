@@ -1,5 +1,6 @@
 import { LitElement, html } from 'lit';
 import style from '/src/components/Register/AgreementItem.css?inline';
+import resetCSS from '/src/styles/reset.css?inline';
 
 class AgreementItem extends LitElement {
   static properties = {
@@ -61,6 +62,7 @@ class AgreementItem extends LitElement {
     return html`
       <style>
         ${style}
+        ${resetCSS}
       </style>
       <div
         class="register__agreement-item ${this.description

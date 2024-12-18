@@ -1,47 +1,15 @@
 import { LitElement, html, css } from 'lit';
 import '/src/components/Register/AgreementItem.js';
-import resetCSS from '/src/Layout/resetCSS.ts';
+import resetCSS from '/src/styles/reset.css?inline';
+import style from '/src/components/Register/AgreementSection.css?inline';
 
 class AgreementSection extends LitElement {
-  static styles = [
-    resetCSS,
-    css`
-      /* 이용 약관 동의 */
-      .register__agreement {
-        border-bottom: 0.0625rem solid var(--gray--200);
-        display: flex;
-        flex-direction: row;
-        gap: 3.125rem;
-        padding-block: 1.25rem;
-        color: var(--content);
-        font-size: var(--text-base);
-        font-weight: var(--font-regular);
-        line-height: var(--line-height-semirelaxed);
-      }
-
-      .register__agreement-label {
-        font-size: var(--text-base);
-        font-weight: var(--font-semibold);
-        line-height: var(--line-height-normal);
-        width: 6.875rem;
-        padding-left: 0.625rem;
-      }
-
-      .register__agreement-label::after {
-        content: '*';
-        color: var(--info---error);
-      }
-
-      .register__agreement-checklist {
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-      }
-    `,
-  ];
-
   render() {
     return html`
+      <style>
+        ${style}
+        ${resetCSS}
+      </style>
       <fieldset class="register__agreement">
         <span class="register__agreement-label">이용약관동의</span>
 
