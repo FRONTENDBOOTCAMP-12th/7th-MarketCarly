@@ -51,11 +51,6 @@
   cursor: pointer;
 }
 
-/* 주소 버튼 */
-.register__button--address-search {
-  width: 21.375rem;
-}
-
 /* 생년월일 입력창 */
 .register__birthday-wrapper {
   border: 0.0625rem solid var(--gray--300);
@@ -120,7 +115,8 @@ input::-webkit-inner-spin-button {
 }
 
 /* 인증번호 확인란 */
-.register__auth {
+.register__auth,
+.register__address {
   margin-top: 0.625rem;
   margin-left: 9.5625rem;
   display: flex;

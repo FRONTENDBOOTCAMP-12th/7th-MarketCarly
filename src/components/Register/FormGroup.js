@@ -13,6 +13,7 @@ class FormGroup extends LitElement {
     errorId: { type: String },
     showAuthInput: { type: Boolean },
     isValid: { type: Object },
+    showDetailAddress: { type: Boolean },
   };
 
   constructor() {
@@ -23,6 +24,7 @@ class FormGroup extends LitElement {
       isPwValid: false,
       isEmailValid: false,
     };
+    this.showDetailAddress = false;
   }
 
   dispatchValidationEvent() {
@@ -108,18 +110,58 @@ class FormGroup extends LitElement {
     }
   }
 
-  handleButtonClick() {
-    const input = this.shadowRoot.querySelector(`#${this.id}`);
-    const value = Number(input.value);
+  kakaoAddressApi() {
+    new daum.Postcode({
+      oncomplete: (data) => {
+        let address = '';
+        let extraInfo = '';
 
-    if (this.id === 'user-phone' && input && value) {
-      this.showAuthInput = true;
-    } else if (this.id === 'user-id' && input) {
-      console.log('user-id');
-    } else if (this.id === 'user-email' && input) {
-      console.log('user-email');
-    } else {
-      console.log('다시 입력');
+        if (data.userSelectedType === 'R') {
+          address = data.roadAddress;
+        } else {
+          address = data.jibunAddress;
+        }
+
+        if (data.userSelectedType === 'R') {
+          if (data.bname && /[동|로|가]$/g.test(data.bname)) {
+            extraInfo += data.bname;
+          }
+          if (data.buildingName && data.apartment === 'Y') {
+            extraInfo += extraInfo
+              ? `, ${data.buildingName}`
+              : data.buildingName;
+          }
+          if (extraInfo) {
+            extraInfo = `(${extraInfo})`;
+          }
+        }
+        const addressInput = this.shadowRoot.querySelector('#user-address');
+        addressInput.value = address + ' ' + extraInfo;
+
+        this.showDetailAddress = true;
+      },
+    }).open();
+  }
+
+  handleButtonClick() {
+    const phoneButton = this.shadowRoot.querySelector(
+      '.register__button--phone-check'
+    );
+    const addressButton = this.shadowRoot.querySelector(
+      '.register__button--address-search'
+    );
+
+    if (phoneButton) {
+      const phoneInput = this.shadowRoot.querySelector('#user-phone');
+      const phoneNumber = Number(phoneInput.value);
+
+      if (phoneNumber) {
+        this.showAuthInput = true;
+      } else {
+        console.log('input error');
+      }
+    } else if (addressButton) {
+      this.kakaoAddressApi();
     }
   }
 
@@ -182,6 +224,24 @@ class FormGroup extends LitElement {
               인증번호 확인
             </button>
           </div>`
+        : ''}
+      ${this.showDetailAddress
+        ? html`
+            <div class="register__address">
+              <label
+                for="user-detail-address"
+                class="register__label--none sr-only"
+                >상세 주소</label
+              >
+              <input
+                type="text"
+                id="user-detail-address"
+                name="user-detail-address"
+                class="register__input"
+                placeholder="상세 주소를 입력하세요"
+              />
+            </div>
+          `
         : ''}
     `;
   }
