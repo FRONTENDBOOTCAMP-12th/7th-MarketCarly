@@ -1,5 +1,6 @@
 import { LitElement, html } from 'lit';
 import style from '/src/components/Register/FormGroup.css?inline';
+import resetCSS from '/src/styles/reset.css?inline';
 
 class FormGroup extends LitElement {
   static properties = {
@@ -170,6 +171,7 @@ class FormGroup extends LitElement {
     return html`
       <style>
         ${style}
+        ${resetCSS}
       </style>
       <div class="register__form-group">
         <label
