@@ -23,14 +23,9 @@ export class HeaderNav extends LitElement {
           justify-content: space-between;
         }
 
-        .nav__left {
-          display: flex;
-          align-items: center;
-          gap: 1rem;
-        }
-
         .nav__menu {
           display: flex;
+          font-size: 1rem;
 
           & a {
             display: flex;
@@ -48,22 +43,23 @@ export class HeaderNav extends LitElement {
           display: flex;
           align-items: center;
           justify-content: center;
-          gap: 0.5rem;
-          padding: 0.5rem 1rem;
-          border: 1px solid var(--gray--200);
-          border-radius: 999px;
+          gap: 0.25rem;
+          padding: 0.25rem 0.5rem;
+          border: 1px solid var(--gray-300, #a6a6a6);
+          border-radius: 16px;
           color: var(--gray--800);
           font-size: var(--text-sm);
           background-color: var(--white);
-          font-weight: 500;
+          font-weight: 400;
+          font-size: 0.75rem;
         }
 
         .nav__delivery-info--highlight {
-          color: var(--primary);
+          color: var(--primary, #5f0080);
         }
 
         .nav__delivery-info--text {
-          color: var(--gray--800);
+          color: var(--gray-500, #6b6b6b);
         }
       `,
     ];
