@@ -1,6 +1,7 @@
 import { LitElement, html } from 'lit';
 import style from '/src/components/Register/FormGroup.css?inline';
 import resetCSS from '/src/styles/reset.css?inline';
+import pb from '/src/api/pocketbase';
 
 class FormGroup extends LitElement {
   static properties = {
@@ -114,6 +115,37 @@ class FormGroup extends LitElement {
     }
   }
 
+  authComplete() {
+    const authInput = this.shadowRoot.querySelector('#auth-number');
+    const authInputValue = authInput.value;
+    const authNumber = '12345';
+
+    if (authInputValue === authNumber) {
+      this.isAuthValid = true;
+      Swal.fire({
+        icon: 'success',
+        title: '인증 완료!',
+      });
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: '인증 실패..',
+        text: '인증 번호를 다시 입력해주세요',
+      });
+      authInput.value = '';
+    }
+
+    this.dispatchEvent(
+      new CustomEvent('auth-validation', {
+        detail: {
+          isAuthValid: this.isAuthValid,
+        },
+        bubbles: true,
+        composed: true,
+      })
+    );
+  }
+
   kakaoAddressApi() {
     new daum.Postcode({
       oncomplete: (data) => {
@@ -147,35 +179,50 @@ class FormGroup extends LitElement {
     }).open();
   }
 
-  authComplete() {
-    const authInput = this.shadowRoot.querySelector('#auth-number');
-    const authInputValue = authInput.value;
-    const authNumber = '12345';
+  async idCheck() {
+    const idInput = this.shadowRoot.querySelector('#user-id');
+    const idValue = idInput.value;
 
-    if (authInputValue === authNumber) {
-      this.isAuthValid = true;
-      Swal.fire({
-        icon: 'success',
-        title: '인증 완료!',
-      });
-    } else {
-      Swal.fire({
-        icon: 'error',
-        title: '인증 실패..',
-        text: '인증 번호를 다시 입력해주세요',
-      });
-      authInput.value = '';
+    try {
+      const record = await pb
+        .collection('user')
+        .getFirstListItem(`userId='${idValue}'`);
+
+      if (record) {
+        Swal.fire({
+          title: '중복된 아이디입니다.',
+          text: '다른 아이디를 입력해주세요.',
+        });
+        idValue = '';
+      }
+    } catch (error) {
+      if (error.status === 404) {
+        Swal.fire('사용 가능한 아이디입니다.');
+      } else {
+        console.error('idCheck error');
+      }
     }
+  }
 
-    this.dispatchEvent(
-      new CustomEvent('auth-validation', {
-        detail: {
-          isAuthValid: this.isAuthValid,
-        },
-        bubbles: true,
-        composed: true,
-      })
-    );
+  async emailCheck() {
+    const emailInput = this.shadowRoot.querySelector('#user-email');
+    const emailValue = emailInput.value;
+
+    try {
+      const record = await pb
+        .collection('user')
+        .getFirstListItem(`email='${emailValue}'`);
+
+      if (record) {
+        Swal.fire('중복된 이메일입니다.');
+      }
+    } catch (error) {
+      if (error.status === 404) {
+        Swal.fire('사용 가능한 이메일입니다.');
+      } else {
+        console.error('emailCheck error');
+      }
+    }
   }
 
   handleButtonClick() {
@@ -184,6 +231,12 @@ class FormGroup extends LitElement {
     );
     const addressButton = this.shadowRoot.querySelector(
       '.register__button--address-search'
+    );
+    const idCheckButton = this.shadowRoot.querySelector(
+      '.register__button--check-id'
+    );
+    const emailCheckButton = this.shadowRoot.querySelector(
+      '.register__button--check-email'
     );
 
     if (phoneButton) {
@@ -198,6 +251,10 @@ class FormGroup extends LitElement {
       }
     } else if (addressButton) {
       this.kakaoAddressApi();
+    } else if (idCheckButton) {
+      this.idCheck();
+    } else if (emailCheckButton) {
+      this.emailCheck();
     }
   }
 
