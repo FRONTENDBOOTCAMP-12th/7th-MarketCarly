@@ -181,7 +181,7 @@ class FormGroup extends LitElement {
 
   async idCheck() {
     const idInput = this.shadowRoot.querySelector('#user-id');
-    const idValue = idInput.value;
+    let idValue = idInput.value;
 
     try {
       const record = await pb
@@ -193,7 +193,6 @@ class FormGroup extends LitElement {
           title: '중복된 아이디입니다.',
           text: '다른 아이디를 입력해주세요.',
         });
-        idValue = '';
       }
     } catch (error) {
       if (error.status === 404) {
