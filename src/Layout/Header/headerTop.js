@@ -184,7 +184,7 @@ export class HeaderTop extends LitElement {
                 <li>
                   <button class="top__icons-button" aria-label="배송지 등록">
                     <img
-                      src="/assets/icons/Location.svg"
+                      src="/assets/icons/location.svg"
                       alt=""
                       aria-hidden="true"
                     />
