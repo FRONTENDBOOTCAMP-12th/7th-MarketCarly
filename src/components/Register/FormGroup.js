@@ -154,9 +154,16 @@ class FormGroup extends LitElement {
 
     if (authInputValue === authNumber) {
       this.isAuthValid = true;
-      alert('인증 완료!');
+      Swal.fire({
+        icon: 'success',
+        title: '인증 완료!',
+      });
     } else {
-      alert('인증 실패..');
+      Swal.fire({
+        icon: 'error',
+        title: '인증 실패..',
+        text: '인증 번호를 다시 입력해주세요',
+      });
       authInput.value = '';
     }
 
@@ -187,7 +194,7 @@ class FormGroup extends LitElement {
         this.showAuthInput = true;
         this.updateComplete.then(() => this.authComplete);
       } else {
-        alert('휴대폰 번호를 입력해주세요');
+        Swal.fire('휴대폰 번호를 입력해주세요');
       }
     } else if (addressButton) {
       this.kakaoAddressApi();
