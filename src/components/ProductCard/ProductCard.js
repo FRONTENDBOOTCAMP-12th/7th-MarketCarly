@@ -1,11 +1,12 @@
-// components/ProductCard/index.js
 import { LitElement, html, css } from 'lit';
-import resetCSS from '../../Layout/resetCSS';
+import resetCSS from '@/Layout/resetCSS';
+import baseCSS from '@/Layout/base';
+import '../ProductCard/ProductBadge.js';
 
 export class ProductCard extends LitElement {
   constructor() {
     super();
-    this.image = '/src/assets/images/product1.jpg';
+    this.image = '/assets/images/product1.jpg';
     this.delivery = '샛별배송';
     this.title = '[풀무원] 탱탱쫄면';
     this.price = 4980;
@@ -34,6 +35,7 @@ export class ProductCard extends LitElement {
   static get styles() {
     return [
       resetCSS,
+      baseCSS,
       css`
         .product {
           position: relative;
@@ -99,13 +101,20 @@ export class ProductCard extends LitElement {
         }
 
         .product__price-wrap {
+          display: block;
+        }
+
+        .product__price-info {
           display: flex;
           align-items: center;
           gap: 0.5rem;
+          font-size: 21.328px;
+          font-weight: 600;
+          line-height: 150%;
         }
 
         .product__discount-rate {
-          color: var(--info---error);
+          color: var(--accent-yellow, #fa622f);
           font-weight: var(--font-semibold);
         }
 
@@ -142,7 +151,7 @@ export class ProductCard extends LitElement {
               alt="${this.title}"
             />
             <button class="product__cart" aria-label="장바구니 담기">
-              <img src="/src/assets/icons/Cart.svg" alt="" aria-hidden="true" />
+              <img src="/assets/icons/Cart.svg" alt="" aria-hidden="true" />
             </button>
           </div>
 
@@ -152,33 +161,36 @@ export class ProductCard extends LitElement {
             <div class="product__price-wrap">
               ${this.isDiscounted
                 ? html`
-                    <strong class="product__discount-rate"
-                      >${this.discount}%</strong
-                    >
-                    <strong class="product__price">
-                      ${this.price?.toLocaleString() ?? 0}원
-                    </strong>
+                    <div class="product__price-info">
+                      <strong class="product__discount-rate"
+                        >${this.discount}%</strong
+                      >
+                      <strong class="product__price"
+                        >${this.price?.toLocaleString() ?? 0}원</strong
+                      >
+                    </div>
                     <del class="product__price--original">
                       ${this.originalPrice?.toLocaleString() ?? 0}원
                     </del>
                   `
                 : html`
-                    <strong class="product__price">
-                      ${this.price?.toLocaleString() ?? 0}원
-                    </strong>
+                    <div class="product__price-info">
+                      <strong class="product__price"
+                        >${this.price?.toLocaleString() ?? 0}원</strong
+                      >
+                    </div>
                   `}
             </div>
-
             ${this.badges?.length
               ? html`
                   <ul class="product__badges">
                     ${this.badges.map(
                       (badge) => html`
                         <li>
-                          <span
-                            class="product__badge product__badge--${badge.type}"
-                            >${badge.text}</span
-                          >
+                          <product-badge
+                            type=${badge.type}
+                            text=${badge.text}
+                          ></product-badge>
                         </li>
                       `
                     )}

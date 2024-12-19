@@ -1,4 +1,3 @@
-// Layout/Header/index.js
 import { LitElement, html, css } from 'lit';
 import './headerTop';
 import './headerNav';

@@ -1,6 +1,5 @@
-// src/components/main/LineBanner.js
 import { LitElement, html, css } from 'lit';
-import resetCSS from '../../Layout/resetCSS';
+import resetCSS from '@/Layout/resetCSS';
 
 export class LineBanner extends LitElement {
   static get styles() {

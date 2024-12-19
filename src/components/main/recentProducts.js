@@ -1,4 +1,3 @@
-// src/components/main/RecentProducts.js
 import { LitElement, html, css } from 'lit';
 import resetCSS from '@/Layout/resetCSS';
 
