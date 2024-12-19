@@ -1,0 +1,28 @@
+/* 전체 크기 & 가운데 배치 */
+.register {
+  width: 40rem;
+  margin: 0 auto;
+}
+
+/* 가입하기 버튼 */
+.register__submit {
+  background-color: var(--primary);
+  color: var(--white);
+  width: 21.25rem;
+  height: 3.375rem;
+  border: none;
+  border-radius: 0.25rem;
+  font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  line-height: var(--line-height-normal);
+  display: block;
+  margin: 2.5rem auto;
+  cursor: pointer;
+}
+
+.register__submit:disabled {
+  background-color: var(--gray--400);
+  color: var(--black);
+  cursor: not-allowed;
+}

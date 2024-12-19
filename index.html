@@ -4,16 +4,24 @@
     <title>Vite Pure css</title>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <link rel="stylesheet" href="/src/styles/style.css" />
     <link rel="stylesheet" href="/src/styles/reset.css" />
+    <link rel="stylesheet" href="/src/styles/style.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script type="module" src="/main.js"></script>
+    <script type="module" src="/src/main.js"></script>
   </head>
   <body>
     <div id="app">
-      hello css!
+      <c-header></c-header>
+      <main-banner></main-banner>
+      <today-recommend-products
+        sectionTitle="이 상품 어때요?"
+      ></today-recommend-products>
+      <recent-products></recent-products>
+      <line-banner></line-banner>
+      <today-recommend-products
+        sectionTitle="놓치면 후회할 가격"
+      ></today-recommend-products>
+      <c-footer></c-footer>
     </div>
-    
-    
   </body>
 </html>
