@@ -14,6 +14,19 @@ class Login extends LitElement {
     try {
       await pb.collection('users').authWithPassword(idValue, pwValue);
 
+      const { record, token } = JSON.parse(
+        localStorage.getItem('pocketbase_auth') ?? '{}'
+      );
+
+      localStorage.setItem(
+        'auth',
+        JSON.stringify({
+          isAuth: !!record,
+          user: record,
+          token: token,
+        })
+      );
+
       Swal.fire({
         title: '로그인 성공!',
         text: '메인페이지로 이동합니다.',
