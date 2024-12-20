@@ -1,8 +1,42 @@
 import { LitElement, html, css } from 'lit';
 import style from '/src/pages/login/login.css?inline';
 import resetCSS from '/src/styles/reset.css?inline';
+import pb from '/src/api/pocketbase.js';
+import Swal from 'sweetalert2';
 
 class Login extends LitElement {
+  async fetchData() {
+    const userId = this.shadowRoot.querySelector('#user-id');
+    const idValue = userId.value;
+    const userPw = this.shadowRoot.querySelector('#user-pw');
+    const pwValue = userPw.value;
+
+    try {
+      await pb.collection('users').authWithPassword(idValue, pwValue);
+
+      Swal.fire({
+        title: '로그인 성공!',
+        text: '메인페이지로 이동합니다.',
+        icon: 'success',
+      }).then(() => {
+        location.href = '/index.html';
+      });
+    } catch (error) {
+      Swal.fire({
+        title: '로그인 실패..',
+        text: '아이디 또는 비밀번호를 다시 확인해주세요.',
+        icon: 'error',
+      }).then(() => {
+        location.reload();
+      });
+    }
+  }
+
+  handleLogin(e) {
+    e.preventDefault();
+    this.fetchData();
+  }
+
   render() {
     return html`
       <style>
@@ -54,7 +88,11 @@ class Login extends LitElement {
                 비밀번호 찾기
               </a>
             </div>
-            <button type="submit" class="login__button login__button--submit">
+            <button
+              type="submit"
+              class="login__button login__button--submit"
+              @click=${this.handleLogin}
+            >
               로그인
             </button>
             <a
