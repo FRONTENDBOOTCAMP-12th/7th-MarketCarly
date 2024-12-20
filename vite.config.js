@@ -39,14 +39,14 @@ export default defineConfig({
     emptyOutDir: true,
     assetsInclude: ['**/*.svg', '**/*.png', '**/*.jpg'],
     // rollupOptions 삭제 가능 (위의 proxy가 라우팅을 해줌)
-    // rollupOptions: {
-    //   input: {
-    //     index: resolve(__dirname, 'index.html'),
-    //     'product': resolve(__dirname, 'src/pages/productDetail/index.html'),
-    //     'login': resolve(__dirname, 'src/pages/login/index.html'),
-    //     'register': resolve(__dirname, 'src/pages/register/index.html'),
-    //     'popup': resolve(__dirname, 'src/components/PopupAd/index.html'),
-    //   },
-    // },
+    rollupOptions: {
+      input: {
+        index: resolve(__dirname, 'index.html'),
+        'product': resolve(__dirname, 'src/pages/productDetail/index.html'),
+        'login': resolve(__dirname, 'src/pages/login/index.html'),
+        'register': resolve(__dirname, 'src/pages/register/index.html'),
+        'popup': resolve(__dirname, 'src/components/PopupAd/index.html'),
+      },
+    },
   },
 });
