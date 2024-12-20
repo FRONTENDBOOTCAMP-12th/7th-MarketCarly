@@ -266,11 +266,16 @@ class FormGroup extends LitElement {
         ${resetCSS}
       </style>
       <div class="register__form-group">
-        <label
-          for="${this.id}"
-          class="register__label register__label--required"
-          >${this.label}</label
-        >
+        <div class="register__label-wrapper">
+          <label
+            for="${this.id}"
+            class="register__label register__label--required"
+            >${this.label}</label
+          ><span class="register__label-required" aria-label="필수 입력 요소"
+            >*</span
+          >
+        </div>
+
         ${this.type
           ? html`<input
               type="${this.type}"

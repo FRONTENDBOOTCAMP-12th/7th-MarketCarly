@@ -9,17 +9,18 @@
   flex-wrap: wrap;
 }
 
-.register__label,
-.register__span {
+.register__label-wrapper {
+  width: 8.75rem;
+}
+
+.register__label {
   font-size: var(--text-base);
   font-weight: var(--font-semibold);
   line-height: var(--line-height-normal);
-  width: 8.75rem;
   text-align: left;
 }
 
-.register__label--required::after {
-  content: '*';
+.register__label-required {
   color: var(--info---error);
 }
 
@@ -48,7 +49,6 @@
   line-height: var(--line-height-normal);
   width: 8.125rem;
   height: 2.75rem;
-  cursor: pointer;
 }
 
 /* 생년월일 입력창 */
