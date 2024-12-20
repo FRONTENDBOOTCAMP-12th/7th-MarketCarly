@@ -185,7 +185,7 @@ class FormGroup extends LitElement {
 
     try {
       const record = await pb
-        .collection('user')
+        .collection('users')
         .getFirstListItem(`userId='${idValue}'`);
 
       if (record) {
@@ -196,7 +196,7 @@ class FormGroup extends LitElement {
         idInput.value = '';
       }
     } catch (error) {
-      if (error.status === 404) {
+      if (error) {
         Swal.fire('사용 가능한 아이디입니다.');
       } else {
         console.error('idCheck error');
@@ -210,7 +210,7 @@ class FormGroup extends LitElement {
 
     try {
       const record = await pb
-        .collection('user')
+        .collection('users')
         .getFirstListItem(`email='${emailValue}'`);
 
       if (record) {
@@ -218,7 +218,7 @@ class FormGroup extends LitElement {
         emailInput.value = '';
       }
     } catch (error) {
-      if (error.status === 404) {
+      if (error) {
         Swal.fire('사용 가능한 이메일입니다.');
       } else {
         console.error('emailCheck error');
