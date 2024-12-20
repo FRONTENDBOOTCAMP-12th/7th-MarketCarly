@@ -1,3 +1,4 @@
+// vite.config.js
 import { defineConfig } from 'vite';
 import { resolve } from 'node:path';
 
@@ -8,26 +9,6 @@ export default defineConfig({
     },
   },
   base: '/',
-  server: { 
-    proxy: {
-      '/login': {
-        target: 'http://localhost:5173',
-        rewrite: () => '/src/pages/login/index.html'
-      },
-      '/register': {
-        target: 'http://localhost:5173',
-        rewrite: () => '/src/pages/register/index.html'
-      },
-      '/productDetail': {
-        target: 'http://localhost:5173',
-        rewrite: () => '/src/pages/productDetail/index.html'
-      },
-      '/popup': {
-        target: 'http://localhost:5173',
-        rewrite: () => '/src/components/PopupAd/index.html'
-      }
-    }
-  },
   build: {
     outDir: 'docs',
     emptyOutDir: true,
@@ -42,24 +23,4 @@ export default defineConfig({
       },
     },
   },
-  preview: {
-    proxy: {
-      '/login': {
-        target: 'http://localhost:4173',
-        rewrite: () => '/src/pages/login/index.html'
-      },
-      '/register': {
-        target: 'http://localhost:4173',
-        rewrite: () => '/src/pages/register/index.html'
-      },
-      '/productDetail': {
-        target: 'http://localhost:4173',
-        rewrite: () => '/src/pages/productDetail/index.html'
-      },
-      '/popup': {
-        target: 'http://localhost:4173',
-        rewrite: () => '/src/components/PopupAd/index.html'
-      }
-    }
-  }
 });

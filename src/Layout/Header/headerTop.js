@@ -141,10 +141,10 @@ export class HeaderTop extends LitElement {
           <nav class="top__login" aria-label="사용자 메뉴">
             <ul class="top__list" role="list">
               <li class="top__item">
-                <a href="/register" class="top__link">회원가입</a>
+                <a href="src/pages/register/" class="top__link">회원가입</a>
               </li>
               <li class="top__item">
-                <a href="/login" class="top__link">로그인</a>
+                <a href="src/pages/login/" class="top__link">로그인</a>
               </li>
               <li class="top__item">
                 <a href="/cs" class="top__link">고객센터</a>
