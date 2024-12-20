@@ -1,35 +1,29 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'node:path';
 
-const getBaseUrl = () => {
-  if (process.env.NODE_ENV === 'production') {
-    return 'https://7th-market-carly.vercel.app';
-  }
-  return 'http://localhost:5173';
-};
 export default defineConfig({
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src'),
     },
   },
-  base: './',
-  server: {
+  base: '/',
+  server: { 
     proxy: {
       '/login': {
-        target: getBaseUrl(),
+        target: 'http://localhost:5173',
         rewrite: () => '/src/pages/login/index.html'
       },
       '/register': {
-        target: getBaseUrl(),
+        target: 'http://localhost:5173',
         rewrite: () => '/src/pages/register/index.html'
       },
       '/productDetail': {
-        target: getBaseUrl(),
+        target: 'http://localhost:5173',
         rewrite: () => '/src/pages/productDetail/index.html'
       },
       '/popup': {
-        target: getBaseUrl(),
+        target: 'http://localhost:5173',
         rewrite: () => '/src/components/PopupAd/index.html'
       }
     }
@@ -38,7 +32,6 @@ export default defineConfig({
     outDir: 'docs',
     emptyOutDir: true,
     assetsInclude: ['**/*.svg', '**/*.png', '**/*.jpg'],
-    // rollupOptions 삭제 가능 (위의 proxy가 라우팅을 해줌)
     rollupOptions: {
       input: {
         index: resolve(__dirname, 'index.html'),
@@ -49,4 +42,24 @@ export default defineConfig({
       },
     },
   },
+  preview: {
+    proxy: {
+      '/login': {
+        target: 'http://localhost:4173',
+        rewrite: () => '/src/pages/login/index.html'
+      },
+      '/register': {
+        target: 'http://localhost:4173',
+        rewrite: () => '/src/pages/register/index.html'
+      },
+      '/productDetail': {
+        target: 'http://localhost:4173',
+        rewrite: () => '/src/pages/productDetail/index.html'
+      },
+      '/popup': {
+        target: 'http://localhost:4173',
+        rewrite: () => '/src/components/PopupAd/index.html'
+      }
+    }
+  }
 });

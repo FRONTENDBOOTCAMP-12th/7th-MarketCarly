@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "cleanUrls": true,
   "routes": [
     { "src": "/login", "dest": "/src/pages/login/index.html" },
     { "src": "/register", "dest": "/src/pages/register/index.html" },
