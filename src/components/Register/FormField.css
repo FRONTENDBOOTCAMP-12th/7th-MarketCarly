@@ -6,8 +6,7 @@
   font-size: var(--text-2xl);
   font-weight: var(--font-semibold);
   line-height: var(--line-height-loose);
-  margin-top: 5rem;
-  margin-bottom: 2.75rem;
+  padding-block: 2.75rem;
 }
 
 .register__required-info {
