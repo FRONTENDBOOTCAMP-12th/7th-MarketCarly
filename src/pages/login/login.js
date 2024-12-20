@@ -8,32 +8,41 @@ class Login extends LitElement {
   async fetchData() {
     const userId = this.shadowRoot.querySelector('#user-id');
     const idValue = userId.value;
+    const idRegex = /^(?=.*[a-zA-Z])(?=.*[0-9]).{6,16}$/;
+    const isIdValid = idRegex.test(idValue);
+
     const userPw = this.shadowRoot.querySelector('#user-pw');
     const pwValue = userPw.value;
+    const pwRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^&*?-_=+]).{6,16}$/;
+    const isPwValid = pwRegex.test(pwValue);
 
     try {
-      await pb.collection('users').authWithPassword(idValue, pwValue);
+      if (isIdValid && isPwValid) {
+        await pb.collection('users').authWithPassword(idValue, pwValue);
 
-      const { record, token } = JSON.parse(
-        localStorage.getItem('pocketbase_auth') ?? '{}'
-      );
+        const { record, token } = JSON.parse(
+          localStorage.getItem('pocketbase_auth') ?? '{}'
+        );
 
-      localStorage.setItem(
-        'auth',
-        JSON.stringify({
-          isAuth: !!record,
-          user: record,
-          token: token,
-        })
-      );
+        localStorage.setItem(
+          'auth',
+          JSON.stringify({
+            isAuth: !!record,
+            user: record,
+            token: token,
+          })
+        );
 
-      Swal.fire({
-        title: '로그인 성공!',
-        text: '메인페이지로 이동합니다.',
-        icon: 'success',
-      }).then(() => {
-        location.href = '/index.html';
-      });
+        Swal.fire({
+          title: '로그인 성공!',
+          text: '메인페이지로 이동합니다.',
+          icon: 'success',
+        }).then(() => {
+          location.href = '/index.html';
+        });
+      } else {
+        Swal.fire('입력 정보가 올바르지 않습니다.');
+      }
     } catch (error) {
       Swal.fire({
         title: '로그인 실패..',
