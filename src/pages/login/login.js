@@ -42,18 +42,17 @@ class Login extends LitElement {
               />
             </div>
             <div class="find-wrapper">
-              <button
-                type="button"
+              <a
+                href="/src/pages/login/"
                 class="login__find-button login__find-button--id"
+                >아이디 찾기</a
               >
-                아이디 찾기
-              </button>
-              <button
-                type="button"
+              <a
+                href="/src/pages/login/"
                 class="login__find-button login__find-button--pw"
               >
                 비밀번호 찾기
-              </button>
+              </a>
             </div>
             <button type="submit" class="login__button login__button--submit">
               로그인

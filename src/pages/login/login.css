@@ -46,19 +46,16 @@
 
 .login__find-button {
   font-family: 'Pretendard Variable', Pretendard, sans-serif;
-  border: 0;
-  background-color: transparent;
-  cursor: pointer;
-  padding: 0;
+  text-decoration: none;
+  font-size: var(--text-sm);
+  color: var(--black);
 }
 
 .login__find-button--id::after {
-  content: '|';
+  content: ' |';
 }
 
 .login__button {
-  width: 21.25rem;
-  height: 3.375rem;
   border: none;
   border-radius: 0.25rem;
   font-family: 'Pretendard Variable', Pretendard, sans-serif;
@@ -70,11 +67,15 @@
 }
 
 .login__button--submit {
+  width: 21.4375rem;
+  height: 3.5rem;
   background-color: var(--primary);
   color: var(--white);
 }
 
 .login__button--register {
+  width: 21.25rem;
+  height: 3.375rem;
   text-decoration: none;
   color: var(--primary);
   background-color: transparent;
