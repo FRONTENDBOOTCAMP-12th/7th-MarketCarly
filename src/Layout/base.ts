@@ -1,4 +1,5 @@
-import { css } from 'lit';
+// styles/base.ts
+import { css } from "lit";
 
 export default css`
   @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
@@ -71,4 +72,4 @@ export default css`
   body {
     font-family: 'Pretendard Variable', Pretendard, sans-serif;
   }
-`;
+`

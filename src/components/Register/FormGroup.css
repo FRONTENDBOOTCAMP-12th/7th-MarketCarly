@@ -1,0 +1,130 @@
+@import url('/src/styles/a11y.css');
+
+.register__form-group {
+  padding-block: 1.25rem;
+  padding-left: 0.3125rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.register__label,
+.register__span {
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  line-height: var(--line-height-normal);
+  width: 8.75rem;
+  text-align: left;
+}
+
+.register__label--required::after {
+  content: '*';
+  color: var(--info---error);
+}
+
+/* 입력창 */
+.register__input {
+  font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  font-size: var(--text-base);
+  font-weight: var(--font-regular);
+  line-height: var(--line-height-semirelaxed);
+  color: var(--gray--400);
+  width: 18.75rem;
+  height: 2.5rem;
+  border-radius: 0.25rem;
+  border: 0.0625rem solid var(--gray--300);
+  padding-inline: 1.25rem;
+}
+
+.register__button {
+  font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  border: 0.0625rem solid var(--primary);
+  border-radius: 0.25rem;
+  background-color: transparent;
+  font-size: var(--text-base);
+  color: var(--primary);
+  font-weight: var(--font-semibold);
+  line-height: var(--line-height-normal);
+  width: 8.125rem;
+  height: 2.75rem;
+  cursor: pointer;
+}
+
+/* 생년월일 입력창 */
+.register__birthday-wrapper {
+  border: 0.0625rem solid var(--gray--300);
+  border-radius: 0.25rem;
+  padding: 0;
+  width: 21.375rem;
+  display: flex;
+  justify-content: center;
+
+  .register__input--birthday {
+    width: 3.125rem;
+    text-align: center;
+    border: none;
+    padding: 0;
+  }
+}
+
+.register__birthday-separator::after {
+  content: '/';
+  color: var(--gray--300);
+}
+
+/* 라디오 버튼 */
+.register__radio-group {
+  color: var(--content);
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  line-height: var(--line-height-normal);
+}
+
+.register__radio {
+  appearance: none;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 0.0625rem solid var(--gray--200);
+  border-radius: 50%;
+}
+
+.register__radio:checked {
+  border: 0.4375rem solid var(--primary);
+}
+
+/* input[type='number'] 기본 화살표 속성 제거 */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* 에러 메시지 */
+.register__error-message {
+  color: var(--info---error);
+  margin-left: 9.375rem;
+  font-size: var(--text-sm);
+  font-weight: var(--font-regular);
+  line-height: var(--line-height-relaxed);
+  display: none;
+}
+
+.is--valid {
+  display: block;
+}
+
+/* 인증번호 확인란, 주소 입력란 */
+.register__auth,
+.register__address {
+  margin-top: 0.625rem;
+  margin-left: 9.5625rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* 추천인 입력란 */
+.register__inviter {
+  margin-left: 9.375rem;
+  margin-top: 0.625rem;
+}

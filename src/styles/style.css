@@ -1,5 +1,10 @@
+#app {
+  position: relative;
+}
 
-
-#app{
-  background: orange
+recent-products {
+  position: fixed;
+  top: 20%;
+  left: 90vw;
+  z-index: 999;
 }
