@@ -1,24 +1,22 @@
 .login {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
 
 .login__legend {
-  font-family: 'Pretendard';
-  font-size: 21px;
-  font-weight: 600;
-  line-height: 31px;
+  font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  font-size: var(--text-2xl);
+  font-weight: var(--font-semibold);
+  line-height: var(--line-height-loose);
   text-align: center;
-  margin-bottom: 44px;
-  margin-top: 80px;
+  padding-block: 2.75rem;
 }
 
 .login__form {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 0.75rem;
 }
 
 .login__label {
@@ -26,26 +24,27 @@
 }
 
 .login__input {
-  font-family: 'Pretendard';
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 25.6px;
-  color: #898989;
-  width: 300px;
-  height: 50px;
-  border-radius: 4px;
-  border: 1px solid #a6a6a6;
-  padding-inline: 20px;
+  font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  font-size: var(--text-base);
+  font-weight: var(--font-regular);
+  line-height: var(--line-height-semirelaxed);
+  color: var(--gray--400);
+  width: 18.75rem;
+  height: 3.125rem;
+  border-radius: 0.25rem;
+  border: 0.0625rem solid var(--gray--300);
+  padding-inline: 1.25rem;
 }
 
 .find-wrapper {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
-  gap: 4px;
+  gap: 0.25rem;
 }
 
 .login__find-button {
+  font-family: 'Pretendard Variable', Pretendard, sans-serif;
   border: 0;
   background-color: transparent;
   cursor: pointer;
@@ -57,28 +56,28 @@
 }
 
 .login__button {
-  width: 340px;
-  height: 54px;
+  width: 21.25rem;
+  height: 3.375rem;
   border: none;
-  border-radius: 4px;
-  font-family: 'Pretendard';
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 24px;
+  border-radius: 0.25rem;
+  font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  line-height: var(--line-height-normal);
   display: block;
   cursor: pointer;
 }
 
 .login__button--submit {
-  background-color: #5f0080;
-  color: #fff;
+  background-color: var(--primary);
+  color: var(--white);
 }
 
 .login__button--register {
   text-decoration: none;
-  color: #5f0080;
+  color: var(--primary);
   background-color: transparent;
-  border: 1px solid #5f0080;
+  border: 0.0625rem solid var(--primary);
   text-align: center;
-  line-height: 54px;
+  line-height: 3.375rem;
 }
