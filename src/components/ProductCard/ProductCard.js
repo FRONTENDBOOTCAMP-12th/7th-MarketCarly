@@ -143,7 +143,7 @@ export class ProductCard extends LitElement {
   render() {
     return html`
       <article class="product">
-        <a href="/productDetail" class="product__link">
+        <a href="src/pages/productDetail/" class="product__link">
           <div class="product__image-wrap">
             <img
               class="product__image"
