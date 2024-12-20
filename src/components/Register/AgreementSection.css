@@ -15,12 +15,14 @@
   font-size: var(--text-base);
   font-weight: var(--font-semibold);
   line-height: var(--line-height-normal);
+}
+
+.register__agreement-label-wrapper {
   width: 6.875rem;
   padding-left: 0.625rem;
 }
 
-.register__agreement-label::after {
-  content: '*';
+.register__label-required {
   color: var(--info---error);
 }
 

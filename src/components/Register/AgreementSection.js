@@ -11,7 +11,12 @@ class AgreementSection extends LitElement {
         ${resetCSS}
       </style>
       <fieldset class="register__agreement">
-        <span class="register__agreement-label">이용약관동의</span>
+        <div class="register__agreement-label-wrapper">
+          <span class="register__agreement-label">이용약관동의</span
+          ><span class="register__label-required" aria-label="필수 입력 요소"
+            >*</span
+          >
+        </div>
 
         <div class="register__agreement-checklist">
           <agreement-item
