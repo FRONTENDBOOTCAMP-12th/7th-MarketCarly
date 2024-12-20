@@ -1,0 +1,9 @@
+{
+  "rewrites": [
+    { "source": "/login", "destination": "/src/pages/login/index.html" },
+    { "source": "/register", "destination": "/src/pages/register/index.html" },
+    { "source": "/productDetail", "destination": "/src/pages/productDetail/index.html" },
+    { "source": "/popup", "destination": "/src/components/PopupAd/index.html" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
