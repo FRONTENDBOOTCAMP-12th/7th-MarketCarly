@@ -51,8 +51,9 @@
   color: var(--black);
 }
 
-.login__find-button--id::after {
-  content: ' |';
+.find-separator {
+  color: var(--black);
+  font-size: var(--text-sm);
 }
 
 .login__button {

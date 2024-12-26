@@ -103,6 +103,7 @@ class Login extends LitElement {
                 class="login__find-button login__find-button--id"
                 >아이디 찾기</a
               >
+              <span class="find-separator" aria-hidden="true">|</span>
               <a
                 href="/src/pages/login/"
                 class="login__find-button login__find-button--pw"
