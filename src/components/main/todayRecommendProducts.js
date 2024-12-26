@@ -57,7 +57,6 @@ export class TodayRecommendProducts extends LitElement {
 
     try {
       const response = await pb.collection('Products').getFullList();
-      console.log('전체 데이터:', response);
 
       const firstPositionProducts = response.filter(
         (product) => product.position === 'first'
@@ -70,7 +69,7 @@ export class TodayRecommendProducts extends LitElement {
       const mapProductsToCard = (products) => {
         return products.map((product) => ({
           title: product.title,
-          image: product.img,
+          image: pb.files.getURL(product, product.img),
           price: product.price,
           originalPrice: product.price,
           isDiscounted: product.discount > 0,
@@ -103,8 +102,8 @@ export class TodayRecommendProducts extends LitElement {
           </header>
           <div class="today__content">
             <ul class="today__list">
-              ${products.map(
-                (product) => html`
+              ${products.map((product) => {
+                return html`
                   <li>
                     <product-card
                       .image=${product.image}
@@ -117,8 +116,8 @@ export class TodayRecommendProducts extends LitElement {
                       .badges=${product.badges}
                     ></product-card>
                   </li>
-                `
-              )}
+                `;
+              })}
             </ul>
           </div>
         </div>

@@ -145,19 +145,14 @@ export class MainBanner extends LitElement {
       const response = await pb.collection('banner').getFullList({
         sort: '-created',
       });
-      console.log('Banner Data Response:', response);
-      console.log('Response length:', response.length);
+
       this.bannerData = response;
-      console.log('First item:', response[0]);
-    } catch (error) {
-      console.error('Error fetching banner data:', error);
-    }
+    } catch (error) {}
   }
   updated(changedProperties) {
     super.updated(changedProperties);
 
     if (changedProperties.has('bannerData')) {
-      console.log('bannerData updated:', this.bannerData);
       if (this.swiper) {
         this.swiper.destroy();
         this.swiper = null;
