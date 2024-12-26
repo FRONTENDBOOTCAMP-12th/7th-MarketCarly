@@ -60,7 +60,7 @@ export class ProductActions extends LitElement {
       <div class="product__actions">
         <button type="button" class="product__button-like" aria-label="관심 상품 등록"></button>
         <button type="button" class="product__button-bell" disabled aria-label="재입고 알림"></button>
-        <button type="button" class="product__button-addcart" aria-label="장바구니 담기">장바구니 담기</button>
+        <button type="button" class="product__button-addcart">장바구니 담기</button>
       </div>
     `;
   }
