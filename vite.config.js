@@ -20,6 +20,7 @@ export default defineConfig({
         'login': resolve(__dirname, 'src/pages/login/index.html'),
         'register': resolve(__dirname, 'src/pages/register/index.html'),
         'popup': resolve(__dirname, 'src/components/PopupAd/index.html'),
+        'productList': resolve(__dirname, 'src/pages/productList/index.html'),
       },
     },
   },
