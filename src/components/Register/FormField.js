@@ -232,7 +232,7 @@ class FormField extends LitElement {
                 class="register__input register__input--birthday"
                 placeholder="yyyy"
               />
-              <span class="register__birthday-separator"></span>
+              <span class="register__birthday-separator" aria-hidden="true">/</span>
               <input
                 type="number"
                 id="birthday-month"
@@ -240,7 +240,7 @@ class FormField extends LitElement {
                 class="register__input register__input--birthday"
                 placeholder="mm"
               />
-              <span class="register__birthday-separator"></span>
+              <span class="register__birthday-separator" aria-hidden="true">/</span>
               <input
                 type="number"
                 id="birthday-day"
