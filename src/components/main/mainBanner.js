@@ -145,10 +145,9 @@ export class MainBanner extends LitElement {
       const response = await pb.collection('banner').getFullList({
         sort: '-created',
       });
+
       this.bannerData = response;
-    } catch (error) {
-      console.error('배너 데이터 불러오기 실패~:', error);
-    }
+    } catch (error) {}
   }
   updated(changedProperties) {
     super.updated(changedProperties);
