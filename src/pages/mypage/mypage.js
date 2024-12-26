@@ -2,10 +2,14 @@ import { LitElement, html } from 'lit';
 import '/src/components/Mypage/FormGroup.js';
 import resetCSS from '/src/styles/reset.css?inline';
 import style from '/src/pages/mypage/mypage.css?inline';
+import pb from '/src/api/pocketbase.js';
+import Swal from 'sweetalert2';
 
 class MyPage extends LitElement {
   static properties = {
     value: { type: String },
+    gender: { type: String },
+    birth: { type: Object },
   };
 
   formGroupList = [
@@ -19,13 +23,15 @@ class MyPage extends LitElement {
       type: 'password',
       id: 'user-pw',
       label: '현재 비밀번호',
+      errorMessage: '현재 비밀번호를 확인해주세요',
+      errorId: 'pw-error',
     },
     {
       type: 'password',
       id: 'user-pw-new',
       label: '새 비밀번호',
       errorMessage: '특수문자 포함 최소 6자~최대 16자',
-      errorId: 'pw-error',
+      errorId: 'pw-new-error',
     },
     {
       type: 'password',
@@ -44,8 +50,6 @@ class MyPage extends LitElement {
       type: 'email',
       id: 'user-email',
       label: '이메일',
-      button: '중복확인',
-      buttonClass: 'mypage__button--check-email',
       errorMessage: '이메일 형식으로 입력해주세요',
       errorId: 'email-error',
       value: this.value,
@@ -68,6 +72,16 @@ class MyPage extends LitElement {
     },
   ];
 
+  constructor() {
+    super();
+    this.gender = 'none';
+    this.birth = {
+      year: '',
+      month: '',
+      day: '',
+    };
+  }
+
   connectedCallback() {
     super.connectedCallback();
     this.getUserInfo();
@@ -88,6 +102,148 @@ class MyPage extends LitElement {
         this.formGroupList[i].value = user.address;
       } else if (this.formGroupList[i].id === 'user-phone') {
         this.formGroupList[i].value = user.phone;
+      }
+    }
+
+    if (user.gender) {
+      this.gender = user.gender;
+    }
+
+    if (user.birth) {
+      const birthArray = user.birth.split('-');
+      this.birth.year = birthArray[0];
+      this.birth.month = birthArray[1];
+      this.birth.day = birthArray[2];
+    }
+  }
+
+  extractFormData() {
+    const formGroup = this.shadowRoot.querySelectorAll('form-group');
+    const fieldKey = [
+      'id',
+      'pw',
+      'newPw',
+      'newPwConfirm',
+      'name',
+      'email',
+      'address',
+      'phone',
+    ];
+    const formGroupData = {};
+
+    fieldKey.forEach((key, index) => {
+      const inputValue =
+        formGroup[index].shadowRoot.querySelector('input').value;
+      formGroupData[key] = inputValue;
+    });
+    const addressDetail =
+      formGroup[6].shadowRoot.querySelector('#user-detail-address')?.value ||
+      '';
+    const address = formGroupData.address + ' ' + addressDetail;
+    formGroupData.address = address;
+
+    const gender = this.shadowRoot.querySelector(
+      `input[type='radio']:checked`
+    ).value;
+    formGroupData.gender = gender;
+
+    const birthInput = this.shadowRoot.querySelectorAll(`input[type='number']`);
+    const year = birthInput[0].value;
+    const month = birthInput[1].value;
+    const day = birthInput[2].value;
+
+    const birth = `${year}-${month}-${day}`;
+    formGroupData.birth = birth;
+
+    return formGroupData;
+  }
+
+  handleUpdate(e) {
+    e.preventDefault();
+    const formData = this.extractFormData();
+    const auth = JSON.parse(localStorage.getItem('auth'));
+    const { user } = auth;
+    const recordId = user.id;
+
+    const formGroup = this.shadowRoot.querySelectorAll('form-group');
+    const userPw = formGroup[1].shadowRoot.querySelector('#user-pw').value;
+    const userPwNew =
+      formGroup[2].shadowRoot.querySelector('#user-pw-new').value;
+    const userPwCheck =
+      formGroup[3].shadowRoot.querySelector('#user-pwCheck-new').value;
+
+    const data = {
+      userId: formData.id,
+      oldPassword: formData.pw,
+      password: formData.newPw,
+      passwordConfirm: formData.newPwConfirm,
+      name: formData.name,
+      email: formData.email,
+      address: formData.address,
+      phone: formData.phone,
+      gender: formData.gender,
+      birth: formData.birth,
+    };
+
+    try {
+      if (userPw && userPwNew && userPwCheck) {
+        pb.collection('users')
+          .update(recordId, data)
+          .then(() => {
+            Swal.fire({
+              title: '정보가 수정되었습니다.',
+              icon: 'success',
+              text: '비밀번호 재확인 페이지로 이동합니다.',
+            }).then(() => {
+              location.href = '/src/pages/pwConfirm/';
+            });
+          });
+      } else {
+        pb.collection('users')
+          .update(recordId, {
+            userId: formData.id,
+            name: formData.name,
+            email: formData.email,
+            address: formData.address,
+            phone: formData.phone,
+            gender: formData.gender,
+            birth: formData.birth,
+          })
+          .then(() => {
+            Swal.fire({
+              title: '정보가 수정되었습니다.',
+              icon: 'success',
+              text: '비밀번호 재확인 페이지로 이동합니다.',
+            }).then(() => {
+              location.href = '/src/pages/pwConfirm/';
+            });
+          });
+      }
+    } catch (error) {
+      Swal.fire('정보 수정을 실패했습니다..');
+    }
+  }
+
+  async handleQuit() {
+    const auth = JSON.parse(localStorage.getItem('auth'));
+    const { user } = auth;
+    const recordId = user.id;
+
+    const result = await Swal.fire({
+      title: '정말로 탈퇴하시겠습니까?',
+      showCancelButton: true,
+      confirmButtonText: '탈퇴하기',
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await pb.collection('users').delete(recordId);
+        localStorage.removeItem('auth');
+        Swal.fire('탈퇴가 완료되었습니다.', '', 'success').then(() => {
+          location.href = '/';
+        });
+      } catch (error) {
+        Swal.fire('탈퇴에 실패했습니다..');
       }
     }
   }
@@ -124,6 +280,7 @@ class MyPage extends LitElement {
                 id="gender-male"
                 class="mypage__radio"
                 value="male"
+                ?checked=${this.gender === 'male'}
               />
               <label for="gender-male" class="mypage__radio-label">남자</label>
               <input
@@ -132,6 +289,7 @@ class MyPage extends LitElement {
                 id="gender-female"
                 class="mypage__radio"
                 value="female"
+                ?checked=${this.gender === 'female'}
               />
               <label for="gender-female" class="mypage__radio-label"
                 >여자</label
@@ -142,8 +300,7 @@ class MyPage extends LitElement {
                 id="gender-none"
                 class="mypage__radio"
                 value="none"
-                checked
-                aria-checked="true"
+                ?checked=${this.gender === 'none'}
               />
               <label for="gender-none" class="myapge__radio-label"
                 >선택 안함</label
@@ -160,6 +317,7 @@ class MyPage extends LitElement {
                     name="birthday-year"
                     class="mypage__input mypage__input--birthday"
                     placeholder="yyyy"
+                    value=${this.birth.year}
                   />
                   <span class="mypage__birthday-separator" aria-hidden="true"
                     >/</span
@@ -170,6 +328,7 @@ class MyPage extends LitElement {
                     name="birthday-month"
                     class="mypage__input mypage__input--birthday"
                     placeholder="mm"
+                    value=${this.birth.month}
                   />
                   <span class="mypage__birthday-separator" aria-hidden="true"
                     >/</span
@@ -180,6 +339,7 @@ class MyPage extends LitElement {
                     name="birthday-day"
                     class="mypage__input mypage__input--birthday"
                     placeholder="dd"
+                    value=${this.birth.day}
                   />
                 </div>
               </div>
@@ -188,10 +348,18 @@ class MyPage extends LitElement {
         </fieldset>
 
         <div class="mypage__button-wrapper">
-          <button type="button" class="mypage__button mypage__button--quit">
+          <button
+            type="button"
+            class="mypage__button mypage__button--quit"
+            @click=${this.handleQuit}
+          >
             탈퇴하기
           </button>
-          <button type="submit" class="mypage__button mypage__button--update">
+          <button
+            type="submit"
+            class="mypage__button mypage__button--update"
+            @click=${this.handleUpdate}
+          >
             회원정보수정
           </button>
         </div>

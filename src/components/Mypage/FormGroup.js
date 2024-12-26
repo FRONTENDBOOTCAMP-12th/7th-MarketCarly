@@ -1,6 +1,7 @@
 import { LitElement, html } from 'lit';
 import style from '/src/components/Mypage/FormGroup.css?inline';
 import resetCSS from '/src/styles/reset.css?inline';
+import pb from '/src/api/pocketbase.js';
 
 class FormGroup extends LitElement {
   static properties = {
@@ -29,7 +30,7 @@ class FormGroup extends LitElement {
     const pwInput = this.shadowRoot.querySelector('#user-pw-new');
     const pwRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^&*?-_=+]).{6,16}$/;
     this.isValid.isPwValid = pwRegex.test(pwInput.value);
-    const error = this.shadowRoot.querySelector('#pw-error');
+    const error = this.shadowRoot.querySelector('#pw-new-error');
 
     if (!this.isValid.isPwValid) {
       error.classList.add('is--valid');
@@ -61,6 +62,32 @@ class FormGroup extends LitElement {
       error.classList.add('is--valid');
     } else {
       error.classList.remove('is--valid');
+    }
+  }
+
+  async validateCurrentPassword() {
+    if (this.id === 'user-pw') {
+      const currentPw = this.shadowRoot.querySelector('#user-pw').value;
+      const errorMessage = this.shadowRoot.querySelector('#pw-error');
+
+      try {
+        const loginData = JSON.parse(localStorage.getItem('auth') ?? '{}');
+        const { userId } = loginData.user;
+
+        const response = await pb
+          .collection('users')
+          .authWithPassword(userId, currentPw);
+
+        if (response) {
+          errorMessage.classList.remove('is--valid');
+        }
+      } catch (error) {
+        if (error) {
+          errorMessage.classList.add('is--valid');
+        } else {
+          console.log('valid error');
+        }
+      }
     }
   }
 
@@ -135,7 +162,11 @@ class FormGroup extends LitElement {
           class="mypage__input"
           value=${this.value}
           @input=${this.showErrorMessage}
-          ?readonly=${this.id === 'user-id' || this.id === 'user-phone'}
+          @blur=${this.validateCurrentPassword}
+          ?readonly=${this.id === 'user-id' ||
+          this.id === 'user-phone' ||
+          this.id === 'user-address' ||
+          this.id === 'user-email'}
         />
 
         ${this.button
