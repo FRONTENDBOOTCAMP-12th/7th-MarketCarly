@@ -1,5 +1,5 @@
 import Pocketbase from 'pocketbase';
 
-const pb = new Pocketbase(import.meta.env.VITE_PB_URL);
+const pb = new Pocketbase();
 
 export default pb;
