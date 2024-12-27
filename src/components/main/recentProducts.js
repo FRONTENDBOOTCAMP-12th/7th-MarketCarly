@@ -135,6 +135,9 @@ export class RecentProducts extends LitElement {
     super.connectedCallback();
     window.addEventListener('storage', () => {
       this.products = JSON.parse(localStorage.getItem('recentProducts')) || [];
+      if (this.swiper) {
+        this.swiper.update();
+      }
     });
   }
 
