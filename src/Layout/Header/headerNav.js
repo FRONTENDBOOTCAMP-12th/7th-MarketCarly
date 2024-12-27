@@ -10,7 +10,6 @@ export class HeaderNav extends LitElement {
       css`
         .nav {
           width: 100%;
-          border-top: 1px solid var(--gray--100);
           border-bottom: 1px solid var(--gray--100);
         }
 

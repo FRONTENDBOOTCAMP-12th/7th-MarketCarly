@@ -10,8 +10,7 @@ export class HeaderTop extends LitElement {
       resetCSS,
       css`
         .top {
-          width: 100%
-          border-bottom: 1px solid var(--gray--100);
+          width: 100%;
         }
 
         .top__inner {
@@ -88,11 +87,11 @@ export class HeaderTop extends LitElement {
           font-size: var(--text-lg);
           font-weight: var(--font-bold);
           color: #c4c4c4;
-          display: flex; 
-          align-items: center; 
+          display: flex;
+          align-items: center;
         }
 
-        .logo__link--active{
+        .logo__link--active {
           color: #5f0080;
         }
 
@@ -107,19 +106,20 @@ export class HeaderTop extends LitElement {
           width: 7px;
           height: 7px;
           top: -5px;
-          right: -5px
+          right: -5px;
         }
 
-        .top__icons, .top__icons-list {
+        .top__icons,
+        .top__icons-list {
           display: flex;
           gap: 1.25rem;
           align-items: center;
         }
 
-        .top__icons-list {  
-          list-style: none; 
-          padding: 0;    
-          margin: 0;     
+        .top__icons-list {
+          list-style: none;
+          padding: 0;
+          margin: 0;
         }
 
         .top__icons-button {
@@ -127,8 +127,8 @@ export class HeaderTop extends LitElement {
           border: none;
           cursor: pointer;
           padding: 0;
-          display: flex; 
-          align-items: center; 
+          display: flex;
+          align-items: center;
         }
       `,
     ];
@@ -141,10 +141,10 @@ export class HeaderTop extends LitElement {
           <nav class="top__login" aria-label="사용자 메뉴">
             <ul class="top__list" role="list">
               <li class="top__item">
-                <a href="src/pages/register/" class="top__link">회원가입</a>
+                <a href="/src/pages/register/" class="top__link">회원가입</a>
               </li>
               <li class="top__item">
-                <a href="src/pages/login/" class="top__link">로그인</a>
+                <a href="/src/pages/login/" class="top__link">로그인</a>
               </li>
               <li class="top__item">
                 <a href="/cs" class="top__link">고객센터</a>
