@@ -13,6 +13,7 @@ export class ProductCard extends LitElement {
     this.originalPrice = 6000;
     this.isDiscounted = true;
     this.discount = 24;
+    this.description = '튀기지 않아 부담없는 매콤함';
     this.badges = [
       { type: 'kurly', text: 'Kurly Only' },
       { type: 'limit', text: '한정수량' },
@@ -28,6 +29,7 @@ export class ProductCard extends LitElement {
       originalPrice: { type: Number },
       isDiscounted: { type: Boolean },
       discount: { type: Number },
+      description: { type: String },
       badges: { type: Array },
     };
   }
@@ -73,10 +75,10 @@ export class ProductCard extends LitElement {
 
         .product__cart {
           position: absolute;
-          bottom: 0.5rem;
-          right: 0.5rem;
-          width: 2rem;
-          height: 2rem;
+          bottom: 0.9375rem;
+          right: 0.9375rem;
+          width: 2.8125rem;
+          height: 2.8125rem;
           border: none;
           background: none;
           cursor: pointer;
@@ -84,24 +86,27 @@ export class ProductCard extends LitElement {
         }
 
         .product__info {
-          padding: 0.75rem 0.5rem;
+          padding: 0.75rem 0;
         }
 
         .product__delivery {
           display: block;
           font-size: var(--text-xs);
-          color: var(--content);
+          font-weight: var(--font-semibold);
+          color: var(--gray--400);
           margin-bottom: 0.5rem;
         }
 
         .product__title {
-          font-size: var(--text-xs);
+          font-size: var(--text-base);
+          font-weight: var(--font-regular);
           color: var(--content);
           margin-bottom: 0.5rem;
         }
 
         .product__price-wrap {
           display: block;
+          margin-bottom: 0.5rem;
         }
 
         .product__price-info {
@@ -128,6 +133,11 @@ export class ProductCard extends LitElement {
           color: var(--gray--400);
           text-decoration: line-through;
           font-size: var(--text-xs);
+        }
+
+        .product__description {
+          font-size: var(--text-xs);
+          color: var(--gray--400);
         }
 
         .product__badges {
@@ -181,6 +191,7 @@ export class ProductCard extends LitElement {
                     </div>
                   `}
             </div>
+            <p class=product__description>${this.description}</p>
             ${this.badges?.length
               ? html`
                   <ul class="product__badges">
