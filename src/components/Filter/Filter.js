@@ -1,21 +1,17 @@
 import { LitElement, html, css } from 'lit';
 import resetCSS from '/src/Layout/resetCSS.ts';
+import baseCSS from '/src/Layout/base.ts';
 
 class Filter extends LitElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
-    this.filterTitle = '카테고리';
-    this.selectedFilterCount = '0';
-    this.categories = [
-      { name: '샐러드 · 간편식', itemCount: '65' },
-    ];
   }
 
   static get properties() {
     return {
       filterTitle: { type: String },
-      selectedFilterCount: { type: Number },
+      selectedCategoryCount: { type: Number },
       categories: { type: Array },
     };
   }
@@ -23,6 +19,7 @@ class Filter extends LitElement {
   static get styles() {
     return [
       resetCSS,
+      baseCSS,
       css`
         button {
           font-family: 'Pretendard Variable', Pretendard, sans-serif;
@@ -32,7 +29,7 @@ class Filter extends LitElement {
           cursor: pointer;
         }
 
-        .filters {
+        .filters__content {
           width: 13.75rem;
           display: flex;
           flex-direction: column;
@@ -176,22 +173,52 @@ class Filter extends LitElement {
     category.classList.toggle('isSelected');
 
     if (isSelected) {
-      this.selectedFilterCount--;
+      this.selectedCategoryCount--;
     } else {
-      this.selectedFilterCount++;
+      this.selectedCategoryCount++;
     }
+
+    this.dispatchEvent(new CustomEvent('filter-changed', {
+      detail: {
+        title: this.filterTitle,
+        selectedCategories: this.getSelectedCategories()
+      },
+      bubbles: true,
+      composed: true,
+    }));
+
+    this.requestUpdate();
+  }
+
+getSelectedCategories() {
+  const selectedCategories = [];
+  const categories = this.shadowRoot.querySelectorAll('.category.isSelected');
+  categories.forEach(category => {
+    const categoryName = category.querySelector('.category__name').textContent;
+    selectedCategories.push(categoryName);
+  });
+  return selectedCategories;
+}
+
+  handleClickReset() {
+    const categories = this.shadowRoot.querySelectorAll('.category');
+    
+    categories.forEach(category => category.classList.remove('isSelected'));
+    this.selectedCategoryCount = 0;
+    
+    this.requestUpdate();
   }
 
   render() {
     return html`
-      <div class="filters">
+      <div class="filters__content">
         <button 
           class="filter" 
           @click=${this.handleClickFilter}
         >
           <div class="filter__info">
             <span class="name">${this.filterTitle}</span>
-            <span class="items">${this.selectedFilterCount > 0 ? this.selectedFilterCount : ''}</span>
+            <span class="items">${this.selectedCategoryCount > 0 ? this.selectedCategoryCount : ''}</span>
           </div>
           <span class="filter__dropdown"></span>
         </button>
