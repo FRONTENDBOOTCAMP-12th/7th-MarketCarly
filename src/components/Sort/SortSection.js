@@ -38,6 +38,13 @@ class SortSection extends LitElement {
 
     if (newIndex !== this.selectedIndex) {
       this.selectedIndex = newIndex;
+
+      this.dispatchEvent(new CustomEvent('sort-changed', {
+        detail: { title: selectedTitle },
+        bubbles: true,
+        composed: true,
+      }));
+
       this.requestUpdate();
     }
   }
