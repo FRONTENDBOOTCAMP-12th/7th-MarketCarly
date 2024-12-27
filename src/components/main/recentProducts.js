@@ -9,6 +9,7 @@ export class RecentProducts extends LitElement {
   static get properties() {
     return {
       products: { type: Array },
+      swiper: { type: Object },
     };
   }
 
@@ -107,7 +108,7 @@ export class RecentProducts extends LitElement {
     this.products = JSON.parse(localStorage.getItem('recentProducts')) || [];
   }
 
-  firstUpdated() {
+  initSwiper() {
     const swiperContainer = this.shadowRoot.querySelector('.recent__content');
     this.swiper = new Swiper(swiperContainer, {
       direction: 'vertical',
@@ -117,6 +118,29 @@ export class RecentProducts extends LitElement {
       wrapperClass: 'recent__list',
       slideClass: 'recent__item',
     });
+  }
+
+  firstUpdated() {
+    this.initSwiper();
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    window.addEventListener('recentProductsUpdated', () => {
+      this.products = JSON.parse(localStorage.getItem('recentProducts')) || [];
+      if (this.swiper) {
+        this.swiper.destroy();
+        this.initSwiper();
+      }
+    });
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    if (this.swiper) {
+      this.swiper.destroy();
+    }
+    window.removeEventListener('recentProductsUpdated');
   }
 
   handlePrevClick() {
@@ -129,21 +153,6 @@ export class RecentProducts extends LitElement {
     if (this.swiper) {
       this.swiper.slideTo(this.swiper.activeIndex + 1);
     }
-  }
-
-  connectedCallback() {
-    super.connectedCallback();
-    window.addEventListener('storage', () => {
-      this.products = JSON.parse(localStorage.getItem('recentProducts')) || [];
-      if (this.swiper) {
-        this.swiper.update();
-      }
-    });
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    window.removeEventListener('storage');
   }
 
   render() {

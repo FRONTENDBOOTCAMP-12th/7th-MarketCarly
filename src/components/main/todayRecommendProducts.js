@@ -99,6 +99,7 @@ export class TodayRecommendProducts extends LitElement {
       recentProducts = recentProducts.slice(-4);
     }
     localStorage.setItem('recentProducts', JSON.stringify(recentProducts));
+    window.dispatchEvent(new CustomEvent('recentProductsUpdated'));
   }
 
   render() {
