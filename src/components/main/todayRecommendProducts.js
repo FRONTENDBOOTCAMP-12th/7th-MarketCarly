@@ -90,6 +90,17 @@ export class TodayRecommendProducts extends LitElement {
     }
   }
 
+  handleProductClick(product) {
+    let recentProducts =
+      JSON.parse(localStorage.getItem('recentProducts')) || [];
+    recentProducts = recentProducts.filter((p) => p.title !== product.title);
+    recentProducts.push(product);
+    if (recentProducts.length > 4) {
+      recentProducts = recentProducts.slice(-4);
+    }
+    localStorage.setItem('recentProducts', JSON.stringify(recentProducts));
+  }
+
   render() {
     const firstSectionTitle = '이 상품 어때요?';
     const secondSectionTitle = '놓치면 후회할 가격';
@@ -104,7 +115,7 @@ export class TodayRecommendProducts extends LitElement {
             <ul class="today__list">
               ${products.map((product) => {
                 return html`
-                  <li>
+                  <li @click=${() => this.handleProductClick(product)}>
                     <product-card
                       .image=${product.image}
                       .delivery=${product.delivery}
