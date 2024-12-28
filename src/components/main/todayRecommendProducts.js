@@ -58,24 +58,41 @@ export class TodayRecommendProducts extends LitElement {
     try {
       const response = await pb.collection('Products').getFullList();
 
-      const firstPositionProducts = response.filter(
-        (product) => product.position === 'first'
-      );
+      const isValidProduct = (product) => {
+        return (
+          product?.title &&
+          product?.img &&
+          typeof product?.price === 'number' &&
+          product?.price >= 0 &&
+          (!product.discount_rate ||
+            (typeof product.discount_rate === 'number' &&
+              product.discount_rate >= 0 &&
+              typeof product.discount_price === 'number' &&
+              product.discount_price >= 0))
+        );
+      };
 
-      const secondPositionProducts = response.filter(
-        (product) => product.position === 'second'
-      );
+      const firstPositionProducts = response
+        .filter((product) => product.position.includes('first'))
+        .filter(isValidProduct);
+
+      const secondPositionProducts = response
+        .filter((product) => product.position.includes('second'))
+        .filter(isValidProduct);
 
       const mapProductsToCard = (products) => {
         return products.map((product) => ({
+          delivery: product.delivery_type === '샛별 배송' ? '샛별 배송' : null,
           title: product.title,
+          brand: product.brand,
+          description: product.description,
           image: pb.files.getURL(product, product.img),
-          price: product.price,
-          originalPrice: product.price,
-          isDiscounted: product.discount > 0,
-          discount: product.discount || 0,
-          delivery: '샛별배송',
-          badges: [],
+          price:
+            product.discount_rate > 0 ? product.discount_price : product.price,
+          originalPrice: product.discount_rate > 0 ? product.price : null,
+          isDiscounted: product.discount_rate > 0,
+          discount_rate: product.discount_rate || 0,
+          badges: product.badges || [],
         }));
       };
 
@@ -121,10 +138,12 @@ export class TodayRecommendProducts extends LitElement {
                       .image=${product.image}
                       .delivery=${product.delivery}
                       .title=${product.title}
+                      .brand=${product.brand}
+                      .description=${product.description}
                       .price=${product.price}
                       .originalPrice=${product.originalPrice}
                       .isDiscounted=${product.isDiscounted}
-                      .discount=${product.discount}
+                      .discount_rate=${product.discount_rate}
                       .badges=${product.badges}
                     ></product-card>
                   </li>

@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import resetCSS from '@/Layout/resetCSS';
 import baseCSS from '@/Layout/base';
-import '../ProductCard/ProductBadge.js';
+import '@/components/ProductCard/ProductBadge.js';
 
 export class ProductCard extends LitElement {
   constructor() {
@@ -25,11 +25,12 @@ export class ProductCard extends LitElement {
       image: { type: String },
       delivery: { type: String },
       title: { type: String },
+      brand: { type: String },
+      description: { type: String },
       price: { type: Number },
       originalPrice: { type: Number },
       isDiscounted: { type: Boolean },
-      discount: { type: Number },
-      description: { type: String },
+      discount_rate: { type: Number },
       badges: { type: Array },
     };
   }
@@ -87,6 +88,9 @@ export class ProductCard extends LitElement {
 
         .product__info {
           padding: 0.75rem 0;
+          white-space: normal;
+          word-wrap: break-word;
+          width: 250px;
         }
 
         .product__delivery {
@@ -138,6 +142,9 @@ export class ProductCard extends LitElement {
         .product__description {
           font-size: var(--text-xs);
           color: var(--gray--400);
+          word-wrap: break-word;
+          width: 100%;
+          overflow-wrap: break-word;
         }
 
         .product__badges {
@@ -150,7 +157,17 @@ export class ProductCard extends LitElement {
     ];
   }
 
+  connectedCallback() {
+    super.connectedCallback();
+    console.log('badges:', this.badges);
+  }
+
   render() {
+    console.log('render badges:', this.badges);
+    const formattedTitle = this.brand
+      ? `[${this.brand}] ${this.title}`
+      : this.title;
+
     return html`
       <article class="product">
         <a href="src/pages/productDetail/" class="product__link">
@@ -158,7 +175,7 @@ export class ProductCard extends LitElement {
             <img
               class="product__image"
               src="${this.image}"
-              alt="${this.title}"
+              alt="${formattedTitle}"
             />
             <button class="product__cart" aria-label="장바구니 담기">
               <img src="/assets/icons/Cart.svg" alt="" aria-hidden="true" />
@@ -166,14 +183,16 @@ export class ProductCard extends LitElement {
           </div>
 
           <div class="product__info">
-            <p class="product__delivery">${this.delivery}</p>
-            <h3 class="product__title">${this.title}</h3>
+            ${this.delivery
+              ? html`<p class="product__delivery">${this.delivery}</p>`
+              : ''}
+            <h3 class="product__title">${formattedTitle}</h3>
             <div class="product__price-wrap">
-              ${this.isDiscounted
+              ${this.isDiscounted && this.discount_rate
                 ? html`
                     <div class="product__price-info">
                       <strong class="product__discount-rate"
-                        >${this.discount}%</strong
+                        >${this.discount_rate}%</strong
                       >
                       <strong class="product__price"
                         >${this.price?.toLocaleString() ?? 0}원</strong
@@ -191,20 +210,24 @@ export class ProductCard extends LitElement {
                     </div>
                   `}
             </div>
-            <p class=product__description>${this.description}</p>
-            ${this.badges?.length
+            ${this.description
+              ? html`<p class="product__description">${this.description}</p>`
+              : ''}
+            ${this.badges?.badges?.length
               ? html`
                   <ul class="product__badges">
-                    ${this.badges.map(
-                      (badge) => html`
-                        <li>
-                          <product-badge
-                            type=${badge.type}
-                            text=${badge.text}
-                          ></product-badge>
-                        </li>
-                      `
-                    )}
+                    ${this.badges.badges
+                      .filter((badge) => badge.type && badge.text)
+                      .map(
+                        (badge) => html`
+                          <li>
+                            <product-badge
+                              type=${badge.type}
+                              text=${badge.text}
+                            ></product-badge>
+                          </li>
+                        `
+                      )}
                   </ul>
                 `
               : ''}
