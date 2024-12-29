@@ -1,0 +1,74 @@
+/* 가격 */
+.cart__price {
+  width: 244px;
+  height: 227px;
+  display: flex;
+  padding: 20px;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+  border: 1px solid var(--gray-100, #e1e1e1);
+  background: var(--gray-50, #f9f9f9);
+}
+
+.cart__price-detail {
+  color: var(--content, #333);
+  font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 25px;
+}
+
+.cart__price-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 244px;
+  padding-bottom: 24px;
+}
+
+.cart__product {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cart__total {
+  padding-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.cart__total-price-label {
+  color: var(--content, #333);
+  font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 25px;
+}
+
+.cart__total-price-detail {
+  color: #000;
+  font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  font-size: 28.43px;
+  font-weight: 700;
+  line-height: 39px;
+}
+
+.cart__total-description {
+  color: var(--content, #333);
+  font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  font-size: 12.003px;
+  font-weight: 600;
+  line-height: 18px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.cart__total-price {
+  width: 244px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
