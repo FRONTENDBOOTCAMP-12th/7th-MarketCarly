@@ -1,0 +1,110 @@
+@import url('/src/styles/a11y.css');
+
+.cart-product {
+  display: flex;
+  width: 742px;
+  padding: 20px 0px;
+  align-items: center;
+  gap: 8px;
+}
+
+.cart-product__checkbox {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  appearance: none;
+}
+
+.cart-product__checkbox-icon {
+  display: flex;
+  width: 24px;
+  height: 24px;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  background: url('../../assets/icons/isChecked=false.svg') no-repeat
+    center/cover;
+}
+
+.cart-product__checkbox:checked + .cart-product__checkbox-icon {
+  background: url('../../assets/icons/isChecked=true.svg');
+}
+
+.cart-product__image {
+  width: 60px;
+  height: 78px;
+}
+
+.cart-product__figure {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cart-product__detail-page {
+  text-decoration: none;
+}
+
+.cart-product__detail-page--desc {
+  margin-right: 179px;
+  height: 24px;
+}
+
+.cart-product__desc,
+.cart-product__product-number,
+.cart-product__product-price {
+  color: #000;
+  font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+.cart-product__product-price {
+  width: 127px;
+  height: 24px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.cart-product__count-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #c4c4c4;
+  width: 84px;
+  height: 30px;
+}
+
+.cart-product__button-plus,
+.cart-product__button-minus {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  color: #333333;
+  border: 0;
+  background-color: transparent;
+  font-size: 22px;
+  font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: baseline;
+}
+
+.cart-product__button-plus:disabled,
+.cart-product__button-minus:disabled {
+  color: #a6a6a6;
+}
+
+.cart-product__button-delete {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border: 0;
+  background-color: transparent;
+  padding: 0;
+}

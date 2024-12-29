@@ -1,0 +1,53 @@
+/* 배송지 */
+.cart__location {
+  border: 1px solid #e1e1e1;
+  width: 244px;
+  height: 182px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+}
+
+.cart__location-image {
+  width: 36px;
+  height: 36px;
+}
+.cart__location-title,
+.cart__location-detail {
+  color: #000;
+  font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+.cart__location-info {
+  display: flex;
+  align-items: center;
+}
+
+.cart__location-delivery {
+  color: var(--primary, #5f0080);
+  font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  font-size: 12.003px;
+  font-weight: 600;
+  line-height: 18px;
+}
+
+.cart__button-location-change {
+  color: var(--primary, #5f0080);
+  font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+  display: flex;
+  width: 244px;
+  height: 44px;
+  justify-content: center;
+  align-items: center;
+  align-self: stretch;
+  border-radius: 4px;
+  background-color: transparent;
+  border: 1px solid var(--primary, #5f0080);
+}

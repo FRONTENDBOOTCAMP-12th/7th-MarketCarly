@@ -1,0 +1,107 @@
+.cart__legend {
+  font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  font-size: var(--text-2xl);
+  font-weight: var(--font-semibold);
+  line-height: var(--line-height-loose);
+  text-align: center;
+  padding-block: 2.75rem;
+}
+
+.cart_container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.cart__checkbox-wrapper {
+  width: 742px;
+  height: 24px;
+  padding-block: 16px;
+  color: #333;
+  font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  border-bottom: 1px solid #000;
+}
+
+.cart__checkbox {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  appearance: none;
+}
+
+.cart__checkbox-icon {
+  width: 23px;
+  height: 23px;
+  background: url('../../assets/icons/isChecked=false.svg') no-repeat
+    center/cover;
+}
+
+.cart__checkbox:checked + .cart__checkbox-icon {
+  background: url('../../assets/icons/isChecked=true.svg');
+}
+
+.cart__button-delete,
+.cart__button--dropdown {
+  border: 0;
+  background-color: transparent;
+  color: #333;
+  font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+  padding: 0;
+}
+
+.cart__type {
+  display: flex;
+  align-items: center;
+  width: 742px;
+  height: 62px;
+}
+
+.cart__type-image {
+  width: 30px;
+  height: 30px;
+}
+
+.cart__type-wrapper {
+  border-bottom: 1px solid #000;
+}
+
+.cart__type-name {
+  color: #000;
+  font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+  width: 690px;
+}
+
+.cart__button--dropdown {
+  width: 22px;
+  height: 22px;
+}
+
+.cart__button {
+  width: 286px;
+  height: 3.5rem;
+  background-color: var(--primary);
+  color: var(--white);
+  margin-top: 20px;
+  font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+.cart__components-wrapper {
+  margin-top: 50px;
+}
