@@ -12,11 +12,11 @@ export class ProductNav extends LitElement {
       css`
 				.product-nav {
 					max-width: 65.625rem;
+					width: 100%;
 					margin: 2.5rem auto 0;
 					position: sticky;
 					top: 56px;
-					z-index: 999;
-					width: 65.625rem;
+					z-index: 100;
 					margin-inline: auto;
 					font-size: var(--text-base);
 				
