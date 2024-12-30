@@ -140,7 +140,9 @@ class Register extends LitElement {
 
     const data = {
       userId: formData.id,
-      pw: formData.pw,
+      password: formData.pw,
+      passwordConfirm: formData.pwCheck,
+      emailVisibility: true,
       name: formData.name,
       email: formData.email,
       phone: formData.phone,
@@ -153,7 +155,7 @@ class Register extends LitElement {
       option4: agreementData.option4,
     };
 
-    pb.collection('user')
+    pb.collection('users')
       .create(data)
       .then(() => {
         Swal.fire({

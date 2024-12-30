@@ -1,135 +1,228 @@
 import { LitElement, html, css } from 'lit';
-import resetCSS from '@/Layout/resetCSS';
+import Swiper from 'swiper';
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+import pb from '@/api/pocketbase.js';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 export class MainBanner extends LitElement {
-  static get styles() {
-    return [
-      resetCSS,
-      css`
-        .main-banner {
-          position: relative;
-          width: 100%;
-        }
+  static properties = {
+    bannerData: { type: Array, state: true },
+    currentPage: { type: Number, state: true },
+  };
 
-        .main-banner__image-container {
-          width: 100%;
-        }
+  static styles = css`
+    :host {
+      display: block;
+      width: 100%;
+      overflow: hidden;
+    }
 
-        .main-banner__image {
-          width: 100%;
-          height: auto;
-          display: block;
-        }
+    .swiper {
+      width: 100%;
+      max-width: 1920px;
+      height: 370px;
+      margin: 0 auto;
+      overflow: hidden;
+      position: relative;
+    }
 
-        .main-banner__controls {
-          position: absolute;
-          top: 50%;
-          transform: translateY(-50%);
-          width: 100%;
-          display: flex;
-          justify-content: space-between;
-          padding: 0 10%;
-          box-sizing: border-box;
-        }
+    .swiper-wrapper {
+      display: flex;
+      max-width: 1920px;
+      width: 100%;
+      height: 100%;
+    }
 
-        .main-banner__button {
-          width: 48px;
-          height: 48px;
-          border-radius: 50%;
-          background: none;
-          border: none;
-          padding: 0;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transition: background-color 0.3s ease;
-        }
+    .swiper-slide {
+      width: 100%;
+      height: 100%;
+      flex-shrink: 0;
+      position: relative;
+      background: #f8f8f8;
+    }
 
-        .main-banner__button:hover {
-          background-color: rgba(128, 128, 128, 0.8);
-        }
+    .slide-image {
+      max-width: 1920px;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
 
-        .main-banner__counter {
-          position: absolute;
-          bottom: 20px;
-          right: 15%;
-          background-color: rgba(128, 128, 128, 0.6);
-          color: white;
-          padding: 4px 12px;
-          border-radius: 12px;
-          font-size: 14px;
-        }
-      `,
-    ];
-  }
+    .swiper-button-prev,
+    .swiper-button-next {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      transition: background-color 0.3s ease;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: 24px;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10;
+    }
+
+    .swiper-button-prev {
+      left: 20px;
+    }
+
+    .swiper-button-next {
+      right: 20px;
+    }
+
+    .swiper-button-prev:hover,
+    .swiper-button-next:hover {
+      border: none;
+      background: rgba(0, 0, 0, 0.6);
+    }
+
+    .swiper-button-prev::after,
+    .swiper-button-next::after {
+      display: none;
+    }
+
+    .swiper-pagination-bullet {
+      width: 8px;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.5);
+      opacity: 1;
+    }
+
+    .swiper-pagination {
+      position: absolute;
+      bottom: 15%;
+      right: 10%;
+      color: #fff;
+      border-radius: 12px;
+      background: rgba(64, 64, 64, 0.3);
+      padding: 1px 12px;
+    }
+
+    .swiper-pagination-bullet-active {
+      background: #fff;
+    }
+  `;
 
   constructor() {
     super();
-    this.images = [
-      '/assets/images/banner01.webp',
-      '/assets/images/banner02.webp',
-      '/assets/images/banner03.webp',
-      '/assets/images/banner05.webp',
-      '/assets/images/banner02.webp',
-    ];
-    this.currentSlide = 1;
+    this.bannerData = [];
+    this.swiper = null;
+    this.currentPage = 1;
   }
 
-  handlePrevClick() {
-    this.currentSlide = this.currentSlide === 1 ? 5 : this.currentSlide - 1;
-    this.requestUpdate();
+  async connectedCallback() {
+    super.connectedCallback();
+    await this.fetchBannerData();
   }
 
-  handleNextClick() {
-    this.currentSlide = this.currentSlide === 5 ? 1 : this.currentSlide + 1;
-    this.requestUpdate();
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    if (this.swiper) {
+      this.swiper.destroy();
+      this.swiper = null;
+    }
+  }
+
+  handlePrevClick = () => {
+    if (this.swiper) {
+      this.swiper.slidePrev();
+    }
+  };
+
+  handleNextClick = () => {
+    if (this.swiper) {
+      this.swiper.slideNext();
+    }
+  };
+
+  async fetchBannerData() {
+    try {
+      const response = await pb.collection('banner').getFullList({
+        sort: '-created',
+      });
+
+      this.bannerData = response;
+    } catch (error) {}
+  }
+  updated(changedProperties) {
+    super.updated(changedProperties);
+
+    if (changedProperties.has('bannerData')) {
+      if (this.swiper) {
+        this.swiper.destroy();
+        this.swiper = null;
+      }
+
+      const swiperContainer = this.shadowRoot?.querySelector('.swiper');
+      if (!swiperContainer) return;
+
+      this.swiper = new Swiper(swiperContainer, {
+        modules: [Navigation, Pagination, Autoplay],
+        slidesPerView: 1,
+        spaceBetween: 0,
+        loop: true,
+        speed: 500,
+        observer: true,
+        observeParents: true,
+        autoplay: {
+          delay: 3000,
+          disableOnInteraction: false,
+        },
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true,
+        },
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev',
+        },
+        on: {
+          slideChange: () => {
+            if (this.swiper) {
+              this.currentPage = this.swiper.realIndex + 1;
+            }
+          },
+        },
+      });
+    }
   }
 
   render() {
+    if (!this.bannerData) return html`Loading...`;
+
     return html`
-      <section class="main-banner">
-        <div class="main-banner__image-container">
-          <figure>
-            <img
-              class="main-banner__image"
-              src=${this.images[this.currentSlide - 1]}
-              alt="메인 배너 이미지 ${this.currentSlide}"
-            />
-          </figure>
+      <div class="swiper">
+        <div class="swiper-wrapper">
+          ${this.bannerData.map((item) => {
+            const fullUrl = `${pb.baseUrl}/api/files/banner/${item.id}/${item.banner_img}`;
+            return html`
+              <div class="swiper-slide">
+                <img
+                  class="slide-image"
+                  src="${fullUrl}"
+                  alt="${item.alt || 'Banner Image'}"
+                  loading="lazy"
+                />
+              </div>
+            `;
+          })}
         </div>
-
-        <nav class="main-banner__controls" aria-label="배너 내비게이션">
-          <button
-            class="main-banner__button"
-            @click=${this.handlePrevClick}
-            aria-label="이전 배너"
-          >
-            <img
-              class="main-banner__button-icon"
-              src="/assets/icons/PrevArrow.svg"
-              alt=""
-              aria-hidden="true"
-            />
-          </button>
-          <button
-            class="main-banner__button"
-            @click=${this.handleNextClick}
-            aria-label="다음 배너"
-          >
-            <img
-              class="main-banner__button-icon"
-              src="/assets/icons/NextArrow.svg"
-              alt=""
-              aria-hidden="true"
-            />
-          </button>
-        </nav>
-
-        <div class="main-banner__counter" role="status" aria-live="polite">
-          ${this.currentSlide} / ${this.images.length}
+          <div class="swiper-pagination">
+            ${this.currentPage} / ${this.bannerData.length}
+          </div>
+          <div class="swiper-button-prev" @click="${this.handlePrevClick}">
+           <img src="/assets/icons/PrevArrow.svg" alt="이전 이미지 넘기기 버튼" />
+          </div>
+          <div class="swiper-button-next" @click="${this.handleNextClick}">
+           <img src="/assets/icons/NextArrow.svg" alt="다음 이미지 넘기기 버튼" />
+          </div>
         </div>
-      </section>
+      </div>
     `;
   }
 }

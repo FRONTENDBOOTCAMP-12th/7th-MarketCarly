@@ -1,7 +1,18 @@
 import { LitElement, html, css } from 'lit';
 import resetCSS from '@/Layout/resetCSS';
+import Swiper from 'swiper';
+import { Navigation } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
 
 export class RecentProducts extends LitElement {
+  static get properties() {
+    return {
+      products: { type: Array },
+      swiper: { type: Object },
+    };
+  }
+
   static get styles() {
     return [
       resetCSS,
@@ -63,7 +74,7 @@ export class RecentProducts extends LitElement {
           margin: 0;
           display: flex;
           flex-direction: column;
-          gap: 0.5rem;
+          transition: transform 0.3s ease;
         }
 
         .recent__item {
@@ -94,18 +105,64 @@ export class RecentProducts extends LitElement {
 
   constructor() {
     super();
-    this.products = [
-      { src: '/assets/images/banner01.webp', alt: '상품 1', href: '#' },
-      { src: '/assets/images/banner02.webp', alt: '상품 2', href: '#' },
-      { src: '/assets/images/banner03.webp', alt: '상품 3', href: '#' },
-      { src: '/assets/images/banner05.webp', alt: '상품 4', href: '#' },
-    ];
+    this.products = JSON.parse(localStorage.getItem('recentProducts')) || [];
+  }
+
+  initSwiper() {
+    const swiperContainer = this.shadowRoot.querySelector('.recent__content');
+    this.swiper = new Swiper(swiperContainer, {
+      direction: 'vertical',
+      slidesPerView: 2,
+      spaceBetween: 10,
+      loop: false,
+      wrapperClass: 'recent__list',
+      slideClass: 'recent__item',
+    });
+  }
+
+  firstUpdated() {
+    this.initSwiper();
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    window.addEventListener('recentProductsUpdated', () => {
+      this.products = JSON.parse(localStorage.getItem('recentProducts')) || [];
+      if (this.swiper) {
+        this.swiper.destroy();
+        this.initSwiper();
+      }
+    });
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    if (this.swiper) {
+      this.swiper.destroy();
+    }
+    window.removeEventListener('recentProductsUpdated');
+  }
+
+  handlePrevClick() {
+    if (this.swiper) {
+      this.swiper.slideTo(this.swiper.activeIndex - 1);
+    }
+  }
+
+  handleNextClick() {
+    if (this.swiper) {
+      this.swiper.slideTo(this.swiper.activeIndex + 1);
+    }
   }
 
   render() {
     return html`
       <aside class="recent">
-        <button class="recent__button" aria-label="이전 상품 보기">
+        <button
+          class="recent__button"
+          @click=${this.handlePrevClick}
+          aria-label="최근 본 상품 상단 이동 버튼"
+        >
           <img
             class="recent__button-icon"
             src="/assets/icons/Direction=Up.svg"
@@ -120,14 +177,14 @@ export class RecentProducts extends LitElement {
 
         <div class="recent__content">
           <ul class="recent__list">
-            ${this.products.map(
+            ${[...this.products].reverse().map(
               (product) => html`
                 <li class="recent__item">
-                  <a href=${product.href} class="recent__link">
+                  <a href="#" class="recent__link">
                     <img
                       class="recent__image"
-                      src=${product.src}
-                      alt=${product.alt}
+                      src=${product.image}
+                      alt=${product.title}
                     />
                   </a>
                 </li>
@@ -136,7 +193,11 @@ export class RecentProducts extends LitElement {
           </ul>
         </div>
 
-        <button class="recent__button" aria-label="다음 상품 보기">
+        <button
+          class="recent__button"
+          @click=${this.handleNextClick}
+          aria-label="다음 상품 보기"
+        >
           <img
             class="recent__button-icon"
             src="/assets/icons/Direction=Down.svg"

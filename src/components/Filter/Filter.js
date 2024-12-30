@@ -1,28 +1,25 @@
 import { LitElement, html, css } from 'lit';
 import resetCSS from '/src/Layout/resetCSS.ts';
+import baseCSS from '/src/Layout/base.ts';
 
 class Filter extends LitElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
-    this.filterTitle = '카테고리';
-    this.selectedFilterCount = '1';
-    this.filterName = '샐러드 · 간편식';
-    this.filterItemCount = '65';
   }
 
   static get properties() {
     return {
       filterTitle: { type: String },
-      selectedFilterCount: { type: Number },
-      filterName: { type: String },
-      filterItemCount: { type: Number },
+      selectedCategoryCount: { type: Number },
+      categories: { type: Array },
     };
   }
 
   static get styles() {
     return [
       resetCSS,
+      baseCSS,
       css`
         button {
           font-family: 'Pretendard Variable', Pretendard, sans-serif;
@@ -32,7 +29,7 @@ class Filter extends LitElement {
           cursor: pointer;
         }
 
-        .filters {
+        .filters__content {
           width: 13.75rem;
           display: flex;
           flex-direction: column;
@@ -104,11 +101,13 @@ class Filter extends LitElement {
         }
 
         .category__checkbox {
+          pointer-events: none;
           position: absolute;
           appearance: none;
         }
 
         .category__icon-check {
+          pointer-events: none;
           display: inline-block;
           width: 1.5rem;
           height: 1.5rem;
@@ -167,37 +166,76 @@ class Filter extends LitElement {
     moreCategory.classList.toggle('isActive');
   }
 
-  handleClickCategory() {
-    const category = this.shadowRoot.querySelector('.category');
+  handleClickCategory(e) {
+    const category = e.currentTarget;
+    const isSelected = category.classList.contains('isSelected');
 
     category.classList.toggle('isSelected');
+
+    if (isSelected) {
+      this.selectedCategoryCount--;
+    } else {
+      this.selectedCategoryCount++;
+    }
+
+    this.dispatchEvent(new CustomEvent('filter-changed', {
+      detail: {
+        title: this.filterTitle,
+        selectedCategories: this.getSelectedCategories()
+      },
+      bubbles: true,
+      composed: true,
+    }));
+
+    this.requestUpdate();
+  }
+
+getSelectedCategories() {
+  const selectedCategories = [];
+  const categories = this.shadowRoot.querySelectorAll('.category.isSelected');
+  categories.forEach(category => {
+    const categoryName = category.querySelector('.category__name').textContent;
+    selectedCategories.push(categoryName);
+  });
+  return selectedCategories;
+}
+
+  handleClickReset() {
+    const categories = this.shadowRoot.querySelectorAll('.category');
+    
+    categories.forEach(category => category.classList.remove('isSelected'));
+    this.selectedCategoryCount = 0;
+    
+    this.requestUpdate();
   }
 
   render() {
     return html`
-      <div class="filters">
+      <div class="filters__content">
         <button 
           class="filter" 
           @click=${this.handleClickFilter}
         >
           <div class="filter__info">
             <span class="name">${this.filterTitle}</span>
-            <span class="items">${this.selectedFilterCount}</span>
+            <span class="items">${this.selectedCategoryCount > 0 ? this.selectedCategoryCount : ''}</span>
           </div>
           <span class="filter__dropdown"></span>
         </button>
         <ul class="categories">
-          <li>
-            <div 
-              class="category"
-              @click=${this.handleClickCategory}
-            >
-              <input class="category__checkbox" type="checkbox" id="checkbox" />
-              <label class="category__icon-check" for="checkbox"></label>
-              <span class="category__name">${this.filterName}</span>
-              <span class="category__items">${this.filterItemCount}</span>
-            </div>
-          </li>
+          ${this.categories.map((category, index) => html`
+            <li>
+              <div 
+                class="category"
+                @click=${this.handleClickCategory}
+              >
+                <input class="category__checkbox" type="checkbox" id="checkbox-${index}" />
+                <label class="category__icon-check" for="checkbox-${index}"></label>
+                <span class="category__name">${category.name}</span>
+                <span class="category__items">${category.itemCount}</span>
+              </div>
+            </li>
+          `)}
         </ul>
         <button class="more-category">
           <span class="more-category__text">카테고리 더 보기</span>

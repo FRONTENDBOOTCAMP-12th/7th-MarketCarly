@@ -79,9 +79,8 @@
   }
 }
 
-.register__birthday-separator::after {
-  content: '/';
-  color: var(--gray--300);
+.register__birthday-separator {
+  color: var(--gray--400);
 }
 
 /* input[type='number'] 기본 화살표 속성 제거 */

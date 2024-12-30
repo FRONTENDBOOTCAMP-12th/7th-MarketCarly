@@ -185,7 +185,7 @@ class FormGroup extends LitElement {
 
     try {
       const record = await pb
-        .collection('user')
+        .collection('users')
         .getFirstListItem(`userId='${idValue}'`);
 
       if (record) {
@@ -196,7 +196,7 @@ class FormGroup extends LitElement {
         idInput.value = '';
       }
     } catch (error) {
-      if (error.status === 404) {
+      if (error) {
         Swal.fire('사용 가능한 아이디입니다.');
       } else {
         console.error('idCheck error');
@@ -210,7 +210,7 @@ class FormGroup extends LitElement {
 
     try {
       const record = await pb
-        .collection('user')
+        .collection('users')
         .getFirstListItem(`email='${emailValue}'`);
 
       if (record) {
@@ -218,7 +218,7 @@ class FormGroup extends LitElement {
         emailInput.value = '';
       }
     } catch (error) {
-      if (error.status === 404) {
+      if (error) {
         Swal.fire('사용 가능한 이메일입니다.');
       } else {
         console.error('emailCheck error');
@@ -266,11 +266,16 @@ class FormGroup extends LitElement {
         ${resetCSS}
       </style>
       <div class="register__form-group">
-        <label
-          for="${this.id}"
-          class="register__label register__label--required"
-          >${this.label}</label
-        >
+        <div class="register__label-wrapper">
+          <label
+            for="${this.id}"
+            class="register__label register__label--required"
+            >${this.label}</label
+          ><span class="register__label-required" aria-label="필수 입력 요소"
+            >*</span
+          >
+        </div>
+
         ${this.type
           ? html`<input
               type="${this.type}"
