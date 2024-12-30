@@ -6,12 +6,14 @@ class CartProduct extends LitElement {
   static properties = {
     count: { type: Number },
     isDisabled: { type: Boolean },
+    isChecked: { type: Boolean },
   };
 
   constructor() {
     super();
     this.count = 1;
     this.isDisabled = true;
+    this.isChecked = true;
   }
 
   handleCountMinus() {
@@ -28,8 +30,23 @@ class CartProduct extends LitElement {
   }
 
   handleDelete() {
-    const cartProduct = this.shadowRoot.querySelector('.cart-product');
-    cartProduct.style.display = 'none';
+    this.dispatchEvent(
+      new CustomEvent('delete', {
+        bubbles: true,
+        composed: true,
+      })
+    );
+  }
+
+  handleCheckChange(e) {
+    this.isChecked = e.target.checked;
+    this.dispatchEvent(
+      new CustomEvent('check-change', {
+        detail: { isChecked: this.isChecked },
+        bubbles: true,
+        composed: true,
+      })
+    );
   }
 
   render() {
@@ -38,14 +55,16 @@ class CartProduct extends LitElement {
         ${resetCSS}
         ${style}
       </style>
-      <fieldset class="cart-product">
-        <legend class="cart-product__legend sr-only">장바구니 품목</legend>
+
+      <li class="cart-product">
         <input
           type="checkbox"
           name="check-product"
           id="check-product"
           class="cart-product__checkbox"
           aria-label="장바구니 품목 선택"
+          checked=${this.isChecked}
+          @change=${this.handleCheckChange}
         />
         <span class="cart-product__checkbox-icon"></span>
         <label for="check-product" class="cart-product__label sr-only"
@@ -98,7 +117,7 @@ class CartProduct extends LitElement {
         <button class="cart-product__button-delete" @click=${this.handleDelete}>
           <img src="/assets/icons/Cancel.svg" alt="장바구니 품목 삭제 버튼" />
         </button>
-      </fieldset>
+      </li>
     `;
   }
 }
