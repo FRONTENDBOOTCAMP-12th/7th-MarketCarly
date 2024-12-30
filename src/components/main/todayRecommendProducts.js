@@ -1,8 +1,7 @@
 import { LitElement, html, css } from 'lit';
-import resetCSS from '../../Layout/resetCSS.js';
+import resetCSS from '@/Layout/resetCSS';
 import '../ProductCard/ProductCard.js';
-import pb from '../../api/pocketbase.js';
-
+import pb from '@/api/pocketbase.js';
 import { register } from 'swiper/element/bundle';
 import 'swiper/css';
 import 'swiper/css/navigation';
