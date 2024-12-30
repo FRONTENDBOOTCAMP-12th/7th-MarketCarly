@@ -8,7 +8,7 @@ import '../../components/ProductDetail/ProductNav';
 import '../../components/ProductDetail/ProductCheckImages';
 import '../../components/ProductDetail/ProductDescription';
 import '../../components/ProductDetail/WhyCarly';
-import pb from '../../api/pocketbase';
+import { productState } from '../../components/ProductDetail/ProductState';
 
 // ProductInfo Component + ProductDetailList
 class ProductInfo extends LitElement {
@@ -18,8 +18,10 @@ class ProductInfo extends LitElement {
     css`
       .product {
         max-width: 65.625rem;
+        width: 100%;
         margin: 2.5rem auto 0;
         display: flex;
+        flex-wrap: wrap;
         justify-content: space-between;
       }
 
@@ -29,7 +31,8 @@ class ProductInfo extends LitElement {
       }
 
       .product__info {
-        width: 35rem;
+        max-width: 35rem;
+        width: 100%;
         display: flex;
         flex-direction: column;
         gap: 1rem;
@@ -91,54 +94,62 @@ class ProductInfo extends LitElement {
     `,
   ];
 
+  // 컴포넌트에서 사용할 프로퍼티 정의
   static properties = {
-    product: { type: Object },
+    productId: { type: String }, // 상품 ID
+    product: { type: Object }, // 상품 데이터
   };
 
   constructor() {
     super();
-    // this.product = {
-    //   delivery: '샛별배송',
-    //   name: '[풀무원] 탱탱쫄면 (4개입)',
-    //   description: '튀기지 않아 부담 없는 매콤함',
-    //   price: 4980,
-    //   originalPrice: 9960,
-    //   discount: 50,
-    //   imageUrl: '/assets/images/product-detail-img01.png',
-    // };
+    // 상품 ID 초기화
+    this.productId = '';
+    // 상품 데이터를 초기화
     this.product = {};
   }
 
+  // DOM에 컴포넌트가 연결될 때 호출되는 메서드
   connectedCallback() {
     super.connectedCallback();
-    this.fetchData();
+
+    // URL에서 productId 추출
+    const urlParts = window.location.pathname.split('/');
+    const productId = urlParts[urlParts.length - 1]; // URL의 마지막 부분
+    // console.log('현재 Product ID:', productId);
+
+    if (productId && !isNaN(productId)) {
+      this.productId = productId;
+      productState.loadProduct(this.productId);
+    } else {
+      console.error('잘못된 productId:', productId);
+    }
+
+    // 상태 구독
+    this.handleProductChange = (product) => {
+      console.log('productState에서 넘겨 받은', product);
+      this.product = product;
+      this.requestUpdate();
+    };
+
+    productState.addListener(this.handleProductChange);
   }
 
-  async fetchData() {
-    try {
-      const productId = 'RAMEN01';
-      const product = await pb
-        .collection('product')
-        .getFirstListItem(`product_id="${productId}"`);
-      console.log(product);
-
-      this.product = {
-        id: product.id,
-        product_id: product.product_id,
-        delivery_type: product.delivery_type,
-        title: product.title,
-        description: product.description,
-        discount_rate: product.discount_rate,
-        price: product.price,
-        original_price: product.original_price,
-        img: `${pb.baseURL}/api/files/product/${product.id}/${product.img}`,
-      };
-    } catch (error) {
-      console.error('error!');
-    }
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    productState.removeListener(this.handleProductChange);
   }
 
   render() {
+    console.log('넘겨진 product 데이터', this.product);
+
+    if (!this.product || Object.keys(this.product).length === 0) {
+      return;
+    }
+
+    if (!this.product || !this.product.price) {
+      return;
+    }
+
     return html`
       <div class="product">
         <figure class="product__img">
@@ -146,7 +157,9 @@ class ProductInfo extends LitElement {
         </figure>
         <div class="product__info">
           <p class="product__delivery">${this.product.delivery_type}</p>
-          <h2 class="product__name">${this.product.title}</h2>
+          <h2 class="product__name">
+            ${this.product.brand} ${this.product.title}
+          </h2>
           <p class="product__description">${this.product.description}</p>
           <div class="product__price-wrapper">
             <div>
@@ -158,13 +171,14 @@ class ProductInfo extends LitElement {
               >
             </div>
             <p class="product__original-price">
-              ${this.product.original_price.toLocaleString()} 원
+              ${this.product.discount_price.toLocaleString()} 원
             </p>
           </div>
           <p class="product__login-benefit">
             로그인 후, 적립 혜택이 제공됩니다.
           </p>
-          <product-detail-list></product-detail-list>
+          <product-detail-list .product="${this.product}"></product-detail-list>
+          <product-actions .product="${this.product}"></product-actions>
         </div>
       </div>
     `;
