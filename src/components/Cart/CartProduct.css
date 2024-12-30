@@ -2,23 +2,23 @@
 
 .cart-product {
   display: flex;
-  width: 742px;
-  padding: 20px 0px;
+  width: 46.375rem;
+  padding: 1.25rem 0rem;
   align-items: center;
-  gap: 8px;
+  gap: 0.5rem;
 }
 
 .cart-product__checkbox {
   position: absolute;
-  width: 24px;
-  height: 24px;
+  width: 1.5rem;
+  height: 1.5rem;
   appearance: none;
 }
 
 .cart-product__checkbox-icon {
   display: flex;
-  width: 24px;
-  height: 24px;
+  width: 1.5rem;
+  height: 1.5rem;
   justify-content: center;
   align-items: center;
   flex-shrink: 0;
@@ -31,14 +31,14 @@
 }
 
 .cart-product__image {
-  width: 60px;
-  height: 78px;
+  width: 3.75rem;
+  height: 4.875rem;
 }
 
 .cart-product__figure {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 0.5rem;
 }
 
 .cart-product__detail-page {
@@ -46,24 +46,24 @@
 }
 
 .cart-product__detail-page--desc {
-  margin-right: 179px;
-  height: 24px;
+  margin-right: 11.1875rem;
+  height: 1.5rem;
 }
 
 .cart-product__desc,
 .cart-product__product-number,
 .cart-product__product-price {
-  color: #000;
+  color: var(--black, #000);
   font-family: 'Pretendard Variable', Pretendard, sans-serif;
-  font-size: 16px;
+  font-size: var(--text-base);
   font-style: normal;
-  font-weight: 600;
-  line-height: 24px;
+  font-weight: var(--font-semibold);
+  line-height: var(--text-2xl);
 }
 
 .cart-product__product-price {
-  width: 127px;
-  height: 24px;
+  width: 7.9375rem;
+  height: 1.5rem;
   display: flex;
   justify-content: flex-end;
 }
@@ -73,21 +73,21 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  gap: 8px;
-  border: 1px solid #c4c4c4;
-  width: 84px;
-  height: 30px;
+  gap: 0.5rem;
+  border: 0.0625rem solid var(--gray--200, #c4c4c4);
+  width: 5.25rem;
+  height: 1.875rem;
 }
 
 .cart-product__button-plus,
 .cart-product__button-minus {
-  width: 30px;
-  height: 30px;
+  width: 1.875rem;
+  height: 1.875rem;
   flex-shrink: 0;
-  color: #333333;
+  color: var(--content, #333);
   border: 0;
   background-color: transparent;
-  font-size: 22px;
+  font-size: var(--text-xl);
   font-family: 'Pretendard Variable', Pretendard, sans-serif;
   display: flex;
   flex-direction: row;
@@ -97,12 +97,12 @@
 
 .cart-product__button-plus:disabled,
 .cart-product__button-minus:disabled {
-  color: #a6a6a6;
+  color: var(--gray--300, #a6a6a6);
 }
 
 .cart-product__button-delete {
-  width: 30px;
-  height: 30px;
+  width: 1.875rem;
+  height: 1.875rem;
   flex-shrink: 0;
   border: 0;
   background-color: transparent;
