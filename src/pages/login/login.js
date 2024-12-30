@@ -38,7 +38,7 @@ class Login extends LitElement {
           text: '메인페이지로 이동합니다.',
           icon: 'success',
         }).then(() => {
-          location.href = '/index.html';
+          location.href = '/';
         });
       } else {
         Swal.fire('입력 정보가 올바르지 않습니다.');
