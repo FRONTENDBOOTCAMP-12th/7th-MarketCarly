@@ -10,7 +10,7 @@ export class HeaderTop extends LitElement {
       resetCSS,
       css`
         .top {
-          width: 100%
+          width: 100%;
           border-bottom: 1px solid var(--gray--100);
         }
 
