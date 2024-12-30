@@ -11,6 +11,7 @@ export class HeaderTop extends LitElement {
       css`
         .top {
           width: 100%;
+          border-bottom: 1px solid var(--gray--100);
         }
 
         .top__inner {
