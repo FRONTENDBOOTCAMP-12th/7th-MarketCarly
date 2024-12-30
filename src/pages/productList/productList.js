@@ -15,6 +15,9 @@ class ProductList extends LitElement {
     this.isFetching = false;
     this.products = [];
     this.filteredProducts = [];
+    this.paginatedProducts = [];
+    this.currentPage = 1;
+    this.itemsPerPage = 6;
   }
 
   static get styles() {
@@ -67,12 +70,14 @@ class ProductList extends LitElement {
     this.fetchProducts();
     this.addEventListener('sort-changed', this.handleSortChanged.bind(this));
     this.addEventListener('filter-changed', this.handleFilterChanged.bind(this));
+    this.addEventListener('page-changed', this.handlePageChanged.bind(this));
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
     this.removeEventListener('sort-changed', this.handleSortChanged.bind(this));
     this.removeEventListener('filter-changed', this.handleFilterChanged.bind(this));
+    this.removeEventListener('page-changed', this.handlePageChanged.bind(this));
   }
 
   async fetchProducts() {
@@ -87,62 +92,71 @@ class ProductList extends LitElement {
     this.filteredProducts = [...this.products];
     this.isFetching = false;
 
+    this.updatePaginatedProducts();
+
     this.requestUpdate();
   }
 
   handleFilterChanged(event) {
-    const { title, selectedCategories } = event.detail;
+    const { title, selectedCategories, processed } = event.detail;
+
+    if (processed) return;
   
-    // 필터 조건 저장
     this.activeFilters = this.activeFilters || {};
     this.activeFilters[title] = selectedCategories;
   
-    // 필터링 로직
     this.filteredProducts = this.products.filter(product => {
-      let isMatch = true; // 기본값: 모든 조건을 만족한다고 가정
+      let isMatch = true;
   
-      // 포장타입 필터
       if (this.activeFilters['포장타입']?.length > 0) {
         if (!this.activeFilters['포장타입'].includes(product.product_type)) {
-          isMatch = false; // 포장타입 조건 미충족
+          isMatch = false;
         }
       }
   
-      // 가격 필터
       if (this.activeFilters['가격']?.length > 0) {
         const price = product.discounted_price || product.price;
         const isPriceMatch = 
-          (this.activeFilters['가격'].includes('6000원 미만') && price < 6000) ||
-          (this.activeFilters['가격'].includes('6000원 ~ 30000원') && price >= 6000 && price <= 30000) ||
-          (this.activeFilters['가격'].includes('30000원 이상') && price > 30000);
+          (this.activeFilters['가격'].includes('6,000원 미만') && price < 6000) ||
+          (this.activeFilters['가격'].includes('6,000원 ~ 30,000원') && price >= 6000 && price < 30000) ||
+          (this.activeFilters['가격'].includes('30,000원 이상') && price >= 30000);
         if (!isPriceMatch) {
-          isMatch = false; // 가격 조건 미충족
+          isMatch = false;
         }
       }
   
-      // 배송 필터
       if (this.activeFilters['배송']?.length > 0) {
         if (!this.activeFilters['배송'].includes(product.delivery_type)) {
-          isMatch = false; // 배송 조건 미충족
+          isMatch = false;
         }
       }
   
-      // 혜택 필터 (할인상품)
       if (this.activeFilters['혜택']?.includes('할인상품')) {
         if (!product.discount_price) {
-          isMatch = false; // 할인상품 조건 미충족
+          isMatch = false;
         }
       }
   
-      return isMatch; // 모든 조건 통과
+      return isMatch;
     });
   
+    this.currentPage = 1;
+    this.updatePaginatedProducts();
+
     this.requestUpdate();
   }
 
   handleSortChanged(event) {
     const sortOption = event.detail.title;
     this.sortProducts(sortOption);
+
+    this.currentPage = 1;
+    this.updatePaginatedProducts();
+  }
+
+  handlePageChanged(event) {
+    this.currentPage = event.detail.currentPage;
+    this.updatePaginatedProducts();
   }
 
   sortProducts(option) {
@@ -156,27 +170,31 @@ class ProductList extends LitElement {
       this.filteredProducts.sort((a, b) => new Date(b.created) - new Date(a.created));
     }
 
+    this.updatePaginatedProducts();
+    this.requestUpdate();
+  }
+
+  updatePaginatedProducts() {
+    const startIdx = (this.currentPage - 1) * this.itemsPerPage;
+    const endIdx = startIdx + this.itemsPerPage;
+    this.paginatedProducts = this.filteredProducts.slice(startIdx, endIdx);
     this.requestUpdate();
   }
 
   render() {
     return html`
       <h1>베스트</h1>
-
+  
       <div class="main-container">
-
         <filter-section></filter-section>
-
         <section class="products">
-
           <div class="sort">
             <span>총 ${this.filteredProducts.length}건</span>
             <sort-section></sort-section>
           </div>
-
           <div class="cards">
             <ul class="cards-list">
-              ${this.filteredProducts.map(
+              ${this.paginatedProducts.map(
                 (product) => html`
                   <li>
                     <product-card
@@ -195,14 +213,17 @@ class ProductList extends LitElement {
               )}
             </ul>
           </div>
-
-          <pagination-section></pagination-section>
-
+          <pagination-section
+            .totalItems=${this.filteredProducts.length}
+            .itemsPerPage=${this.itemsPerPage}
+            .currentPage=${this.currentPage}
+            @page-changed=${this.handlePageChanged}
+          ></pagination-section>
         </section>
-
       </div>
     `;
   }
+  
 }
 
 customElements.define('product-list', ProductList);
