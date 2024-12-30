@@ -2,6 +2,7 @@ import { LitElement, html, css } from 'lit';
 import resetCSS from '../resetCSS.ts';
 import baseCSS from '../base.ts';
 import './searchBar.js';
+import Swal from 'sweetalert2';
 
 export class HeaderTop extends LitElement {
   static get styles() {
@@ -30,6 +31,7 @@ export class HeaderTop extends LitElement {
           display: flex;
           list-style: none;
           gap: 0.75rem;
+          align-items: center;
         }
 
         .top__item {
@@ -130,8 +132,69 @@ export class HeaderTop extends LitElement {
           display: flex;
           align-items: center;
         }
+
+        .top__login-auth {
+          display: flex;
+          align-items: center;
+        }
+
+        .top__button-logout {
+          border: 0;
+          background-color: transparent;
+          font-size: 0.75rem;
+          display: flex;
+          padding-left: 0.625rem;
+          padding-right: 0;
+        }
       `,
     ];
+  }
+
+  static properties = {
+    isAuth: { type: Boolean },
+    userName: { type: String },
+  };
+
+  constructor() {
+    super();
+    this.isAuth = false;
+    this.userName = '';
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.getAuth();
+  }
+
+  getAuth() {
+    const auth = JSON.parse(localStorage.getItem('auth') || '');
+    this.isAuth = auth.isAuth;
+
+    const { user } = auth;
+    this.userName = user.name;
+  }
+
+  handleLogout() {
+    Swal.fire({
+      title: '로그아웃 하시겠습니까?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: '로그아웃',
+    }).then((isConfirmed) => {
+      if (isConfirmed) {
+        localStorage.removeItem('auth');
+        location.href = '/';
+      }
+    });
+  }
+
+  handleLoginDirect() {
+    Swal.fire({
+      title: '로그인 후 이용 가능합니다.',
+      text: '로그인 페이지로 이동합니다.',
+    }).then(() => {
+      location.href = '/src/pages/login/';
+    });
   }
 
   render() {
@@ -144,7 +207,20 @@ export class HeaderTop extends LitElement {
                 <a href="/src/pages/register/" class="top__link">회원가입</a>
               </li>
               <li class="top__item">
-                <a href="/src/pages/login/" class="top__link">로그인</a>
+                ${this.isAuth
+                  ? html`<div class="top__login-auth">
+                      <span class="top__login-name">${this.userName}님</span>
+                      <button
+                        type="button"
+                        class="top__button-logout"
+                        @click=${this.handleLogout}
+                      >
+                        Logout
+                      </button>
+                    </div>`
+                  : html`<a href="/src/pages/login/" class="top__link"
+                      >로그인</a
+                    >`}
               </li>
               <li class="top__item">
                 <a href="/cs" class="top__link">고객센터</a>
@@ -182,9 +258,15 @@ export class HeaderTop extends LitElement {
             <nav class="top__icons" aria-label="사용자 도구">
               <ul class="top__icons-list" role="list">
                 <li>
-                  <button class="top__icons-button" aria-label="배송지 등록">
+                  <button
+                    class="top__icons-button"
+                    @click=${this.isAuth
+                      ? () => (location.href = '/src/pages/pwConfirm/')
+                      : this.handleLoginDirect}
+                    aria-label="개인정보 수정"
+                  >
                     <img
-                      src="/assets/icons/location.svg"
+                      src="/assets/icons/edit.svg"
                       alt=""
                       aria-hidden="true"
                     />
