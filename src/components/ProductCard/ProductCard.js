@@ -30,7 +30,7 @@ export class ProductCard extends LitElement {
       price: { type: Number },
       originalPrice: { type: Number },
       isDiscounted: { type: Boolean },
-      discount_rate: { type: Number },
+      discount: { type: Number },
       badges: { type: Array },
     };
   }
@@ -56,12 +56,18 @@ export class ProductCard extends LitElement {
           width: 250px;
           aspect-ratio: 1 / 1.25;
           background: var(--gray--50);
+          overflow: hidden;
         }
 
         .product__image {
           width: 100%;
           height: 100%;
           object-fit: cover;
+          transition: transform 0.3s ease;
+
+          &:hover {
+            transform: scale(1.03);
+          }
         }
 
         .product__discount {
@@ -188,11 +194,11 @@ export class ProductCard extends LitElement {
               : ''}
             <h3 class="product__title">${formattedTitle}</h3>
             <div class="product__price-wrap">
-              ${this.isDiscounted && this.discount_rate
+              ${this.isDiscounted && this.discount
                 ? html`
                     <div class="product__price-info">
                       <strong class="product__discount-rate"
-                        >${this.discount_rate}%</strong
+                        >${this.discount}%</strong
                       >
                       <strong class="product__price"
                         >${this.price?.toLocaleString() ?? 0}원</strong
