@@ -8,24 +8,6 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
 export class TodayRecommendProducts extends LitElement {
-  constructor() {
-    super();
-    this.sectionTitle = '이 상품 어때요?';
-    this.firstPositionProducts = [];
-    this.secondPositionProducts = [];
-    this.isFetching = false;
-    register();
-  }
-
-  static get properties() {
-    return {
-      sectionTitle: { type: String },
-      position: { type: String },
-      firstPositionProducts: { type: Array },
-      secondPositionProducts: { type: Array },
-    };
-  }
-
   static get styles() {
     return [
       resetCSS,
@@ -129,6 +111,25 @@ export class TodayRecommendProducts extends LitElement {
     ];
   }
 
+  constructor() {
+    super();
+    this.sectionTitle = '이 상품 어때요?';
+    this.firstPositionProducts = [];
+    this.secondPositionProducts = [];
+    this.isFetching = false;
+    register();
+  }
+
+  static get properties() {
+    return {
+      id: { type: String },
+      sectionTitle: { type: String },
+      position: { type: String },
+      firstPositionProducts: { type: Array },
+      secondPositionProducts: { type: Array },
+    };
+  }
+
   async firstUpdated() {
     await this.setupSwiper();
   }
@@ -201,6 +202,7 @@ export class TodayRecommendProducts extends LitElement {
 
       const mapProductsToCard = (products) => {
         return products.map((product) => ({
+          id: product.id,
           delivery: product.delivery_type === '샛별 배송' ? '샛별 배송' : null,
           title: product.title,
           brand: product.brand,
@@ -326,8 +328,10 @@ export class TodayRecommendProducts extends LitElement {
                     @click=${() => this.handleProductClick(product)}
                   >
                     <product-card
+                      .id=${product.id}
                       .image=${product.image}
                       .delivery=${product.delivery}
+                      .titleLink=${'#'}
                       .title=${product.title}
                       .brand=${product.brand}
                       .description=${product.description}
