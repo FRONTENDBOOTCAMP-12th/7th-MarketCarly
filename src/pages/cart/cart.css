@@ -90,6 +90,11 @@
   height: 22px;
 }
 
+.cart__img-dropdown {
+  width: 17px;
+  height: 17px;
+}
+
 .cart__button {
   width: 286px;
   height: 3.5rem;
