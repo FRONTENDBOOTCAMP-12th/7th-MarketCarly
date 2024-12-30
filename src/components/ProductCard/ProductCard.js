@@ -159,11 +159,9 @@ export class ProductCard extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    console.log('badges:', this.badges);
   }
 
   render() {
-    console.log('render badges:', this.badges);
     const formattedTitle = this.brand
       ? `[${this.brand}] ${this.title}`
       : this.title;

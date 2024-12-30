@@ -155,6 +155,25 @@ export class RecentProducts extends LitElement {
     }
   }
 
+  initSwiper() {
+    const swiperContainer = this.shadowRoot.querySelector('.recent__content');
+    this.swiper = new Swiper(swiperContainer, {
+      modules: [Navigation],
+      direction: 'vertical',
+      slidesPerView: 2,
+      spaceBetween: 10,
+      loop: true,
+      navigation: {
+        nextEl: this.shadowRoot.querySelector('[aria-label="다음 상품 보기"]'),
+        prevEl: this.shadowRoot.querySelector(
+          '[aria-label="최근 본 상품 상단 이동 버튼"]'
+        ),
+      },
+      wrapperClass: 'recent__list',
+      slideClass: 'recent__item',
+    });
+  }
+
   render() {
     return html`
       <aside class="recent">
