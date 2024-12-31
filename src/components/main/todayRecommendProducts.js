@@ -125,6 +125,44 @@ export class TodayRecommendProducts extends LitElement {
             right: 30px;
           }
         }
+
+        .view-all-button {
+          width: 100%;
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 12px;
+          background: #f7f7f7cc;
+          border: 1px solid #eee;
+          border-radius: 12px;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          padding: 20px;
+        }
+
+        .view-all-button:hover {
+          background: #f0f0f0;
+        }
+
+        .view-all-circle {
+          width: 60px;
+          height: 60px;
+          border-radius: 50%;
+          background: white;
+          border: 1px solid #ddd;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 8px;
+        }
+
+        .view-all-text {
+          font-size: 16px;
+          color: #333;
+          font-weight: 500;
+        }
       `,
     ];
   }
@@ -238,6 +276,13 @@ export class TodayRecommendProducts extends LitElement {
     window.dispatchEvent(new CustomEvent('recentProductsUpdated'));
   }
 
+  handleViewAllClick() {
+    const targetPath = '/src/pages/productList/';
+    if (window.location.pathname !== targetPath) {
+      window.location.href = `${window.location.origin}${targetPath}`;
+    }
+  }
+
   renderProducts(products, position, sectionTitle) {
     return html`
       <section class="today" data-position="${position}">
@@ -304,7 +349,7 @@ export class TodayRecommendProducts extends LitElement {
                 "prevEl": ".swiper-button[slot=button-prev]",
                 "nextEl": ".swiper-button[slot=button-next]"
               }'
-              autoplay='{"delay": 2000, "disableOnInteraction": false}'
+              autoplay='{"delay": 3000, "disableOnInteraction": false}'
               breakpoints='{
                 "320": {
                   "slidesPerView": 2,
@@ -340,6 +385,32 @@ export class TodayRecommendProducts extends LitElement {
                   </swiper-slide>
                 `
               )}
+              <swiper-slide>
+                <button
+                  @click=${this.handleViewAllClick}
+                  class="view-all-button"
+                  aria-label="전체보기"
+                >
+                  <div class="view-all-circle">
+                    <svg
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M8.5 5L15.5 12L8.5 19"
+                        stroke="#333"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </div>
+                  <span class="view-all-text"> 상품 전체 보기</span>
+                </button>
+              </swiper-slide>
             </swiper-container>
           </div>
         </div>
