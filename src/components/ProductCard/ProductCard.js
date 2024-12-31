@@ -26,12 +26,18 @@ export class ProductCard extends LitElement {
           width: 250px;
           aspect-ratio: 1 / 1.25;
           background: var(--gray--50);
+          overflow: hidden;
         }
 
         .product__image {
           width: 100%;
           height: 100%;
           object-fit: cover;
+          transition: transform 0.3s ease;
+
+          &:hover {
+            transform: scale(1.03);
+          }
         }
 
         .product__discount {
