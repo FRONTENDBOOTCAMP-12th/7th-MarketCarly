@@ -18,6 +18,7 @@ class ProductList extends LitElement {
     this.paginatedProducts = [];
     this.currentPage = 1;
     this.itemsPerPage = 6;
+    this.activeFilters = {};
   }
 
   static get styles() {
@@ -54,6 +55,29 @@ class ProductList extends LitElement {
           align-items: center;
           font-size: var(--text-base);
           font-weight: var(--font-semibold);
+        }
+
+        .active-filter {
+          display: flex;
+          align-items: center;
+          background-color: none;
+          border: 0.0625rem solid var(--gray--100);
+          padding: 1.25rem;
+        }
+
+        .active-filter__name {
+          color: var(--secondary);
+          font-size: var(--text-sm);
+        }
+
+        .active-filter__remove {
+          width: 30px;
+          height: 30px;
+          border: none;
+          background: none;
+          padding: 0;
+          cursor: pointer;
+          margin-right: 1.25rem;
         }
 
         .cards-list {
@@ -102,8 +126,19 @@ class ProductList extends LitElement {
 
     if (processed) return;
   
-    this.activeFilters = this.activeFilters || {};
-    this.activeFilters[title] = selectedCategories;
+    if (!this.activeFilters[title]) {
+      this.activeFilters[title] = [];
+    }
+
+    selectedCategories.forEach((category) => {
+      if (!this.activeFilters[title].includes(category)) {
+        this.activeFilters[title].push(category);
+      }
+    });
+
+    if (selectedCategories.length === 0) {
+      delete this.activeFilters[title];
+    }
   
     this.filteredProducts = this.products.filter(product => {
       let isMatch = true;
@@ -146,6 +181,25 @@ class ProductList extends LitElement {
     this.requestUpdate();
   }
 
+  removeFilter(filterKey, category) {
+    this.activeFilters[filterKey] = this.activeFilters[filterKey].filter(
+      (item) => item !== category
+    );
+
+    if (this.activeFilters[filterKey].length === 0) {
+      delete this.activeFilters[filterKey];
+    }
+
+    this.handleFilterChanged({
+      detail: {
+        title: filterKey,
+        selectedCategories: this.activeFilters[filterKey] || [],
+      },
+    });
+    
+    this.requestUpdate();
+  }
+  
   handleSortChanged(event) {
     const sortOption = event.detail.title;
     this.sortProducts(sortOption);
@@ -163,9 +217,9 @@ class ProductList extends LitElement {
     if (option === '추천순') {
       this.filteredProducts = [...this.products];
     } else if (option === '낮은 가격순') {
-      this.filteredProducts.sort((a, b) => (a.discounted_price || a.price) - (b.discounted_price || b.price));
+      this.filteredProducts.sort((a, b) => (a.discount_price || a.price) - (b.discount_price || b.price));
     } else if (option === '높은 가격순') {
-      this.filteredProducts.sort((a, b) => (b.discounted_price || b.price) - (a.discounted_price || a.price));
+      this.filteredProducts.sort((a, b) => (b.discount_price || b.price) - (a.discount_price || a.price));
     } else if (option === '신상품순') {
       this.filteredProducts.sort((a, b) => new Date(b.created) - new Date(a.created));
     }
@@ -192,6 +246,26 @@ class ProductList extends LitElement {
             <span>총 ${this.filteredProducts.length}건</span>
             <sort-section></sort-section>
           </div>
+            ${this.activeFilters && Object.keys(this.activeFilters).length > 0
+              ? html`
+                <div class="active-filters">
+                  <div class="active-filter">
+                    ${Object.entries(this.activeFilters).map(
+                      ([filterKey, categories]) => categories.map(
+                        (category) => html`
+                          <span class="active-filter__name">${category}</span>
+                          <button
+                            class="active-filter__remove"
+                            @click=${() => this.removeFilter(filterKey, category)}
+                          >
+                            <img src="/assets/icons/Cancel.svg" />
+                          </button>
+                        `
+                      )
+                    )}
+                </div>
+              `
+            : ''}
           <div class="cards">
             <ul class="cards-list">
               ${this.paginatedProducts.map(
