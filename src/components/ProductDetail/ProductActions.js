@@ -278,7 +278,7 @@ export class ProductActions extends LitElement {
         </button>
         <div class="cart-tooltip ${this.tooltipVisible ? 'show' : ''}">
           <div class="cart-tooltip__info">
-            <img src="${this.product.img}" alt="${this.product.title}" />
+            <img src="${this.product.image}" alt="${this.product.title}" />
             <div class="cart-tooltip__text">
               <p class="cart-tooltip__title">
                 ${this.product.brand} ${this.product.title}
