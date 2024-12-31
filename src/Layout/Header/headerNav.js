@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import resetCSS from '../resetCSS.ts';
 import baseCSS from '../base.ts';
+import '../../components/MenuCategory/MenuCategory'
 
 export class HeaderNav extends LitElement {
   static get styles() {
@@ -68,7 +69,7 @@ export class HeaderNav extends LitElement {
     return html`
       <nav class="nav">
         <div class="nav__inner">
-          <p>카테고리 자리</p>
+          <menu-category></menu-category>
           <div class="nav__menu">
             <a href="/src/pages/productList/?category=new">신상품</a>
             <a href="/src/pages/productList/?category=best">베스트</a>
