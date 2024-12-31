@@ -1,0 +1,95 @@
+.pw-confirm {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-bottom: 3.125rem;
+}
+
+.pw-confirm__fieldset {
+  width: 600px;
+}
+
+.pw-confirm__legend {
+  font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  font-size: var(--text-2xl);
+  font-weight: var(--font-semibold);
+  line-height: var(--line-height-loose);
+  padding-top: 2.75rem;
+}
+
+.pw-confirm__title {
+  font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  font-size: var(--text-2xl);
+  font-weight: var(--font-semibold);
+  line-height: var(--line-height-loose);
+}
+
+.pw-confirm__description {
+  font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  font-size: var(--text-sm);
+  color: var(--gray--700);
+  padding-bottom: 1.25rem;
+}
+
+.pw-confirm__form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  border-top: 3px solid var(--black);
+  padding-block: 30px;
+  border-bottom: 1px solid var(--gray--200);
+}
+
+.pw-confirm__form-group {
+  display: flex;
+  flex-direction: row;
+}
+
+.pw-confirm__label-wrapper {
+  width: 8.75rem;
+  padding-top: 1.125rem;
+}
+
+.pw-confirm__label {
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  line-height: var(--line-height-normal);
+}
+
+.pw-confirm--required {
+  color: var(--info---error);
+}
+
+.pw-confirm__input {
+  font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  font-size: var(--text-base);
+  font-weight: var(--font-regular);
+  line-height: var(--line-height-semirelaxed);
+  color: var(--gray--400);
+  width: 18.75rem;
+  height: 3.125rem;
+  border-radius: 0.25rem;
+  border: 0.0625rem solid var(--gray--200);
+  padding-inline: 1.25rem;
+}
+.pw-confirm__button {
+  background-color: var(--primary);
+  color: var(--white);
+  width: 21.25rem;
+  height: 3.375rem;
+  border: none;
+  border-radius: 0.25rem;
+  font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  line-height: var(--line-height-normal);
+  display: block;
+  margin: 2.5rem auto;
+}
+
+.pw-confirm__button:disabled {
+  background-color: var(--gray--400);
+  color: var(--black);
+  cursor: not-allowed;
+}
