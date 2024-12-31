@@ -16,8 +16,6 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     position: absolute; 
-    top: 40px;
-    left: 0;
     z-index: 100;
 }
 
@@ -30,7 +28,7 @@
     padding: 8px;
     gap: 10px; 
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease;
     user-select: none;
 }
 
@@ -38,19 +36,30 @@
     width: 24px;
     height: 24px;
     display: block;
+    transition: fill 0.3s ease;
 }
 
 .menu-item span {
     font-size: 16px;
     line-height: 24px;
     font-weight: 600;
-    color: #333;
+    color: #333; 
     display: block;
+    transition: color 0.3s ease;
 }
+
 
 .menu-item:hover {
     background-color: #f0f0f0;
     border-radius: 8px;
+}
+
+.menu-item:hover img {
+    filter: brightness(0) saturate(100%) invert(30%) sepia(70%) saturate(700%) hue-rotate(260deg) brightness(100%) contrast(95%);
+}
+
+.menu-item:hover span {
+    color: #5f0080;
 }
 
 .toggle-button {
