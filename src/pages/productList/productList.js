@@ -95,6 +95,26 @@ class ProductList extends LitElement {
     this.addEventListener('sort-changed', this.handleSortChanged.bind(this));
     this.addEventListener('filter-changed', this.handleFilterChanged.bind(this));
     this.addEventListener('page-changed', this.handlePageChanged.bind(this));
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const category = urlParams.get('category');
+  
+    switch (category) {
+      case 'new':
+        this.title = '신상품';
+        this.sortOption = '신상품순';
+        break;
+      case 'best':
+        this.title = '베스트';
+        this.sortOption = '추천순';
+        break;
+      case 'sales':
+        this.title = '알뜰쇼핑';
+        this.sortOption = '낮은 가격순';
+        break;
+    }
+
+    this.requestUpdate();
   }
 
   disconnectedCallback() {
@@ -115,9 +135,7 @@ class ProductList extends LitElement {
 
     this.filteredProducts = [...this.products];
     this.isFetching = false;
-
     this.updatePaginatedProducts();
-
     this.requestUpdate();
   }
 
@@ -140,45 +158,40 @@ class ProductList extends LitElement {
       delete this.activeFilters[title];
     }
   
-    this.filteredProducts = this.products.filter(product => {
-      let isMatch = true;
-  
-      if (this.activeFilters['포장타입']?.length > 0) {
-        if (!this.activeFilters['포장타입'].includes(product.product_type)) {
-          isMatch = false;
-        }
-      }
-  
-      if (this.activeFilters['가격']?.length > 0) {
-        const price = product.discounted_price || product.price;
-        const isPriceMatch = 
-          (this.activeFilters['가격'].includes('6,000원 미만') && price < 6000) ||
-          (this.activeFilters['가격'].includes('6,000원 ~ 30,000원') && price >= 6000 && price < 30000) ||
-          (this.activeFilters['가격'].includes('30,000원 이상') && price >= 30000);
-        if (!isPriceMatch) {
-          isMatch = false;
-        }
-      }
-  
-      if (this.activeFilters['배송']?.length > 0) {
-        if (!this.activeFilters['배송'].includes(product.delivery_type)) {
-          isMatch = false;
-        }
-      }
-  
-      if (this.activeFilters['혜택']?.includes('할인상품')) {
-        if (!product.discount_price) {
-          isMatch = false;
-        }
-      }
-  
-      return isMatch;
-    });
-  
+    this.filteredProducts = this.products.filter(product => this.applyFilters(product));
     this.currentPage = 1;
-    this.updatePaginatedProducts();
 
+    this.updatePaginatedProducts();
     this.requestUpdate();
+  }
+
+  applyFilters(product) {
+    let isMatch = true;
+
+    Object.entries(this.activeFilters).forEach(([filterKey, categories]) => {
+      if (filterKey === '포장타입' && categories.length > 0 && !categories.includes(product.product_type)) {
+        isMatch = false;
+      } else if (filterKey === '가격' && categories.length > 0) {
+        const price = product.discounted_price || product.price;
+        if (!this.isPriceMatch(price, categories)) {
+          isMatch = false;
+        }
+      } else if (filterKey === '배송' && categories.length > 0 && !categories.includes(product.delivery_type)) {
+        isMatch = false;
+      } else if (filterKey === '혜택' && categories.includes('할인상품') && !product.discount_price) {
+        isMatch = false;
+      }
+    });
+
+    return isMatch;
+  }
+
+  isPriceMatch(price, categories) {
+    return (
+      (categories.includes('6,000원 미만') && price < 6000) ||
+      (categories.includes('6,000원 ~ 30,000원') && price >= 6000 && price < 30000) ||
+      (categories.includes('30,000원 이상') && price >= 30000)
+    );
   }
 
   removeFilter(filterKey, category) {
@@ -201,10 +214,9 @@ class ProductList extends LitElement {
   }
   
   handleSortChanged(event) {
-    const sortOption = event.detail.title;
-    this.sortProducts(sortOption);
-
+    this.sortProducts(event.detail.title);
     this.currentPage = 1;
+
     this.updatePaginatedProducts();
   }
 
@@ -231,13 +243,15 @@ class ProductList extends LitElement {
   updatePaginatedProducts() {
     const startIdx = (this.currentPage - 1) * this.itemsPerPage;
     const endIdx = startIdx + this.itemsPerPage;
+    
     this.paginatedProducts = this.filteredProducts.slice(startIdx, endIdx);
+    
     this.requestUpdate();
   }
 
   render() {
     return html`
-      <h1>베스트</h1>
+      <h1>${this.title}</h1>
   
       <div class="main-container">
         <filter-section></filter-section>
@@ -278,7 +292,7 @@ class ProductList extends LitElement {
                       .price=${product.discount_price || product.price || 0}
                       .originalPrice=${product.price || 0}
                       .isDiscounted=${!!product.discount_price}
-                      .discount=${product.discount_rate || 0}
+                      .discount_rate=${product.discount_rate || 0}
                       .description=${product.description}
                       .badges=${product.badges || []}
                     ></product-card>

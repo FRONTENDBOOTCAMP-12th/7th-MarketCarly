@@ -70,9 +70,9 @@ export class HeaderNav extends LitElement {
         <div class="nav__inner">
           <p>카테고리 자리</p>
           <div class="nav__menu">
-            <a href="/new">신상품</a>
-            <a href="/best">베스트</a>
-            <a href="/sales">알뜰쇼핑</a>
+            <a href="/src/pages/productList/?category=new">신상품</a>
+            <a href="/src/pages/productList/?category=best">베스트</a>
+            <a href="/src/pages/productList/?category=sales">알뜰쇼핑</a>
             <a href="/special">특가/혜택</a>
           </div>
           <div class="nav__delivery-info">
