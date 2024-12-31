@@ -2,14 +2,22 @@ class MenuCategory extends HTMLElement {
     constructor() {
         super();
 
+        // Shadow DOM 생성
         const shadow = this.attachShadow({ mode: "open" });
 
-
+        // CSS 링크 추가
         const linkElement = document.createElement("link");
         linkElement.setAttribute("rel", "stylesheet");
-        linkElement.setAttribute("href", "./MenuCategory.css");
+        linkElement.setAttribute("href", "/src/components/MenuCategory/MenuCategory.css");
 
+        // 버튼 및 SVG 생성
+        const toggleButton = document.createElement("div");
+        toggleButton.classList.add("toggle-button");
+        toggleButton.innerHTML = `
+            <img src="/src/assets/icons/category.svg" alt="카테고리 버튼" width="84" height="24">
+        `;
 
+        // 메뉴 컨테이너 생성
         const container = document.createElement("div");
         container.classList.add("menu-container");
         container.innerHTML = `
@@ -17,6 +25,7 @@ class MenuCategory extends HTMLElement {
             <div class="menu-item"><img src="/src/assets/icons/Vegetable.svg" alt="채소"><span>채소</span></div>
             <div class="menu-item"><img src="/src/assets/icons/Fruit.svg" alt="과일 · 견과 · 쌀"><span>과일 · 견과 · 쌀</span></div>
             <div class="menu-item"><img src="/src/assets/icons/SeaFood.svg" alt="수산 · 해산 · 건어물"><span>수산 · 해산 · 건어물</span></div>
+            <div class="menu-item"><img src="/src/assets/icons/Meat.svg" alt="정육 · 계란"><span>정육 · 계란</span></div>
             <div class="menu-item"><img src="/src/assets/icons/Meat.svg" alt="정육 · 계란"><span>정육 · 계란</span></div>
             <div class="menu-item"><img src="/src/assets/icons/Cook.svg" alt="국 · 반찬 · 메인요리"><span>국 · 반찬 · 메인요리</span></div>
             <div class="menu-item"><img src="/src/assets/icons/Salad.svg" alt="샐러드 · 간편식"><span>샐러드 · 간편식</span></div>
@@ -37,19 +46,32 @@ class MenuCategory extends HTMLElement {
             <div class="menu-item"><img src="/src/assets/icons/Travel.svg" alt="여행 · 티켓"><span>여행 · 티켓</span></div>
         `;
 
-
+        // Shadow DOM에 추가
         shadow.appendChild(linkElement);
+        shadow.appendChild(toggleButton);
         shadow.appendChild(container);
 
+        // 이벤트 추가
+        toggleButton.addEventListener("click", () => {
+            if (container.style.display === "none" || !container.style.display) {
+                container.style.display = "flex";
+            } else {
+                container.style.display = "none";
+            }
+        });
 
-        const menuItems = container.querySelectorAll(".menu-item");
-        menuItems.forEach(item => {
-            item.addEventListener("click", (event) => {
+        toggleButton.addEventListener("keydown", (event) => {
+            if (event.key === "Enter" || event.key === " ") {
                 event.preventDefault();
-                event.stopPropagation();
-            });
+                if (container.style.display === "none" || !container.style.display) {
+                    container.style.display = "flex";
+                } else {
+                    container.style.display = "none";
+                }
+            }
         });
     }
 }
 
+// Custom Element 등록
 customElements.define("menu-category", MenuCategory);
