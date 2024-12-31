@@ -5,6 +5,7 @@
   width: 46.375rem;
   padding: 1.25rem 0rem;
   align-items: center;
+  justify-content: space-between;
   gap: 0.5rem;
 }
 
@@ -39,6 +40,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  width: 28.125rem;
 }
 
 .cart-product__detail-page {
@@ -46,7 +48,6 @@
 }
 
 .cart-product__detail-page--desc {
-  margin-right: 11.1875rem;
   height: 1.5rem;
 }
 
@@ -107,4 +108,11 @@
   border: 0;
   background-color: transparent;
   padding: 0;
+}
+
+.cart-product__product-price-original {
+  width: 6.25rem;
+  display: flex;
+  justify-content: flex-start;
+  color: var(--gray--200, #c4c4c4);
 }

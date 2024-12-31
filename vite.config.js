@@ -21,6 +21,8 @@ export default defineConfig({
         popup: resolve(__dirname, 'src/components/PopupAd/index.html'),
         productList: resolve(__dirname, 'src/pages/productList/index.html'),
         cart: resolve(__dirname, 'src/pages/cart/index.html'),
+        pwConfirm: resolve(__dirname, 'src/pages/pwConfirm/index.html'),
+        mypage: resolve(__dirname, 'src/pages/mypage/index.html'),
       },
     },
   },
