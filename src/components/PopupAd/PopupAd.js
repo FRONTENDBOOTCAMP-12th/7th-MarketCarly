@@ -4,6 +4,17 @@ import resetCSS from '/src/styles/reset.css?inline';
 
 class PopupAd extends LitElement {
 
+    constructor() {
+        super();
+        const today = new Date().toISOString().split('T')[0];
+        const popupState = localStorage.getItem('popup-hidden-today');
+        if (popupState === today) {
+            this.hidden = true; 
+        } else {
+            this.hidden = false;
+        }
+    }
+
     handleCloseToday(){
         const popup = this.shadowRoot.querySelector('.popup');
         popup.style.display = 'none'; 
@@ -14,6 +25,11 @@ class PopupAd extends LitElement {
         popup.style.display = 'none'; 
     }
 
+    hidePopup() {
+        const popup = this.shadowRoot.querySelector('.popup');
+        popup.style.display = 'none';
+    }
+
     render() {
         return html`
         <style>${styles}, ${resetCSS}</style>
@@ -22,8 +38,8 @@ class PopupAd extends LitElement {
             <div class="popup-image"></div>
             <div class="popup-text">
                 <p>
-                    해당 사이트는 가시안이며 비상업적 취업을 위한<br>
-                    포트폴리오 용으로만 사용하기 위해 제작된 사이트입니다.
+                    해당 사이트는<br> 가시안이며 비상업적 취업을 위한<br>
+                    포트폴리오 용으로만 사용하기 위해<br> 제작된 사이트입니다.
                 </p>
             </div>
             <div class="popup-footer">
