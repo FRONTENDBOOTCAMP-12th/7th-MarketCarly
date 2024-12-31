@@ -48,6 +48,7 @@
     transition: color 0.3s ease;
 }
 
+
 .menu-item:hover {
     background-color: #f0f0f0;
     border-radius: 8px;
