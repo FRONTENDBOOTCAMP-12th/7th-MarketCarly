@@ -102,14 +102,14 @@ export class ProductDetailList extends LitElement {
         font-weight: var(--font-semibold);
         vertical-align: middle;
       }
-    `
+    `,
   ];
 
   static properties = {
-    details: { type: Array },
-    productName: { type: String },
-    price: { type: Number },
-    originalPrice: { type: Number },
+    details: { attribute: true },
+    productName: { type: String, attribute: true },
+    price: { type: Number, attribute: true },
+    originalPrice: { type: Number, attribute: true },
     quantity: { type: Number },
     totalPrice: { type: Number },
   };
@@ -126,10 +126,10 @@ export class ProductDetailList extends LitElement {
       { title: '알레르기정보', info: '대두, 밀, 쇠고기 함유' },
     ];
     this.productName = '[풀무원] 탱탱쫄면 (4개입)';
-    this.price = 4980;
+    this.price = 4580;
     this.originalPrice = 9960;
     this.quantity = 1;
-    this.totalPrice = 4980;
+    this.totalPrice = this.price;
   }
 
   handleQuantityChange(event) {
@@ -142,7 +142,7 @@ export class ProductDetailList extends LitElement {
     return html`
       <ul class="product__detail-list">
         ${this.details.map(
-          detail => html`
+          (detail) => html`
             <li class="product__detail-item">
               <dt class="product__detail-title">${detail.title}</dt>
               <dd class="product__detail-info">${detail.info}</dd>
@@ -159,8 +159,12 @@ export class ProductDetailList extends LitElement {
                 @quantity-change="${this.handleQuantityChange}"
               ></product-quantity>
               <div class="product__price-wrapper">
-                <span class="product__original-price">${this.originalPrice.toLocaleString()}원</span>
-                <span class="product__final-price">${(this.price * this.quantity).toLocaleString()}원</span>
+                <span class="product__original-price"
+                  >${this.originalPrice.toLocaleString()}원</span
+                >
+                <span class="product__final-price"
+                  >${(this.price * this.quantity).toLocaleString()}원</span
+                >
               </div>
             </div>
           </dd>
@@ -168,7 +172,10 @@ export class ProductDetailList extends LitElement {
       </ul>
       <div class="product__total">
         <p>
-          총 상품금액: <span class="product__total-price">${this.totalPrice.toLocaleString()} 원</span>
+          총 상품금액:
+          <span class="product__total-price"
+            >${this.totalPrice.toLocaleString()} 원</span
+          >
         </p>
         <div class="product__reward">
           <span class="product__reward-icon">적립</span>

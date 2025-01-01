@@ -201,6 +201,7 @@ export class TodayRecommendProducts extends LitElement {
 
       const mapProductsToCard = (products) => {
         return products.map((product) => ({
+          id: product.id,
           delivery: product.delivery_type === '샛별 배송' ? '샛별 배송' : null,
           title: product.title,
           brand: product.brand,

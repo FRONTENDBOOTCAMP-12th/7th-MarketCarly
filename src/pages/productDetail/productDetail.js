@@ -116,11 +116,13 @@ class ProductInfo extends LitElement {
 
   async fetchData() {
     try {
-      const productId = 'RAMEN01';
+      const productId = JSON.parse(
+        localStorage.getItem('recentProducts')
+      ).slice(-1)[0].id;
+      console.log('상품 고유 ID 확인', productId);
       const product = await pb
-        .collection('product')
-        .getFirstListItem(`product_id="${productId}"`);
-      console.log(product);
+        .collection('Products')
+        .getFirstListItem(`id="${productId}"`);
 
       this.product = {
         id: product.id,
@@ -134,7 +136,7 @@ class ProductInfo extends LitElement {
         img: `${pb.baseURL}/api/files/product/${product.id}/${product.img}`,
       };
     } catch (error) {
-      console.error('error!');
+      console.error('에러', error); // 에러 원인 파악용
     }
   }
 
@@ -154,17 +156,21 @@ class ProductInfo extends LitElement {
                 >${this.product.discount_rate}%</span
               >
               <span class="product__price"
-                >${this.product.price.toLocaleString()} 원</span
+                >${this.product.price?.toLocaleString()} 원</span
               >
             </div>
             <p class="product__original-price">
-              ${this.product.original_price.toLocaleString()} 원
+              ${this.product.original_price?.toLocaleString()} 원
             </p>
           </div>
           <p class="product__login-benefit">
             로그인 후, 적립 혜택이 제공됩니다.
           </p>
-          <product-detail-list></product-detail-list>
+          <product-detail-list
+            productName="${this.product.title}"
+            price="${this.product.price}"
+            originalPrice="${this.product.original_price}"
+          ></product-detail-list>
         </div>
       </div>
     `;
