@@ -41,11 +41,11 @@ class SortSection extends LitElement {
           border: 0.0625rem solid var(--content);
           border-radius: 0.1875rem;
           z-index: 1;
-          visibility: hidden;
+          display: none;
         }
 
         .sort-options__icon:hover + .sort-options__message {
-          visibility: visible;
+          display: block;
         }
 
         .divider {
@@ -89,7 +89,9 @@ class SortSection extends LitElement {
             ${title === '추천순'
               ? html`
                 <span class="sort-options__icon"></span>
-                <div class="sort-options__message">소비자 인기도(판매량, 판매금액, 조회수 등), 상품 출시일, 수요 적합성, 상품 운영상 필요 등을 종합적으로 고려한 순서입니다.</div>
+                <div class="sort-options__message">
+                  소비자 인기도(판매량, 판매금액, 조회수 등), 상품 출시일, 수요 적합성, 상품 운영상 필요 등을 종합적으로 고려한 순서입니다.
+                </div>
               `
               : ''
             }

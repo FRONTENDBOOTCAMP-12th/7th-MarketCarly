@@ -35,7 +35,6 @@ class Sort extends LitElement {
 
           &.isSelected {
             color: var(--content);
-            cursor: default;
           }
         }
       `
