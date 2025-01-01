@@ -12,7 +12,7 @@ export class InnerTop extends LitElement {
 
       .inner-top {
         display: flex;
-        width: 1050px;
+        max-width: 1050px;
         margin: 0 auto;
         padding: 28px 0px 32px 0px;
         justify-content: space-between;
@@ -29,6 +29,34 @@ export class InnerTop extends LitElement {
 
       footer-about {
         width: 50%;
+      }
+
+      @media (max-width: 768px) {
+        .inner-top {
+          flex-direction: column;
+          padding: 20px;
+        }
+
+        customer-service,
+        footer-about {
+          width: 100%;
+          padding: 0;
+        }
+
+        footer-about {
+          position: relative;
+          margin-top: 32px;
+          padding-top: 32px;
+        }
+
+        footer-about::before {
+          content: '';
+          position: absolute;
+          background-color: rgb(233, 233, 233);
+          width: 50%;
+          height: 1px;
+          top: 0;
+        }
       }
     `;
   }
