@@ -4,6 +4,7 @@ import style from '/src/pages/cart/cart.css?inline';
 import '/src/components/Cart/CartProduct.js';
 import '/src/components/Cart/CartLocation.js';
 import '/src/components/Cart/CartPrice.js';
+import Swal from 'sweetalert2';
 
 class Cart extends LitElement {
   static properties = {
@@ -12,6 +13,11 @@ class Cart extends LitElement {
     isOpenDropdownFreeze: { type: Boolean },
     isOpenDropdownRoom: { type: Boolean },
     isAllChecked: { type: Boolean },
+    cartData: { type: Array },
+    refrigeratedItems: { type: Array },
+    frozenItems: { type: Array },
+    roomTempItems: { type: Array },
+    checkCount: { type: Number },
   };
 
   constructor() {
@@ -21,16 +27,40 @@ class Cart extends LitElement {
     this.isOpenDropdownFreeze = true;
     this.isOpenDropdownRoom = true;
     this.isAllChecked = true;
+    this.cartData = [];
+    this.refrigeratedItems = [];
+    this.frozenItems = [];
+    this.roomTempItems = [];
+    this.checkCount = 0;
   }
 
   connectedCallback() {
     super.connectedCallback();
     this.getAuth();
+    this.getCartData();
   }
 
   getAuth() {
     const auth = JSON.parse(localStorage.getItem('auth')) || '';
     this.isAuth = auth ? auth.isAuth : false;
+  }
+
+  getCartData() {
+    this.cartData = JSON.parse(localStorage.getItem('cart')) || [];
+
+    this.refrigeratedItems = this.cartData.filter(
+      (item) => item.temperature === '냉장'
+    );
+
+    this.frozenItems = this.cartData.filter(
+      (item) => item.temperature === '냉동'
+    );
+
+    this.roomTempItems = this.cartData.filter(
+      (item) => item.temperature === '상온'
+    );
+
+    this.checkCount = this.cartData.filter((item) => item.isChecked).length;
   }
 
   handleLoginDirect() {
@@ -58,24 +88,50 @@ class Cart extends LitElement {
       const checkbox = product.shadowRoot.querySelector('#check-product');
       checkbox.checked = isChecked;
     });
+
+    if (!isChecked) {
+      this.cartData.forEach((data) => {
+        data.isChecked = false;
+      });
+      this.checkCount = 0;
+      this.saveData();
+      this.notifyCartUpdate();
+    } else {
+      this.cartData.forEach((data) => {
+        data.isChecked = true;
+      });
+      this.checkCount = this.cartData.length;
+      this.saveData();
+      this.notifyCartUpdate();
+    }
   }
 
   handleProductCheckChange() {
     const checkArr = [];
     const cartProducts = this.shadowRoot.querySelectorAll('cart-product');
+    let count = 0;
+
     cartProducts.forEach((product) => {
       const checkbox = product.shadowRoot.querySelector('#check-product');
       checkArr.push(checkbox.checked);
+      if (checkbox.checked) {
+        count += 1;
+      }
     });
 
     this.isAllChecked = checkArr.every((checkState) => checkState);
 
     const cartCheckbox = this.shadowRoot.querySelector('#cart__checkbox');
-    if (this.isAllChecked) {
-      cartCheckbox.checked = true;
-    } else {
-      cartCheckbox.checked = false;
-    }
+    cartCheckbox.checked = this.isAllChecked;
+
+    this.checkCount = count;
+
+    this.cartData.forEach((data, index) => {
+      data.isChecked = checkArr[index];
+    });
+
+    this.saveData();
+    this.notifyCartUpdate();
   }
 
   handleDeleteCheck() {
@@ -87,11 +143,49 @@ class Cart extends LitElement {
         product.style.display = 'none';
       }
     });
+
+    this.cartData = this.cartData.filter((data) => !data.isChecked);
+
+    this.saveData();
+    this.notifyCartUpdate();
   }
 
   handleDeleteProduct(e) {
     const cartProduct = e.target;
-    cartProduct.style.display = 'none';
+    const { productId } = e.detail;
+
+    Swal.fire({
+      text: '장바구니에서 삭제하시겠습니까?',
+      showCancelButton: true,
+      confirmButtonText: '삭제하기',
+    }).then((isConfirmed) => {
+      cartProduct.style.display = 'none';
+      if (isConfirmed) {
+        this.cartData = this.cartData.filter((data) => data.id !== productId);
+
+        this.saveData();
+
+        this.refrigeratedItems = this.cartData.filter(
+          (item) => item.temperature === '냉장'
+        );
+        this.frozenItems = this.cartData.filter(
+          (item) => item.temperature === '냉동'
+        );
+        this.roomTempItems = this.cartData.filter(
+          (item) => item.temperature === '상온'
+        );
+
+        this.notifyCartUpdate();
+      }
+    });
+  }
+
+  notifyCartUpdate() {
+    window.dispatchEvent(new Event('cart-updated'));
+  }
+
+  saveData() {
+    localStorage.setItem('cart', JSON.stringify(this.cartData));
   }
 
   render() {
@@ -117,7 +211,7 @@ class Cart extends LitElement {
                 />
                 <span class="cart__checkbox-icon"></span>
                 <label for="cart__checkbox" class="cart__label"
-                  >전체선택(3/3)</label
+                  >전체선택(${this.checkCount}/${this.cartData.length})</label
                 >
                 <span class="cart__separator" aria-hidden="true">/</span>
                 <button
@@ -153,10 +247,15 @@ class Cart extends LitElement {
                   </span>
                   ${this.isOpenDropdownRefrigerated
                     ? html`<ul>
-                        <cart-product
-                          @check-change=${this.handleProductCheckChange}
-                          @delete=${this.handleDeleteProduct}
-                        ></cart-product>
+                        ${this.refrigeratedItems.map(
+                          (item) => html`
+                            <cart-product
+                              .productData=${item}
+                              @check-change=${this.handleProductCheckChange}
+                              @delete=${this.handleDeleteProduct}
+                            ></cart-product>
+                          `
+                        )}
                       </ul>`
                     : ''}
                 </div>
@@ -183,10 +282,15 @@ class Cart extends LitElement {
                   </span>
                   ${this.isOpenDropdownFreeze
                     ? html`<ul>
-                        <cart-product
-                          @check-change=${this.handleProductCheckChange}
-                          @delete=${this.handleDeleteProduct}
-                        ></cart-product>
+                        ${this.frozenItems.map(
+                          (item) => html`
+                            <cart-product
+                              .productData=${item}
+                              @check-change=${this.handleProductCheckChange}
+                              @delete=${this.handleDeleteProduct}
+                            ></cart-product>
+                          `
+                        )}
                       </ul>`
                     : ''}
                 </div>
@@ -213,10 +317,15 @@ class Cart extends LitElement {
                   </span>
                   ${this.isOpenDropdownRoom
                     ? html`<ul>
-                        <cart-product
-                          @check-change=${this.handleProductCheckChange}
-                          @delete=${this.handleDeleteProduct}
-                        ></cart-product>
+                        ${this.roomTempItems.map(
+                          (item) => html`
+                            <cart-product
+                              .productData=${item}
+                              @check-change=${this.handleProductCheckChange}
+                              @delete=${this.handleDeleteProduct}
+                            ></cart-product>
+                          `
+                        )}
                       </ul>`
                     : ''}
                 </div>
