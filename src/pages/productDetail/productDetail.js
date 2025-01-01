@@ -1,4 +1,5 @@
 import { LitElement, html, css } from 'lit';
+import pb from '@/api/pocketbase.js';
 import resetCSS from '../../Layout/resetCSS';
 import base from '../../Layout/base';
 import '../../components/ProductDetail/ProductDetailList';
@@ -86,6 +87,7 @@ class ProductInfo extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     console.log('ProductInfo: 컴포넌트 연결');
+    this.fetchData();
   }
 
   async fetchData() {
@@ -107,7 +109,8 @@ class ProductInfo extends LitElement {
         discount_rate: product.discount_rate,
         price: product.price,
         original_price: product.original_price,
-        img: `${pb.baseURL}/api/files/product/${product.id}/${product.img}`,
+        // image: `${pb.baseURL}/api/files/product/${product.id}/${product.img}`,
+        image: pb.files.getURL(product, product.img),
       };
     } catch (error) {
       console.error('에러', error); // 에러 원인 파악용
@@ -178,7 +181,6 @@ class ProductInfo extends LitElement {
             price="${this.product.price}"
             originalPrice="${this.product.original_price}"
           ></product-detail-list>
-          <product-detail-list .product="${this.product}"></product-detail-list>
           <product-actions .product="${this.product}"></product-actions>
         </div>
       </div>
