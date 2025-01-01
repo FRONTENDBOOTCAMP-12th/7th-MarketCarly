@@ -7,13 +7,31 @@ class CartProduct extends LitElement {
     count: { type: Number },
     isDisabled: { type: Boolean },
     isChecked: { type: Boolean },
+    quantity: { type: Number },
+    productData: { type: Array },
+    cartData: { type: Array },
   };
 
   constructor() {
     super();
-    this.count = 1;
-    this.isDisabled = true;
+    this.count = this.quantity;
+    this.isDisabled = false;
     this.isChecked = true;
+    this.quantity = 0;
+    this.productData = [];
+    this.cartData = [];
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.getData();
+  }
+
+  getData() {
+    if (this.productData) {
+      this.count = this.productData.quantity || 1;
+      this.isChecked = this.productData.isChecked || false;
+    }
   }
 
   handleCountMinus() {
@@ -22,16 +40,25 @@ class CartProduct extends LitElement {
     }
 
     this.isDisabled = this.count <= 1;
+
+    this.productData.quantity = this.productData.quantity - 1;
+    this.saveData();
+    this.notifyCartUpdate();
   }
 
   handleCountPlus() {
     this.count += 1;
     this.isDisabled = this.count <= 1;
+
+    this.productData.quantity = this.productData.quantity + 1;
+    this.saveData();
+    this.notifyCartUpdate();
   }
 
   handleDelete() {
     this.dispatchEvent(
       new CustomEvent('delete', {
+        detail: { productId: this.productData.id },
         bubbles: true,
         composed: true,
       })
@@ -47,6 +74,31 @@ class CartProduct extends LitElement {
         composed: true,
       })
     );
+
+    this.productData.isChecked = this.isChecked;
+    this.saveData();
+    this.notifyCartUpdate();
+  }
+
+  notifyCartUpdate() {
+    window.dispatchEvent(new Event('cart-updated'));
+  }
+
+  saveData() {
+    this.cartData = JSON.parse(localStorage.getItem('cart')) || [];
+
+    this.cartData = this.cartData.map((data) => {
+      if (this.productData.id === data.id) {
+        return {
+          ...data,
+          quantity: this.productData.quantity,
+          isChecked: this.productData.isChecked,
+        };
+      }
+      return data;
+    });
+
+    localStorage.setItem('cart', JSON.stringify(this.cartData));
   }
 
   render() {
@@ -74,8 +126,8 @@ class CartProduct extends LitElement {
         <figure class="cart-product__figure">
           <a href="/src/pages/productDetail/" class="cart-product__detail-page">
             <img
-              src="/assets/images/product01.webp"
-              alt="탱탱쫄면(상품명)"
+              src=${this.productData.image}
+              alt=${this.productData.title}
               class="cart-product__image"
             />
           </a>
@@ -84,7 +136,7 @@ class CartProduct extends LitElement {
             class="cart-product__detail-page cart-product__detail-page--desc"
           >
             <figcaption class="cart-product__desc">
-              [풀무원] 탱탱쫄면 (4개입)
+              [${this.productData.brand}] ${this.productData.title}
             </figcaption>
           </a>
         </figure>
@@ -111,7 +163,14 @@ class CartProduct extends LitElement {
         </div>
 
         <span class="cart-product__product-price" aria-label="제품 가격"
-          >4,980원</span
+          >${(this.productData.price * this.count).toLocaleString()}원</span
+        >
+        <del class="cart-product__product-price-original" aria-label="제품 가격"
+          >${this.productData.originalPrice
+            ? html`${(
+                this.productData.originalPrice * this.count
+              ).toLocaleString()}원`
+            : ''}</del
         >
 
         <button class="cart-product__button-delete" @click=${this.handleDelete}>

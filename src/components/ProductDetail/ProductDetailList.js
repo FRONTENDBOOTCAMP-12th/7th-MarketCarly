@@ -9,7 +9,7 @@ export class ProductDetailList extends LitElement {
     base,
     css`
       .product__detail-list {
-				max-width: 560px;
+        max-width: 560px;
         width: 100%;
         padding: 20px 0 0;
       }
@@ -41,10 +41,10 @@ export class ProductDetailList extends LitElement {
         line-height: var(--line-height-normal);
       }
 
-			.product__selection-wrapper {
-				border: 1px solid var(--gray--100);
-				padding: 12px 16px;
-			}
+      .product__selection-wrapper {
+        border: 1px solid var(--gray--100);
+        padding: 12px 16px;
+      }
 
       .product__selection {
         padding-top: 12px;
@@ -113,22 +113,19 @@ export class ProductDetailList extends LitElement {
   ];
 
   static properties = {
-    // productId: { type: String },
-    product: { type: Object },
+    product: { type: Object }, // 부모로부터 전달받은 상품 정보
     quantity: { type: Number },
     totalPrice: { type: Number },
   };
 
   constructor() {
     super();
-    // this.productId = '';
-    this.product = {};
+    this.product = {}; // 초기화된 상품 데이터
     this.quantity = 1;
     this.totalPrice = 0;
   }
 
   connectedCallback() {
-    // 부모로부터 클래스의 메서드 호출
     super.connectedCallback();
 
     // 초기 데이터가 있을 경우 총 금액 계산
@@ -157,17 +154,17 @@ export class ProductDetailList extends LitElement {
 
   render() {
     const details = [
-      { title: '배송', info: this.product.delivery_type || '정보 없음' },
+      { title: '배송', info: this.product.delivery || '정보 없음' },
       { title: '판매자', info: this.product.seller || '정보 없음' },
-      { title: '포장타입', info: this.product.product_type || '정보 없음' },
+      { title: '포장타입', info: this.product.packaging_type || '정보 없음' },
       { title: '판매단위', info: this.product.selling_unit || '정보 없음' },
       { title: '중량/용량', info: this.product.weight_volume || '정보 없음' },
       { title: '원산지', info: this.product.origin || '정보 없음' },
-      { title: '알레르기정보', info: this.product.allergy || '정보 없음' },
+      { title: '알레르기정보', info: this.product.allergy_info || '정보 없음' },
     ];
 
     const price = this.product.price || 0;
-    const originalPrice = this.product.discount_price || 0;
+    const originalPrice = this.product.originalPrice || 0;
 
     return html`
       <ul class="product__detail-list">
@@ -190,9 +187,11 @@ export class ProductDetailList extends LitElement {
                   @quantity-change="${this.handleQuantityChange}"
                 ></product-quantity>
                 <div class="product__price-wrapper">
-                  <span class="product__original-price"
-                    >${originalPrice.toLocaleString()}원</span
-                  >
+                  ${originalPrice
+                    ? html`<span class="product__original-price"
+                        >${originalPrice.toLocaleString()}원</span
+                      >`
+                    : ''}
                   <span class="product__final-price"
                     >${price.toLocaleString()}원</span
                   >
@@ -217,4 +216,5 @@ export class ProductDetailList extends LitElement {
     `;
   }
 }
+
 customElements.define('product-detail-list', ProductDetailList);
