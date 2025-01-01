@@ -94,7 +94,7 @@ export class HeaderTop extends LitElement {
         }
 
         .logo__link--active {
-          color: #5f0080;
+          color: var(--primary);
         }
 
         .logo__divide {
