@@ -37,9 +37,9 @@ class Pagination extends LitElement {
 
         a {
           display: table-cell;
-          width: 34px;
-          height: 34px;
-          border: 1px solid var(--gray--100);
+          width: 2.125rem;
+          height: 2.125rem;
+          border: 0.0625rem solid var(--gray--100);
           text-align: center;
           align-content: center;
           color: var(--content);

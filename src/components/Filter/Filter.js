@@ -178,7 +178,7 @@ class Filter extends LitElement {
       this.selectedCategoryCount++;
     }
 
-    this.dispatchEvent(new CustomEvent('filter-changed', {
+    this.dispatchEvent(new CustomEvent('category-changed', { 
       detail: {
         title: this.filterTitle,
         selectedCategories: this.getSelectedCategories()
@@ -190,15 +190,17 @@ class Filter extends LitElement {
     this.requestUpdate();
   }
 
-getSelectedCategories() {
-  const selectedCategories = [];
-  const categories = this.shadowRoot.querySelectorAll('.category.isSelected');
-  categories.forEach(category => {
-    const categoryName = category.querySelector('.category__name').textContent;
-    selectedCategories.push(categoryName);
-  });
-  return selectedCategories;
-}
+  getSelectedCategories() {
+    const selectedCategories = [];
+    const categories = this.shadowRoot.querySelectorAll('.category.isSelected');
+
+    categories.forEach(category => {
+      const categoryName = category.querySelector('.category__name').textContent;
+      selectedCategories.push(categoryName);
+    });
+    
+    return selectedCategories;
+  }
 
   handleClickReset() {
     const categories = this.shadowRoot.querySelectorAll('.category');
