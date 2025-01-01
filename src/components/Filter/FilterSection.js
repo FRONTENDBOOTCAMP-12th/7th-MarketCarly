@@ -85,20 +85,20 @@ class FilterSection extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    this.addEventListener('filter-changed', this.handleFilterChanged.bind(this));
+    this.addEventListener('category-changed', this.handleCategoryChanged.bind(this));
   }
   
   disconnectedCallback() {
     super.disconnectedCallback();
-    this.removeEventListener('filter-changed', this.handleFilterChanged.bind(this));
+    this.removeEventListener('category-changed', this.handleCategoryChanged.bind(this));
   }
   
-  handleFilterChanged(event) {
+  handleCategoryChanged(event) {
     const { title, selectedCategories } = event.detail;
   
     if (event.detail?.processed) return;
   
-    this.dispatchEvent(new CustomEvent('filter-changed', {
+    this.dispatchEvent(new CustomEvent('category-changed', {
       detail: { title, selectedCategories, processed: true },
       bubbles: true,
       composed: true,

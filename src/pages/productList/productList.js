@@ -92,8 +92,9 @@ class ProductList extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     this.fetchProducts();
+
     this.addEventListener('sort-changed', this.handleSortChanged.bind(this));
-    this.addEventListener('filter-changed', this.handleFilterChanged.bind(this));
+    this.addEventListener('category-changed', this.handleCategoryChanged.bind(this));
     this.addEventListener('page-changed', this.handlePageChanged.bind(this));
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -120,7 +121,7 @@ class ProductList extends LitElement {
   disconnectedCallback() {
     super.disconnectedCallback();
     this.removeEventListener('sort-changed', this.handleSortChanged.bind(this));
-    this.removeEventListener('filter-changed', this.handleFilterChanged.bind(this));
+    this.removeEventListener('category-changed', this.handleCategoryChanged.bind(this));
     this.removeEventListener('page-changed', this.handlePageChanged.bind(this));
   }
 
@@ -134,65 +135,37 @@ class ProductList extends LitElement {
     }));
 
     this.filteredProducts = [...this.products];
+
     this.isFetching = false;
     this.updatePaginatedProducts();
     this.requestUpdate();
   }
 
-  handleFilterChanged(event) {
+  handleCategoryChanged(event) {
     const { title, selectedCategories, processed } = event.detail;
-
     if (processed) return;
   
-    if (!this.activeFilters[title]) {
-      this.activeFilters[title] = [];
-    }
-
-    selectedCategories.forEach((category) => {
-      if (!this.activeFilters[title].includes(category)) {
-        this.activeFilters[title].push(category);
+    if (title) {
+      if (!this.activeFilters[title]) {
+        this.activeFilters[title] = [];
       }
-    });
-
-    if (selectedCategories.length === 0) {
-      delete this.activeFilters[title];
+  
+      this.activeFilters[title] = selectedCategories;
+  
+      if (selectedCategories.length === 0) {
+        delete this.activeFilters[title];
+      }
+    } else {
+      this.activeFilters = {};
     }
   
     this.filteredProducts = this.products.filter(product => this.applyFilters(product));
     this.currentPage = 1;
-
+  
     this.updatePaginatedProducts();
     this.requestUpdate();
   }
-
-  applyFilters(product) {
-    let isMatch = true;
-
-    Object.entries(this.activeFilters).forEach(([filterKey, categories]) => {
-      if (filterKey === '포장타입' && categories.length > 0 && !categories.includes(product.product_type)) {
-        isMatch = false;
-      } else if (filterKey === '가격' && categories.length > 0) {
-        const price = product.discounted_price || product.price;
-        if (!this.isPriceMatch(price, categories)) {
-          isMatch = false;
-        }
-      } else if (filterKey === '배송' && categories.length > 0 && !categories.includes(product.delivery_type)) {
-        isMatch = false;
-      } else if (filterKey === '혜택' && categories.includes('할인상품') && !product.discount_price) {
-        isMatch = false;
-      }
-    });
-
-    return isMatch;
-  }
-
-  isPriceMatch(price, categories) {
-    return (
-      (categories.includes('6,000원 미만') && price < 6000) ||
-      (categories.includes('6,000원 ~ 30,000원') && price >= 6000 && price < 30000) ||
-      (categories.includes('30,000원 이상') && price >= 30000)
-    );
-  }
+  
 
   removeFilter(filterKey, category) {
     this.activeFilters[filterKey] = this.activeFilters[filterKey].filter(
@@ -203,15 +176,59 @@ class ProductList extends LitElement {
       delete this.activeFilters[filterKey];
     }
 
-    this.handleFilterChanged({
-      detail: {
-        title: filterKey,
-        selectedCategories: this.activeFilters[filterKey] || [],
-      },
+    this.filteredProducts = this.products.filter(product => this.applyFilters(product));
+    this.updatePaginatedProducts();
+
+    const filterSection = this.shadowRoot.querySelector('filter-section');
+    const filterItems = filterSection.shadowRoot.querySelectorAll('filter-item');
+
+    filterItems.forEach((filterItem) => {
+      if (filterItem.filterTitle === filterKey) {
+        const categoryElements = filterItem.shadowRoot.querySelectorAll('.category');
+        const categoryNames = filterItem.shadowRoot.querySelectorAll('.category__name');
+
+        categoryNames.forEach((categoryName, index) => {
+          if (categoryName.innerText === category) {
+            categoryElements[index].classList.remove('isSelected');
+            filterItem.selectedCategoryCount--;
+          }
+        });
+      }
     });
-    
+
     this.requestUpdate();
   }
+
+  applyFilters(product) {
+    return Object.entries(this.activeFilters).every(([filterKey, categories]) => {
+      if (categories.length === 0) return true;
+  
+      if (filterKey === '포장타입') {
+        return categories.some(category => category === product.product_type);
+      }
+      if (filterKey === '가격') {
+        const price = product.discounted_price || product.price;
+        return this.isPriceMatch(price, categories);
+      }
+      if (filterKey === '배송') {
+        return categories.some(category => category === product.delivery_type);
+      }
+      if (filterKey === '혜택') {
+        return categories.some(category => category === '할인상품' && product.discount_price);
+      }
+  
+      return true;
+    });
+  }
+
+  isPriceMatch(price, categories) {
+    return (
+      (categories.includes('6,000원 미만') && price < 6000) ||
+      (categories.includes('6,000원 ~ 30,000원') && price >= 6000 && price < 30000) ||
+      (categories.includes('30,000원 이상') && price >= 30000)
+    );
+  }
+
   
   handleSortChanged(event) {
     this.sortProducts(event.detail.title);
