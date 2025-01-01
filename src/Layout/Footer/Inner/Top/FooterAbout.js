@@ -45,7 +45,7 @@ export class FooterAbout extends LitElement {
       .paragraph {
         display: flex;
         align-items: center;
-        color: #333333;
+        color: var(--content);
         font-size: 12px;
         line-height: 18px;
       }
@@ -58,7 +58,7 @@ export class FooterAbout extends LitElement {
       }
 
       .text a {
-        color: #5f0080;
+        color: var(--primary);
         text-decoration: none;
       }
 

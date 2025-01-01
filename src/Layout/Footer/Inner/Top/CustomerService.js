@@ -94,7 +94,7 @@ export class CustomerService extends LitElement {
         }
 
         .service__email-link {
-          color: #5f0080;
+          color: var(--primary);
           text-decoration: none;
         }
 
