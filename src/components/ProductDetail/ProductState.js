@@ -1,34 +1,30 @@
-import pb from '../../api/pocketbase';
-
-// 상품 데이터 전역 상태 관리 클래스
 class ProductState {
   constructor() {
     this.product = {}; // 현재 상품 데이터
     this.listeners = []; // 구독 중인 리스너
   }
 
-  // 상품 데이터 로드 및 상태 업데이트
-  async loadProduct(productId) {
+  // 로컬 스토리지에서 데이터 로드
+  loadProductFromLocalStorage() {
     try {
-      const product = await pb
-        .collection('products')
-        .getFirstListItem(`product_id="${productId}"`);
-      // console.log('product 데이터', product);
+      // 최근 본 상품 리스트를 로컬 스토리지에서 가져옴
+      const recentProducts =
+        JSON.parse(localStorage.getItem('recentProducts')) || [];
 
-      // 원본 데이터를 그대로 저장
-      this.product = {
-        ...product, // 모든 데이터를 포함
-				brand: `[${product.brand}]`, // 브랜드 이름에 [] 추가
-        img: pb.files.getURL(product, product.img), // 이미지 URL 변환
-      };
-
-      this.notifyListeners(); // 데이터 변경 알림
+      if (recentProducts.length > 0) {
+        // 가장 마지막에 추가된 상품 선택
+        this.product = recentProducts[recentProducts.length - 1];
+        this.notifyListeners(); // 상태 변경 알림
+        console.log('Loaded product from localStorage:', this.product);
+      } else {
+        console.error('No recentProducts found in localStorage.');
+      }
     } catch (error) {
-      console.error('제품 데이터를 가져오는데 실패했습니다:', error);
+      console.error('Failed to load product from localStorage:', error);
     }
   }
 
-  // 상태 반환
+  // 현재 상태 반환
   getProduct() {
     return this.product;
   }
