@@ -18,6 +18,7 @@ export class FooterMiddle extends LitElement {
       .middle__logo {
         width: 34px;
         height: 34px;
+        flex-shrink: 0;
       }
 
       .middle__logo--tosspayments {
@@ -29,6 +30,21 @@ export class FooterMiddle extends LitElement {
         color: rgb(76, 76, 76);
         font-size: 12px;
         line-height: 18px;
+        word-break: keep-all;
+      }
+
+      @media (max-width: 768px) {
+        .middle {
+          display: flex;
+          flex-direction: column;
+          flex-wrap: wrap;
+          word-break: keep-all;
+        }
+
+        .middle__section {
+          padding: 0px 8px;
+          display: flex;
+        }
       }
     `;
   }

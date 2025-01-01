@@ -66,6 +66,7 @@ export class HeaderTop extends LitElement {
           padding: 1rem;
           max-width: 1050px;
           margin: 0 auto;
+          gap: 1rem;
         }
 
         .top__logo {
@@ -145,6 +146,22 @@ export class HeaderTop extends LitElement {
           display: flex;
           padding-left: 0.625rem;
           padding-right: 0;
+        }
+
+        @media (max-width: 900px) {
+          .search__form {
+            gap: none;
+          }
+        }
+
+        @media (max-width: 850px) {
+          .logo__links {
+            width: 200px;
+          }
+
+          .top__icons-list {
+            width: 150px;
+          }
         }
       `,
     ];

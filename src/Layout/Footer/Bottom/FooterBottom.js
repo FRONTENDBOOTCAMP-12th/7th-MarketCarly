@@ -4,9 +4,10 @@ class FooterBottomInner extends LitElement {
   static get styles() {
     return css`
       .inner {
-        width: 1050px;
+        max-width: 1050px;
         margin: 0 auto;
-        padding: 20px 0;
+        padding: 20px 4px 32px 4px;
+        box-sizing: border-box;
       }
 
       .text {
