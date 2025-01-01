@@ -12,39 +12,32 @@ class FilterSection extends LitElement {
         title: '배송',
         selectedCategoryCount: 0,
         categories: [
-          { name: '샛별배송', itemCount: '1' },
+          { name: '샛별 배송', itemCount: '6' },
         ]
       },
       {
         title: '포장타입',
         selectedCategoryCount: 0,
         categories: [
-          { name: '상온', itemCount: '1' },
-          { name: '냉장', itemCount: '1' },
-          { name: '냉동', itemCount: '1' },
+          { name: '상온', itemCount: '3' },
+          { name: '냉장', itemCount: '3' },
+          { name: '냉동', itemCount: '2' },
         ]
       },
       {
         title: '가격',
         selectedCategoryCount: 0,
         categories: [
-          { name: '6000원 미만', itemCount: '114' },
-          { name: '6000원 ~ 30000원', itemCount: '116' },
-          { name: '30000원 이상', itemCount: '116' },
+          { name: '6,000원 미만', itemCount: '3' },
+          { name: '6,000원 ~ 30,000원', itemCount: '4' },
+          { name: '30,000원 이상', itemCount: '1' },
         ]
       },
       {
         title: '혜택',
         selectedCategoryCount: 0,
         categories: [
-          { name: '할인상품', itemCount: '379' },
-        ]
-      },
-      {
-        title: '유형',
-        selectedCategoryCount: 0,
-        categories: [
-          { name: 'Kurly Only', itemCount: '379' },
+          { name: '할인상품', itemCount: '4' },
         ]
       },
     ];
@@ -102,9 +95,11 @@ class FilterSection extends LitElement {
   
   handleFilterChanged(event) {
     const { title, selectedCategories } = event.detail;
-
+  
+    if (event.detail?.processed) return;
+  
     this.dispatchEvent(new CustomEvent('filter-changed', {
-      detail: { title, selectedCategories },
+      detail: { title, selectedCategories, processed: true },
       bubbles: true,
       composed: true,
     }));
@@ -114,6 +109,8 @@ class FilterSection extends LitElement {
     const filterItems = this.shadowRoot.querySelectorAll('filter-item');
 
     filterItems.forEach(filterItem => filterItem.handleClickReset());
+
+    window.location.reload();
   }
 
   render() {

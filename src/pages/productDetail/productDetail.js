@@ -8,9 +8,8 @@ import '../../components/ProductDetail/ProductNav';
 import '../../components/ProductDetail/ProductCheckImages';
 import '../../components/ProductDetail/ProductDescription';
 import '../../components/ProductDetail/WhyCarly';
-import pb from '../../api/pocketbase';
+import { productState } from '../../components/ProductDetail/ProductState';
 
-// ProductInfo Component + ProductDetailList
 class ProductInfo extends LitElement {
   static styles = [
     resetCSS,
@@ -18,51 +17,43 @@ class ProductInfo extends LitElement {
     css`
       .product {
         max-width: 65.625rem;
+        width: 100%;
         margin: 2.5rem auto 0;
         display: flex;
+        flex-wrap: wrap;
         justify-content: space-between;
       }
-
       .product__img img {
-        width: 25rem;
-        height: 32.125rem;
+        max-width: 25rem;
+        width: 100%;
+        max-height: 32.125rem;
+        height: 100%;
       }
-
       .product__info {
-        width: 35rem;
+        max-width: 35rem;
+        width: 100%;
         display: flex;
         flex-direction: column;
         gap: 1rem;
       }
-
       .product__delivery {
         font-size: var(--text-xl);
         font-weight: var(--font-bold);
         color: var(--gray--500);
         line-height: var(--line-height-semitight);
       }
-
       .product__name {
         font-size: var(--text-3xl);
         font-weight: var(--font-semibold);
         color: var(--content);
         line-height: var(--line-height-normal);
       }
-
       .product__description {
         font-size: var(--text-base);
         font-weight: var(--font-regular);
         color: var(--gray--400);
         line-height: var(--line-height-semirelaxed);
       }
-
-      .product__login-benefit {
-        font-size: var(--text-base);
-        font-weight: var(--font-semibold);
-        color: var(--primary);
-        line-height: var(--line-height-normal);
-      }
-
       .product__price-wrapper .product__discount {
         font-size: var(--text-3xl);
         font-weight: var(--font-bold);
@@ -70,23 +61,15 @@ class ProductInfo extends LitElement {
         color: var(--accent--yellow);
         line-height: var(--line-height-normal);
       }
-
       .product__price-wrapper .product__price {
         font-size: var(--text-3xl);
         font-weight: var(--font-semibold);
         line-height: var(--line-height-normal);
       }
-
       .product__price-wrapper .product__original-price {
         text-decoration: line-through;
         color: var(--gray--400);
         line-height: var(--line-height-normal);
-      }
-
-      .product__price-wrapper .product__currency {
-        font-size: var(--text-base);
-        font-weight: var(--font-bold);
-        line-height: var(--line-height-semitight);
       }
     `,
   ];
@@ -97,22 +80,12 @@ class ProductInfo extends LitElement {
 
   constructor() {
     super();
-    // this.product = {
-    //   delivery: '샛별배송',
-    //   name: '[풀무원] 탱탱쫄면 (4개입)',
-    //   description: '튀기지 않아 부담 없는 매콤함',
-    //   price: 4980,
-    //   originalPrice: 9960,
-    //   discount: 50,
-    //   imageUrl: '/assets/images/product-detail-img01.png',
-    // };
-    this.product = {};
+    this.product = {}; // 초기 상태
   }
 
   connectedCallback() {
     super.connectedCallback();
-    this.fetchData();
-  }
+    console.log('ProductInfo: 컴포넌트 연결');
 
   async fetchData() {
     try {
@@ -138,29 +111,62 @@ class ProductInfo extends LitElement {
     } catch (error) {
       console.error('에러', error); // 에러 원인 파악용
     }
+
+    // 상태 변경 리스너
+    this.handleProductChange = (product) => {
+      console.log('ProductInfo: 리스너 호출, 받은 product:', product);
+      this.product = product;
+      this.requestUpdate(); // 강제 렌더링
+    };
+
+    productState.addListener(this.handleProductChange);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    productState.removeListener(this.handleProductChange);
   }
 
   render() {
+    if (!this.product || Object.keys(this.product).length === 0) {
+      return html`<p>상품 정보를 불러오는 중입니다...</p>`;
+    }
+
+    const {
+      image = '',
+      title = '상품명 없음',
+      brand = '',
+      delivery = '배송 정보 없음',
+      description = '',
+      price = 0,
+      originalPrice = 0,
+      discount_rate = 0,
+    } = this.product;
+
     return html`
       <div class="product">
         <figure class="product__img">
-          <img src="${this.product.img}" alt="${this.product.title}" />
+          <img src="${image}" alt="${title}" />
         </figure>
         <div class="product__info">
-          <p class="product__delivery">${this.product.delivery_type}</p>
-          <h2 class="product__name">${this.product.title}</h2>
-          <p class="product__description">${this.product.description}</p>
+          <p class="product__delivery">${delivery}</p>
+          <h2 class="product__name">${brand} ${title}</h2>
+          <p class="product__description">${description}</p>
           <div class="product__price-wrapper">
             <div>
-              <span class="product__discount"
-                >${this.product.discount_rate}%</span
+              <span class="product__discount" aria-label="할인율"
+                >${discount_rate}%</span
               >
-              <span class="product__price"
-                >${this.product.price?.toLocaleString()} 원</span
+
+              <span class="product__price" aria-label="할인가"
+                >${price.toLocaleString()} 원</span
               >
             </div>
-            <p class="product__original-price">
-              ${this.product.original_price?.toLocaleString()} 원
+            <p class="product__original-price" aria-label="정상가">
+              ${originalPrice
+                ? originalPrice.toLocaleString()
+                : '가격 정보 없음'}
+              원
             </p>
           </div>
           <p class="product__login-benefit">
@@ -171,9 +177,12 @@ class ProductInfo extends LitElement {
             price="${this.product.price}"
             originalPrice="${this.product.original_price}"
           ></product-detail-list>
+          <product-detail-list .product="${this.product}"></product-detail-list>
+          <product-actions .product="${this.product}"></product-actions>
         </div>
       </div>
     `;
   }
 }
+
 customElements.define('product-info', ProductInfo);

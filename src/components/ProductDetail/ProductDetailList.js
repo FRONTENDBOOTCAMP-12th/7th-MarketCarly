@@ -9,7 +9,8 @@ export class ProductDetailList extends LitElement {
     base,
     css`
       .product__detail-list {
-        width: 560px;
+        max-width: 560px;
+        width: 100%;
         padding: 20px 0 0;
       }
 
@@ -38,6 +39,11 @@ export class ProductDetailList extends LitElement {
         padding-right: 4px;
         color: var(--gray--400);
         line-height: var(--line-height-normal);
+      }
+
+      .product__selection-wrapper {
+        border: 1px solid var(--gray--100);
+        padding: 12px 16px;
       }
 
       .product__selection {
@@ -81,6 +87,7 @@ export class ProductDetailList extends LitElement {
       .product__total-price {
         font-size: var(--text-3xl);
         font-weight: var(--font-semibold);
+        padding-inline-start: 17px;
       }
 
       .product__reward {
@@ -110,38 +117,64 @@ export class ProductDetailList extends LitElement {
     productName: { type: String, attribute: true },
     price: { type: Number, attribute: true },
     originalPrice: { type: Number, attribute: true },
+    product: { type: Object }, // 부모로부터 전달받은 상품 정보
     quantity: { type: Number },
     totalPrice: { type: Number },
   };
 
   constructor() {
     super();
-    this.details = [
-      { title: '배송', info: '샛별배송' },
-      { title: '판매자', info: '칼리' },
-      { title: '포장타입', info: '상온 (종이포장)' },
-      { title: '판매단위', info: '1봉' },
-      { title: '중량/용량', info: '123g*4봉' },
-      { title: '원산지', info: '상세페이지 별도표기' },
-      { title: '알레르기정보', info: '대두, 밀, 쇠고기 함유' },
-    ];
-    this.productName = '[풀무원] 탱탱쫄면 (4개입)';
-    this.price = 4580;
-    this.originalPrice = 9960;
+
+    this.product = {}; // 초기화된 상품 데이터
     this.quantity = 1;
-    this.totalPrice = this.price;
+    this.totalPrice = 0;
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+
+    // 초기 데이터가 있을 경우 총 금액 계산
+    if (this.product && Object.keys(this.product).length > 0) {
+      this.totalPrice = this.calculateTotalPrice();
+    }
   }
 
   handleQuantityChange(event) {
     this.quantity = event.detail.quantity;
-    this.totalPrice = this.price * this.quantity;
-    this.requestUpdate();
+    this.totalPrice = this.calculateTotalPrice();
+  }
+
+  // 총 금액 계산
+  calculateTotalPrice() {
+    const price = this.product.price || 0;
+    return price * this.quantity;
+  }
+
+  updated(changedProperties) {
+    // product 또는 quantity가 변경될 때만 총 금액 재계산
+    if (changedProperties.has('product')) {
+      this.totalPrice = this.calculateTotalPrice();
+    }
   }
 
   render() {
+    const details = [
+      { title: '배송', info: this.product.delivery || '정보 없음' },
+      { title: '판매자', info: this.product.seller || '정보 없음' },
+      { title: '포장타입', info: this.product.packaging_type || '정보 없음' },
+      { title: '판매단위', info: this.product.selling_unit || '정보 없음' },
+      { title: '중량/용량', info: this.product.weight_volume || '정보 없음' },
+      { title: '원산지', info: this.product.origin || '정보 없음' },
+      { title: '알레르기정보', info: this.product.allergy_info || '정보 없음' },
+    ];
+
+    const price = this.product.price || 0;
+    const originalPrice = this.product.originalPrice || 0;
+
     return html`
       <ul class="product__detail-list">
-        ${this.details.map(
+
+        ${details.map(
           (detail) => html`
             <li class="product__detail-item">
               <dt class="product__detail-title">${detail.title}</dt>
@@ -152,19 +185,23 @@ export class ProductDetailList extends LitElement {
         <li class="product__detail-item">
           <dt class="product__detail-title">상품선택</dt>
           <dd class="product__detail-info">
-            <p>${this.productName}</p>
-            <div class="product__selection">
-              <product-quantity
-                .quantity="${this.quantity}"
-                @quantity-change="${this.handleQuantityChange}"
-              ></product-quantity>
-              <div class="product__price-wrapper">
-                <span class="product__original-price"
-                  >${this.originalPrice.toLocaleString()}원</span
-                >
-                <span class="product__final-price"
-                  >${(this.price * this.quantity).toLocaleString()}원</span
-                >
+            <div class="product__selection-wrapper">
+              <p>${this.product.brand} ${this.product.title}</p>
+              <div class="product__selection">
+                <product-quantity
+                  .quantity="${this.quantity}"
+                  @quantity-change="${this.handleQuantityChange}"
+                ></product-quantity>
+                <div class="product__price-wrapper">
+                  ${originalPrice
+                    ? html`<span class="product__original-price"
+                        >${originalPrice.toLocaleString()}원</span
+                      >`
+                    : ''}
+                  <span class="product__final-price"
+                    >${price.toLocaleString()}원</span
+                  >
+                </div>
               </div>
             </div>
           </dd>
@@ -185,4 +222,5 @@ export class ProductDetailList extends LitElement {
     `;
   }
 }
+
 customElements.define('product-detail-list', ProductDetailList);

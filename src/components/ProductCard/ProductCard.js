@@ -2,39 +2,9 @@ import { LitElement, html, css } from 'lit';
 import resetCSS from '@/Layout/resetCSS';
 import baseCSS from '@/Layout/base';
 import '@/components/ProductCard/ProductBadge.js';
+import Swal from 'sweetalert2';
 
 export class ProductCard extends LitElement {
-  constructor() {
-    super();
-    this.image = '/assets/images/product1.jpg';
-    this.delivery = '샛별배송';
-    this.title = '[풀무원] 탱탱쫄면';
-    this.price = 4980;
-    this.originalPrice = 6000;
-    this.isDiscounted = true;
-    this.discount = 24;
-    this.description = '튀기지 않아 부담없는 매콤함';
-    this.badges = [
-      { type: 'kurly', text: 'Kurly Only' },
-      { type: 'limit', text: '한정수량' },
-    ];
-  }
-
-  static get properties() {
-    return {
-      image: { type: String },
-      delivery: { type: String },
-      title: { type: String },
-      brand: { type: String },
-      description: { type: String },
-      price: { type: Number },
-      originalPrice: { type: Number },
-      isDiscounted: { type: Boolean },
-      discount_rate: { type: Number },
-      badges: { type: Array },
-    };
-  }
-
   static get styles() {
     return [
       resetCSS,
@@ -56,12 +26,18 @@ export class ProductCard extends LitElement {
           width: 250px;
           aspect-ratio: 1 / 1.25;
           background: var(--gray--50);
+          overflow: hidden;
         }
 
         .product__image {
           width: 100%;
           height: 100%;
           object-fit: cover;
+          transition: transform 0.3s ease;
+
+          &:hover {
+            transform: scale(1.03);
+          }
         }
 
         .product__discount {
@@ -84,6 +60,12 @@ export class ProductCard extends LitElement {
           background: none;
           cursor: pointer;
           padding: 0;
+          opacity: 0.9;
+          transition: opacity 0.2s ease;
+        }
+
+        .product__cart:hover {
+          opacity: 1;
         }
 
         .product__info {
@@ -106,6 +88,9 @@ export class ProductCard extends LitElement {
           font-weight: var(--font-regular);
           color: var(--content);
           margin-bottom: 0.5rem;
+          &:hover {
+            text-decoration: underline;
+          }
         }
 
         .product__price-wrap {
@@ -157,80 +142,179 @@ export class ProductCard extends LitElement {
     ];
   }
 
+  constructor() {
+    super();
+    this.image = '/assets/images/product1.jpg';
+    this.delivery = '샛별배송';
+    this.title = '[풀무원] 탱탱쫄면';
+    this.price = 4980;
+    this.originalPrice = 6000;
+    this.isDiscounted = true;
+    this.discount = 24;
+    this.description = '튀기지 않아 부담없는 매콤함';
+    this.badges = [
+      { type: 'kurly', text: 'Kurly Only' },
+      { type: 'limit', text: '한정수량' },
+    ];
+  }
+
+  static get properties() {
+    return {
+      image: { type: String },
+      delivery: { type: String },
+      title: { type: String },
+      brand: { type: String },
+      description: { type: String },
+      price: { type: Number },
+      originalPrice: { type: Number },
+      isDiscounted: { type: Boolean },
+      discount_rate: { type: Number },
+      badges: { type: Array },
+    };
+  }
+
   connectedCallback() {
     super.connectedCallback();
   }
 
+  handleProductClick(e) {
+    if (e.target.closest('.product__cart')) return;
+
+    const titleLink = this.renderRoot.querySelector('.product-title');
+    if (titleLink) {
+      window.location.href = titleLink.href;
+    }
+  }
+
+  handleCartClick(e) {
+    e.stopPropagation();
+
+    const cartItem = {
+      id: this.id,
+      title: this.title,
+      brand: this.brand,
+      price: this.price,
+      originalPrice: this.originalPrice,
+      image: this.image,
+      discount_rate: this.discount_rate || 0,
+      description: this.description,
+      temperature: this.temperature || '상온',
+      quantity: 1,
+      isChecked: true,
+    };
+
+    const existingCart = JSON.parse(localStorage.getItem('cart') || '[]');
+    const existingItemIndex = existingCart.findIndex(
+      (item) => item.id === cartItem.id
+    );
+
+    if (existingItemIndex > -1) {
+      existingCart[existingItemIndex].quantity += 1;
+    } else {
+      existingCart.push(cartItem);
+    }
+
+    localStorage.setItem('cart', JSON.stringify(existingCart));
+
+    this.dispatchEvent(
+      new CustomEvent('cart-updated', {
+        detail: { cart: existingCart },
+        bubbles: true,
+        composed: true,
+      })
+    );
+
+    Swal.fire({
+      icon: 'success',
+      title: `${this.title}\n장바구니에 추가되었습니다.`,
+      showDenyButton: true,
+      showConfirmButton: true,
+      denyButtonText: '장바구니 보기',
+      confirmButtonText: '닫기',
+      reverseButtons: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+      } else if (result.isDenied) {
+        window.location.href = 'src/pages/cart/';
+      }
+    });
+  }
+
   render() {
-    const formattedTitle = this.brand
-      ? `[${this.brand}] ${this.title}`
-      : this.title;
-
     return html`
-      <article class="product">
-        <a href="src/pages/productDetail/" class="product__link">
-          <div class="product__image-wrap">
-            <img
-              class="product__image"
-              src="${this.image}"
-              alt="${formattedTitle}"
-            />
-            <button class="product__cart" aria-label="장바구니 담기">
-              <img src="/assets/icons/Cart.svg" alt="" aria-hidden="true" />
-            </button>
-          </div>
+      <article class="product" @click=${this.handleProductClick}>
+        <div class="product__image-wrap">
+          <img
+            class="product__image"
+            src="${this.image}"
+            alt="${this.brand ? `[${this.brand}] ${this.title}` : this.title}"
+          />
+          <button
+            class="product__cart"
+            aria-label="장바구니 담기"
+            @click=${this.handleCartClick}
+          >
+            <img src="/assets/icons/Cart.svg" alt="장바구니 아이콘" />
+          </button>
+        </div>
 
-          <div class="product__info">
-            ${this.delivery
-              ? html`<p class="product__delivery">${this.delivery}</p>`
+        <div class="product__info">
+          ${this.delivery
+            ? html`<p class="product__delivery">${this.delivery}</p>`
+            : ''}
+          <div class="product__title-wrap">
+            ${this.brand
+              ? html`<span class="product__brand">[${this.brand}]</span>`
               : ''}
-            <h3 class="product__title">${formattedTitle}</h3>
-            <div class="product__price-wrap">
-              ${this.isDiscounted && this.discount_rate
-                ? html`
-                    <div class="product__price-info">
-                      <strong class="product__discount-rate"
-                        >${this.discount_rate}%</strong
-                      >
-                      <strong class="product__price"
-                        >${this.price?.toLocaleString() ?? 0}원</strong
-                      >
-                    </div>
-                    <del class="product__price--original">
-                      ${this.originalPrice?.toLocaleString() ?? 0}원
-                    </del>
-                  `
-                : html`
-                    <div class="product__price-info">
-                      <strong class="product__price"
-                        >${this.price?.toLocaleString() ?? 0}원</strong
-                      >
-                    </div>
-                  `}
-            </div>
-            ${this.description
-              ? html`<p class="product__description">${this.description}</p>`
-              : ''}
-            ${this.badges?.badges?.length
-              ? html`
-                  <ul class="product__badges">
-                    ${this.badges.badges
-                      .filter((badge) => badge.type && badge.text)
-                      .map(
-                        (badge) => html`
-                          <li>
-                            <product-badge
-                              type=${badge.type}
-                              text=${badge.text}
-                            ></product-badge>
-                          </li>
-                        `
-                      )}
-                  </ul>
-                `
-              : ''}
+            <a href="src/pages/productDetail/" class="product-title"
+              >${this.title}</a
+            >
           </div>
-        </a>
+          <div class="product__price-wrap">
+            ${this.isDiscounted && this.discount_rate
+              ? html`
+                  <div class="product__price-info">
+                    <strong class="product__discount-rate"
+                      >${this.discount_rate}%</strong
+                    >
+                    <strong class="product__price"
+                      >${this.price?.toLocaleString() ?? 0}원</strong
+                    >
+                  </div>
+                  <del class="product__price--original">
+                    ${this.originalPrice?.toLocaleString() ?? 0}원
+                  </del>
+                `
+              : html`
+                  <div class="product__price-info">
+                    <strong class="product__price"
+                      >${this.price?.toLocaleString() ?? 0}원</strong
+                    >
+                  </div>
+                `}
+          </div>
+          ${this.description
+            ? html`<p class="product__description">${this.description}</p>`
+            : ''}
+          ${this.badges?.badges?.length
+            ? html`
+                <ul class="product__badges">
+                  ${this.badges.badges
+                    .filter((badge) => badge.type && badge.text)
+                    .map(
+                      (badge) => html`
+                        <li>
+                          <product-badge
+                            type=${badge.type}
+                            text=${badge.text}
+                          ></product-badge>
+                        </li>
+                      `
+                    )}
+                </ul>
+              `
+            : ''}
+        </div>
       </article>
     `;
   }

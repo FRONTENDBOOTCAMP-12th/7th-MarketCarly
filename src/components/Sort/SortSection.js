@@ -20,6 +20,32 @@ class SortSection extends LitElement {
           display: flex;
           align-items: center;
           gap: 0.5rem;
+          position: relative;
+        }
+
+        .sort-options__icon {
+          width: 0.875rem;
+          height: 0.875rem;
+          background: url('/assets/icons/Frame.svg') center no-repeat;
+        }
+
+        .sort-options__message {
+          position: absolute;
+          top: 1.875rem;
+          width: 14.375rem;
+          padding: 1.25rem;
+          color: var(--gray--500);
+          font-size: var(--text-xs);
+          font-weight: var(--font-regular);
+          background-color: var(--white);
+          border: 0.0625rem solid var(--content);
+          border-radius: 0.1875rem;
+          z-index: 1;
+          visibility: hidden;
+        }
+
+        .sort-options__icon:hover + .sort-options__message {
+          visibility: visible;
         }
 
         .divider {
@@ -59,6 +85,15 @@ class SortSection extends LitElement {
               .isSelected=${index === this.selectedIndex}
               @sort-selected=${this.handleSortSelected}
             ></sort-item>
+        
+            ${title === '추천순'
+              ? html`
+                <span class="sort-options__icon"></span>
+                <div class="sort-options__message">소비자 인기도(판매량, 판매금액, 조회수 등), 상품 출시일, 수요 적합성, 상품 운영상 필요 등을 종합적으로 고려한 순서입니다.</div>
+              `
+              : ''
+            }
+
             ${index < this.sortOptions.length - 1
               ? html`<span class="divider"></span>`
               : ''}

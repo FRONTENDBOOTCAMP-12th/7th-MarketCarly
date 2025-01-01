@@ -18,19 +18,29 @@ export class ProductQuantity extends LitElement {
         border: 1px solid var(--gray--200);
       }
 
+			.product__quantity span {
+				color: var(--black);
+			}
+
       .product__quantity--minus,
       .product__quantity--plus {
         width: 30px;
         height: 30px;
         background-color: inherit;
         border: none;
-        cursor: pointer;
       }
 
       .product__quantity--minus {
         background-image: url(/assets/icons/Minus.svg);
-        background-position: -8px -46px;
       }
+
+			.product__quantity--minus.disabled {
+				background-position: -8px -46px;
+			}
+
+			.product__quantity--minus.enabled {
+				background-position: -8px -8px;
+			}
 
       .product__quantity--plus {
         background-image: url(/assets/icons/Plus.svg);
@@ -52,9 +62,9 @@ export class ProductQuantity extends LitElement {
     this.quantity = Math.max(1, this.quantity + change);
     this.dispatchEvent(
       new CustomEvent('quantity-change', {
-        detail: { quantity: this.quantity },
-        bubbles: true,
-        composed: true,
+        detail: { quantity: this.quantity }, // 추가 데이터 전달
+        bubbles: true, // 부모 요소로 이벤트 버블링
+        composed: true, // Shadow DOM 바깥으로 이벤트 전달
       })
     );
   }
@@ -63,7 +73,7 @@ export class ProductQuantity extends LitElement {
     return html`
       <div class="product__quantity">
         <button
-          class="product__quantity--minus"
+          class="product__quantity--minus ${this.quantity === 1 ? 'disabled' : 'enabled'}"
           type="button"
           aria-label="구매 상품 수량 빼기"
           @click="${() => this.updateQuantity(-1)}"

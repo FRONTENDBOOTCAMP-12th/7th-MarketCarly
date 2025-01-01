@@ -15,6 +15,10 @@ class ProductList extends LitElement {
     this.isFetching = false;
     this.products = [];
     this.filteredProducts = [];
+    this.paginatedProducts = [];
+    this.currentPage = 1;
+    this.itemsPerPage = 6;
+    this.activeFilters = {};
   }
 
   static get styles() {
@@ -53,6 +57,29 @@ class ProductList extends LitElement {
           font-weight: var(--font-semibold);
         }
 
+        .active-filter {
+          display: flex;
+          align-items: center;
+          background-color: none;
+          border: 0.0625rem solid var(--gray--100);
+          padding: 1.25rem;
+        }
+
+        .active-filter__name {
+          color: var(--secondary);
+          font-size: var(--text-sm);
+        }
+
+        .active-filter__remove {
+          width: 30px;
+          height: 30px;
+          border: none;
+          background: none;
+          padding: 0;
+          cursor: pointer;
+          margin-right: 1.25rem;
+        }
+
         .cards-list {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
@@ -67,12 +94,34 @@ class ProductList extends LitElement {
     this.fetchProducts();
     this.addEventListener('sort-changed', this.handleSortChanged.bind(this));
     this.addEventListener('filter-changed', this.handleFilterChanged.bind(this));
+    this.addEventListener('page-changed', this.handlePageChanged.bind(this));
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const category = urlParams.get('category');
+  
+    switch (category) {
+      case 'new':
+        this.title = '신상품';
+        this.sortOption = '신상품순';
+        break;
+      case 'best':
+        this.title = '베스트';
+        this.sortOption = '추천순';
+        break;
+      case 'sales':
+        this.title = '알뜰쇼핑';
+        this.sortOption = '낮은 가격순';
+        break;
+    }
+
+    this.requestUpdate();
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
     this.removeEventListener('sort-changed', this.handleSortChanged.bind(this));
     this.removeEventListener('filter-changed', this.handleFilterChanged.bind(this));
+    this.removeEventListener('page-changed', this.handlePageChanged.bind(this));
   }
 
   async fetchProducts() {
@@ -86,97 +135,154 @@ class ProductList extends LitElement {
 
     this.filteredProducts = [...this.products];
     this.isFetching = false;
-
+    this.updatePaginatedProducts();
     this.requestUpdate();
   }
 
   handleFilterChanged(event) {
-    const { title, selectedCategories } = event.detail;
+    const { title, selectedCategories, processed } = event.detail;
+
+    if (processed) return;
   
-    // 필터 조건 저장
-    this.activeFilters = this.activeFilters || {};
-    this.activeFilters[title] = selectedCategories;
-  
-    // 필터링 로직
-    this.filteredProducts = this.products.filter(product => {
-      let isMatch = true; // 기본값: 모든 조건을 만족한다고 가정
-  
-      // 포장타입 필터
-      if (this.activeFilters['포장타입']?.length > 0) {
-        if (!this.activeFilters['포장타입'].includes(product.product_type)) {
-          isMatch = false; // 포장타입 조건 미충족
-        }
+    if (!this.activeFilters[title]) {
+      this.activeFilters[title] = [];
+    }
+
+    selectedCategories.forEach((category) => {
+      if (!this.activeFilters[title].includes(category)) {
+        this.activeFilters[title].push(category);
       }
-  
-      // 가격 필터
-      if (this.activeFilters['가격']?.length > 0) {
-        const price = product.discounted_price || product.price;
-        const isPriceMatch = 
-          (this.activeFilters['가격'].includes('6000원 미만') && price < 6000) ||
-          (this.activeFilters['가격'].includes('6000원 ~ 30000원') && price >= 6000 && price <= 30000) ||
-          (this.activeFilters['가격'].includes('30000원 이상') && price > 30000);
-        if (!isPriceMatch) {
-          isMatch = false; // 가격 조건 미충족
-        }
-      }
-  
-      // 배송 필터
-      if (this.activeFilters['배송']?.length > 0) {
-        if (!this.activeFilters['배송'].includes(product.delivery_type)) {
-          isMatch = false; // 배송 조건 미충족
-        }
-      }
-  
-      // 혜택 필터 (할인상품)
-      if (this.activeFilters['혜택']?.includes('할인상품')) {
-        if (!product.discount_price) {
-          isMatch = false; // 할인상품 조건 미충족
-        }
-      }
-  
-      return isMatch; // 모든 조건 통과
     });
+
+    if (selectedCategories.length === 0) {
+      delete this.activeFilters[title];
+    }
   
+    this.filteredProducts = this.products.filter(product => this.applyFilters(product));
+    this.currentPage = 1;
+
+    this.updatePaginatedProducts();
     this.requestUpdate();
   }
 
+  applyFilters(product) {
+    let isMatch = true;
+
+    Object.entries(this.activeFilters).forEach(([filterKey, categories]) => {
+      if (filterKey === '포장타입' && categories.length > 0 && !categories.includes(product.product_type)) {
+        isMatch = false;
+      } else if (filterKey === '가격' && categories.length > 0) {
+        const price = product.discounted_price || product.price;
+        if (!this.isPriceMatch(price, categories)) {
+          isMatch = false;
+        }
+      } else if (filterKey === '배송' && categories.length > 0 && !categories.includes(product.delivery_type)) {
+        isMatch = false;
+      } else if (filterKey === '혜택' && categories.includes('할인상품') && !product.discount_price) {
+        isMatch = false;
+      }
+    });
+
+    return isMatch;
+  }
+
+  isPriceMatch(price, categories) {
+    return (
+      (categories.includes('6,000원 미만') && price < 6000) ||
+      (categories.includes('6,000원 ~ 30,000원') && price >= 6000 && price < 30000) ||
+      (categories.includes('30,000원 이상') && price >= 30000)
+    );
+  }
+
+  removeFilter(filterKey, category) {
+    this.activeFilters[filterKey] = this.activeFilters[filterKey].filter(
+      (item) => item !== category
+    );
+
+    if (this.activeFilters[filterKey].length === 0) {
+      delete this.activeFilters[filterKey];
+    }
+
+    this.handleFilterChanged({
+      detail: {
+        title: filterKey,
+        selectedCategories: this.activeFilters[filterKey] || [],
+      },
+    });
+    
+    this.requestUpdate();
+  }
+  
   handleSortChanged(event) {
-    const sortOption = event.detail.title;
-    this.sortProducts(sortOption);
+    this.sortProducts(event.detail.title);
+    this.currentPage = 1;
+
+    this.updatePaginatedProducts();
+  }
+
+  handlePageChanged(event) {
+    this.currentPage = event.detail.currentPage;
+    this.updatePaginatedProducts();
   }
 
   sortProducts(option) {
     if (option === '추천순') {
       this.filteredProducts = [...this.products];
     } else if (option === '낮은 가격순') {
-      this.filteredProducts.sort((a, b) => (a.discounted_price || a.price) - (b.discounted_price || b.price));
+      this.filteredProducts.sort((a, b) => (a.discount_price || a.price) - (b.discount_price || b.price));
     } else if (option === '높은 가격순') {
-      this.filteredProducts.sort((a, b) => (b.discounted_price || b.price) - (a.discounted_price || a.price));
+      this.filteredProducts.sort((a, b) => (b.discount_price || b.price) - (a.discount_price || a.price));
     } else if (option === '신상품순') {
       this.filteredProducts.sort((a, b) => new Date(b.created) - new Date(a.created));
     }
 
+    this.updatePaginatedProducts();
+    this.requestUpdate();
+  }
+
+  updatePaginatedProducts() {
+    const startIdx = (this.currentPage - 1) * this.itemsPerPage;
+    const endIdx = startIdx + this.itemsPerPage;
+    
+    this.paginatedProducts = this.filteredProducts.slice(startIdx, endIdx);
+    
     this.requestUpdate();
   }
 
   render() {
     return html`
-      <h1>베스트</h1>
-
+      <h1>${this.title}</h1>
+  
       <div class="main-container">
-
         <filter-section></filter-section>
-
         <section class="products">
-
           <div class="sort">
             <span>총 ${this.filteredProducts.length}건</span>
             <sort-section></sort-section>
           </div>
-
+            ${this.activeFilters && Object.keys(this.activeFilters).length > 0
+              ? html`
+                <div class="active-filters">
+                  <div class="active-filter">
+                    ${Object.entries(this.activeFilters).map(
+                      ([filterKey, categories]) => categories.map(
+                        (category) => html`
+                          <span class="active-filter__name">${category}</span>
+                          <button
+                            class="active-filter__remove"
+                            @click=${() => this.removeFilter(filterKey, category)}
+                          >
+                            <img src="/assets/icons/Cancel.svg" />
+                          </button>
+                        `
+                      )
+                    )}
+                </div>
+              `
+            : ''}
           <div class="cards">
             <ul class="cards-list">
-              ${this.filteredProducts.map(
+              ${this.paginatedProducts.map(
                 (product) => html`
                   <li>
                     <product-card
@@ -186,7 +292,7 @@ class ProductList extends LitElement {
                       .price=${product.discount_price || product.price || 0}
                       .originalPrice=${product.price || 0}
                       .isDiscounted=${!!product.discount_price}
-                      .discount=${product.discount_rate || 0}
+                      .discount_rate=${product.discount_rate || 0}
                       .description=${product.description}
                       .badges=${product.badges || []}
                     ></product-card>
@@ -195,14 +301,17 @@ class ProductList extends LitElement {
               )}
             </ul>
           </div>
-
-          <pagination-section></pagination-section>
-
+          <pagination-section
+            .totalItems=${this.filteredProducts.length}
+            .itemsPerPage=${this.itemsPerPage}
+            .currentPage=${this.currentPage}
+            @page-changed=${this.handlePageChanged}
+          ></pagination-section>
         </section>
-
       </div>
     `;
   }
+  
 }
 
 customElements.define('product-list', ProductList);

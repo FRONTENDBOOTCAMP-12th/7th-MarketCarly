@@ -6,8 +6,8 @@ class Pagination extends LitElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
-    this.totalItems = 26;
-    this.itemsPerPage = 12;
+    this.totalItems = 8;
+    this.itemsPerPage = 6;
     this.currentPage = 1;
   }
 
@@ -74,8 +74,19 @@ class Pagination extends LitElement {
     ];
   }
 
-  handleClickPageNum(pageNum) {
+  handleClickPageNum(pageNum, e) {
+    if (pageNum < 1 || pageNum > Math.ceil(this.totalItems / this.itemsPerPage))
+      return;
+
     this.currentPage = pageNum;
+
+    e.preventDefault();
+
+    this.dispatchEvent(new CustomEvent('page-changed', {
+      detail: { currentPage: this.currentPage },
+      bubbles: true,
+      composed: true,
+    }));
   }
 
   get paginationNumbers() {
@@ -91,22 +102,23 @@ class Pagination extends LitElement {
 
   render() {
     const pageNumbers = this.paginationNumbers;
+
     return html`
       <div class="pagination-container">
         <div class="pagination">
-          <a href="/" class="pagination__to-first" @click="${() => this.handleClickPageNum(1)}"></a>
-          <a href="/" class="pagination__to-previous" @click="${() => this.handleClickPageNum(this.currentPage - 1)}"></a>
+          <a href="#" class="pagination__to-first" @click="${(e) => this.handleClickPageNum(1,e)}"></a>
+          <a href="#" class="pagination__to-previous" @click="${(e) => this.handleClickPageNum(this.currentPage - 1,e)}"></a>
           ${pageNumbers.map(page => html`
             <a 
-              href="/" 
+              href="#" 
               class="${this.currentPage === page ? 'current' : ''}" 
-              @click="${() => this.handleClickPageNum(page)}"
+              @click="${(e) => this.handleClickPageNum(page, e)}"
             >
               ${page}
             </a>
           `)}
-          <a href="/" class="pagination__to-next" @click="${() => this.handleClickPageNum(this.currentPage + 1)}"></a>
-          <a href="/" class="pagination__to-last" @click="${() => this.handleClickPageNum(this.totalPages)}"></a>
+          <a href="#" class="pagination__to-next" @click="${(e) => this.handleClickPageNum(this.currentPage + 1,e)}"></a>
+          <a href="#" class="pagination__to-last" @click="${(e) => this.handleClickPageNum(this.totalPages,e)}"></a>
         </div>
       </div>
     `;
