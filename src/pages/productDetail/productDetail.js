@@ -86,14 +86,31 @@ class ProductInfo extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     console.log('ProductInfo: 컴포넌트 연결');
+  }
 
-    // 로컬 스토리지에서 데이터 로드
-    productState.loadProductFromLocalStorage();
+  async fetchData() {
+    try {
+      const productId = JSON.parse(
+        localStorage.getItem('recentProducts')
+      ).slice(-1)[0].id;
+      console.log('상품 고유 ID 확인', productId);
+      const product = await pb
+        .collection('Products')
+        .getFirstListItem(`id="${productId}"`);
 
-    // 초기 데이터 설정
-    const initialProduct = productState.getProduct();
-    if (initialProduct && Object.keys(initialProduct).length > 0) {
-      this.product = initialProduct;
+      this.product = {
+        id: product.id,
+        product_id: product.product_id,
+        delivery_type: product.delivery_type,
+        title: product.title,
+        description: product.description,
+        discount_rate: product.discount_rate,
+        price: product.price,
+        original_price: product.original_price,
+        img: `${pb.baseURL}/api/files/product/${product.id}/${product.img}`,
+      };
+    } catch (error) {
+      console.error('에러', error); // 에러 원인 파악용
     }
 
     // 상태 변경 리스너
@@ -141,6 +158,7 @@ class ProductInfo extends LitElement {
               <span class="product__discount" aria-label="할인율"
                 >${discount_rate}%</span
               >
+
               <span class="product__price" aria-label="할인가"
                 >${price.toLocaleString()} 원</span
               >
@@ -155,6 +173,11 @@ class ProductInfo extends LitElement {
           <p class="product__login-benefit">
             로그인 후, 적립 혜택이 제공됩니다.
           </p>
+          <product-detail-list
+            productName="${this.product.title}"
+            price="${this.product.price}"
+            originalPrice="${this.product.original_price}"
+          ></product-detail-list>
           <product-detail-list .product="${this.product}"></product-detail-list>
           <product-actions .product="${this.product}"></product-actions>
         </div>

@@ -113,6 +113,10 @@ export class ProductDetailList extends LitElement {
   ];
 
   static properties = {
+    details: { attribute: true },
+    productName: { type: String, attribute: true },
+    price: { type: Number, attribute: true },
+    originalPrice: { type: Number, attribute: true },
     product: { type: Object }, // 부모로부터 전달받은 상품 정보
     quantity: { type: Number },
     totalPrice: { type: Number },
@@ -120,6 +124,7 @@ export class ProductDetailList extends LitElement {
 
   constructor() {
     super();
+
     this.product = {}; // 초기화된 상품 데이터
     this.quantity = 1;
     this.totalPrice = 0;
@@ -168,6 +173,7 @@ export class ProductDetailList extends LitElement {
 
     return html`
       <ul class="product__detail-list">
+
         ${details.map(
           (detail) => html`
             <li class="product__detail-item">
