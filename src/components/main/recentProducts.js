@@ -174,6 +174,14 @@ export class RecentProducts extends LitElement {
     });
   }
 
+  handleProductClick(product) {
+    const currentProducts = JSON.parse(localStorage.getItem('recentProducts'));
+    const filterProduct = currentProducts.filter((p) => p.id !== product.id);
+    filterProduct.push(product);
+    localStorage.setItem('recentProducts', JSON.stringify(filterProduct));
+    window.dispatchEvent(new CustomEvent('recentProductsUpdated'));
+  }
+
   render() {
     return html`
       <aside class="recent">
@@ -199,7 +207,11 @@ export class RecentProducts extends LitElement {
             ${[...this.products].reverse().map(
               (product) => html`
                 <li class="recent__item">
-                  <a href="#" class="recent__link">
+                  <a
+                    href="/src/pages/productDetail/"
+                    class="recent__link"
+                    @click=${() => this.handleProductClick(product)}
+                  >
                     <img
                       class="recent__image"
                       src=${product.image}
