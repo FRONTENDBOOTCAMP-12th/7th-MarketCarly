@@ -86,6 +86,7 @@ class ProductInfo extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     console.log('ProductInfo: 컴포넌트 연결');
+  }
 
   async fetchData() {
     try {
