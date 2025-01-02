@@ -136,12 +136,20 @@ export class FooterAbout extends LitElement {
 
         <div class="sns">
           <a href="#" class="sns__link">
-            <img src="/assets/icons/nblog.png" alt="블로그" class="sns__icon" />
+            <img
+              src="/assets/icons/nblog.png"
+              alt="네이버 블로그"
+              width="30"
+              height="30"
+              class="sns__icon"
+            />
           </a>
           <a href="#" class="sns__link">
             <img
               src="/assets/icons/facebook.png"
               alt="페이스북"
+              width="30"
+              height="30"
               class="sns__icon"
             />
           </a>
@@ -149,13 +157,17 @@ export class FooterAbout extends LitElement {
             <img
               src="/assets/icons/instagram.png"
               alt="인스타그램"
+              width="30"
+              height="30"
               class="sns__icon"
             />
           </a>
           <a href="#" class="sns__link">
             <img
               src="/assets/icons/npost.png"
-              alt="네이버포스트"
+              alt="네이버 포스트"
+              width="30"
+              height="30"
               class="sns__icon"
             />
           </a>

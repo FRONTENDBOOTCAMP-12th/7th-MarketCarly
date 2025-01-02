@@ -56,6 +56,8 @@ export class FooterMiddle extends LitElement {
           <img
             src="/assets/icons/ISMS.svg"
             alt="ISMS 로고"
+            width="34"
+            height="34"
             class="middle__logo"
           />
           <span class="middle__text"
@@ -68,6 +70,8 @@ export class FooterMiddle extends LitElement {
           <img
             src="/assets/icons/privacy.svg"
             alt="개인정보보호 로고"
+            width="34"
+            height="34"
             class="middle__logo"
           />
           <span class="middle__text"
@@ -80,6 +84,8 @@ export class FooterMiddle extends LitElement {
           <img
             src="/assets/icons/logo_tosspayments.png"
             alt="토스페이먼츠 로고"
+            width="102"
+            height="32"
             class="middle__logo middle__logo--tosspayments"
           />
           <span class="middle__text"
@@ -92,6 +98,8 @@ export class FooterMiddle extends LitElement {
           <img
             src="/assets/icons/wooribank.svg"
             alt="우리은행 로고"
+            width="34"
+            height="34"
             class="middle__logo"
           />
           <span class="middle__text"
