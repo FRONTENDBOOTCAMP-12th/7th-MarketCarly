@@ -145,7 +145,7 @@ export class ProductCard extends LitElement {
   constructor() {
     super();
     this.image = '/assets/images/product1.jpg';
-    this.delivery = '샛별배송';
+    this.delivery = '샛별 배송';
     this.title = '[풀무원] 탱탱쫄면';
     this.price = 4980;
     this.originalPrice = 6000;
@@ -204,10 +204,11 @@ export class ProductCard extends LitElement {
       image: this.image,
       discount_rate: this.discount_rate || 0,
       description: this.description,
-      temperature: this.product_type || '상온',
+      product_type: this.product_type,
       quantity: 1,
       isChecked: true,
     };
+    console.log('생성된 cartItem:', cartItem);
 
     const existingCart = JSON.parse(localStorage.getItem('cart') || '[]');
     const existingItemIndex = existingCart.findIndex(

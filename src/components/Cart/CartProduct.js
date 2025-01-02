@@ -58,7 +58,9 @@ class CartProduct extends LitElement {
   handleDelete() {
     this.dispatchEvent(
       new CustomEvent('delete', {
-        detail: { productId: this.productData.id },
+        detail: {
+          productId: this.productData.id,
+        },
         bubbles: true,
         composed: true,
       })
