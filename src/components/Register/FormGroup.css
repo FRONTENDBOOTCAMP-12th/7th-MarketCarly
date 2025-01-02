@@ -9,17 +9,18 @@
   flex-wrap: wrap;
 }
 
-.register__label,
-.register__span {
+.register__label-wrapper {
+  width: 8.75rem;
+}
+
+.register__label {
   font-size: var(--text-base);
   font-weight: var(--font-semibold);
   line-height: var(--line-height-normal);
-  width: 8.75rem;
   text-align: left;
 }
 
-.register__label--required::after {
-  content: '*';
+.register__label-required {
   color: var(--info---error);
 }
 
@@ -48,12 +49,6 @@
   line-height: var(--line-height-normal);
   width: 8.125rem;
   height: 2.75rem;
-  cursor: pointer;
-}
-
-/* 주소 버튼 */
-.register__button--address-search {
-  width: 21.375rem;
 }
 
 /* 생년월일 입력창 */
@@ -119,8 +114,9 @@ input::-webkit-inner-spin-button {
   display: block;
 }
 
-/* 인증번호 확인란 */
-.register__auth {
+/* 인증번호 확인란, 주소 입력란 */
+.register__auth,
+.register__address {
   margin-top: 0.625rem;
   margin-left: 9.5625rem;
   display: flex;

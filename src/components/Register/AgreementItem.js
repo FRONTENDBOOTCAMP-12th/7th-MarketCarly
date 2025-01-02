@@ -1,5 +1,6 @@
 import { LitElement, html } from 'lit';
 import style from '/src/components/Register/AgreementItem.css?inline';
+import resetCSS from '/src/styles/reset.css?inline';
 
 class AgreementItem extends LitElement {
   static properties = {
@@ -17,10 +18,51 @@ class AgreementItem extends LitElement {
     this.link = false;
   }
 
+  checkAgreeAll(e) {
+    const isChecked = e.target.checked;
+    const checkList = this.parentElement.children;
+    const checkboxes = [];
+
+    for (let i = 0; i < checkList.length; i++) {
+      const checkInput = this.parentElement.children[
+        i
+      ].shadowRoot.querySelectorAll('input[type="checkbox"]');
+      checkboxes.push(checkInput[0]);
+    }
+
+    if (this.value === 'agree-all') {
+      checkboxes.forEach((checkbox) => {
+        checkbox.checked = isChecked;
+      });
+    } else {
+      const otherCheckboxes = checkboxes.filter(
+        (checkbox) => checkbox.value !== 'agree-all'
+      );
+
+      const allChecked = otherCheckboxes.every((checkbox) => checkbox.checked);
+
+      const agreeAllCheckbox = checkboxes.find(
+        (checkbox) => checkbox.value === 'agree-all'
+      );
+      if (agreeAllCheckbox) {
+        agreeAllCheckbox.checked = allChecked;
+      }
+    }
+
+    this.dispatchEvent(
+      new CustomEvent('agreement-change', {
+        detail: { value: this.value, checked: e.target.checked },
+        bubbles: true,
+        composed: true,
+      })
+    );
+  }
+
   render() {
     return html`
       <style>
         ${style}
+        ${resetCSS}
       </style>
       <div
         class="register__agreement-item ${this.description
@@ -34,6 +76,7 @@ class AgreementItem extends LitElement {
           id="${this.value}"
           class="register__checkbox"
           ?required="${this.required}"
+          @change=${this.checkAgreeAll}
         />
         <label for="${this.value}" class="register__checkbox-label">
           <span class="register__icon-check"></span>${this.label}${!this

@@ -8,10 +8,10 @@ class PopupAd extends LitElement {
     baseCSS,
     css`
       .popup-content {
-        width: 27.5rem; 
-        height: 42rem; 
+        width: 27.5rem;
+        height: 42rem;
         background-color: var(--white);
-        border-radius: 0.625rem; 
+        border-radius: 0.625rem;
         overflow: hidden;
         position: relative;
         text-align: center;
@@ -21,9 +21,9 @@ class PopupAd extends LitElement {
 
       .popup-image {
         width: 100%;
-        height: calc(100% - 5.375rem); 
+        height: calc(100% - 5.375rem);
         background: url('/src/assets/images/popupadimg.jpeg') no-repeat center center/cover;
-        filter: blur(0.25rem); 
+        filter: blur(0.25rem);
         position: absolute;
         top: 0;
         left: 0;
@@ -40,8 +40,8 @@ class PopupAd extends LitElement {
         z-index: 2;
         color: var(--white);
         background: rgba(var(--black), 0.6);
-        font-size: 1.333rem; 
-        line-height: 2.133rem; 
+        font-size: 1.333rem;
+        line-height: 2.133rem;
         text-align: center;
       }
 
@@ -59,11 +59,11 @@ class PopupAd extends LitElement {
         flex: 1;
         line-height: 5.375rem;
         text-align: center;
-        font-size: 1rem; /* 16px to rem */
+        font-size: 1rem;
         color: var(--content);
         background-color: var(--white);
         cursor: pointer;
-        border-top: 0.063rem solid var(--gray--200); 
+        border-top: 0.063rem solid var(--gray--200);
       }
 
       .footer-btn:not(:last-child) {
@@ -85,7 +85,7 @@ class PopupAd extends LitElement {
 
   handleCloseToday() {
     const today = new Date().toISOString().split('T')[0];
-    localStorage.setItem('popup-hidden-today', today); 
+    localStorage.setItem('popup-hidden-today', today);
     this.hidePopup();
   }
 
@@ -121,3 +121,4 @@ class PopupAd extends LitElement {
 }
 
 customElements.define('popup-ad', PopupAd);
+
