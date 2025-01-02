@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import resetCSS from '../resetCSS.ts';
 import baseCSS from '../base.ts';
-import './searchBar.js';
+import './SearchBar.js';
 import Swal from 'sweetalert2';
 
 export class HeaderTop extends LitElement {

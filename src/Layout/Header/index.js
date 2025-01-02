@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit';
-import './headerTop';
-import './headerNav';
+import './HeaderTop';
+import './HeaderNav';
 
 export class Header extends LitElement {
   static get styles() {
