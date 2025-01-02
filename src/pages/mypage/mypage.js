@@ -158,6 +158,21 @@ class MyPage extends LitElement {
     return formGroupData;
   }
 
+  handleUpdateLocalStorage() {
+    const { record, token } = JSON.parse(
+      localStorage.getItem('pocketbase_auth') ?? '{}'
+    );
+
+    localStorage.setItem(
+      'auth',
+      JSON.stringify({
+        isAuth: !!record,
+        user: record,
+        token: token,
+      })
+    );
+  }
+
   handleUpdate(e) {
     e.preventDefault();
     const formData = this.extractFormData();
@@ -190,6 +205,8 @@ class MyPage extends LitElement {
         pb.collection('users')
           .update(recordId, data)
           .then(() => {
+            this.handleUpdateLocalStorage();
+
             Swal.fire({
               title: '정보가 수정되었습니다.',
               icon: 'success',
@@ -210,6 +227,8 @@ class MyPage extends LitElement {
             birth: formData.birth,
           })
           .then(() => {
+            this.handleUpdateLocalStorage();
+
             Swal.fire({
               title: '정보가 수정되었습니다.',
               icon: 'success',
