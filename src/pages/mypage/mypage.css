@@ -1,0 +1,128 @@
+.mypage {
+  width: 40rem;
+  margin: 0 auto;
+}
+
+.mypage__legend {
+  margin-left: 0.625rem;
+  font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  font-size: var(--text-2xl);
+  font-weight: var(--font-semibold);
+  line-height: var(--line-height-loose);
+  padding-block: 2.75rem;
+}
+
+/* 회원가입 폼 */
+.mypage__form {
+  border-top: 0.125rem solid var(--content);
+  border-bottom: 0.0625rem solid var(--content);
+  display: grid;
+  padding-block: 1.25rem;
+}
+
+.mypage__form-group {
+  padding-block: 1.25rem;
+  padding-left: 0.3125rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.mypage__label,
+.mypage__span {
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  line-height: var(--line-height-normal);
+  width: 8.75rem;
+  text-align: left;
+}
+
+/* 생년월일 입력창 */
+.mypage__birthday-wrapper {
+  border: 0.0625rem solid var(--gray--300);
+  border-radius: 0.25rem;
+  padding: 0;
+  width: 21.375rem;
+  display: flex;
+  justify-content: center;
+
+  .mypage__input--birthday {
+    width: 3.125rem;
+    text-align: center;
+    border: none;
+    padding: 0;
+  }
+}
+
+/* 입력창 */
+.mypage__input {
+  font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  font-size: var(--text-base);
+  font-weight: var(--font-regular);
+  line-height: var(--line-height-semirelaxed);
+  color: var(--gray--400);
+  width: 18.75rem;
+  height: 2.5rem;
+  border-radius: 0.25rem;
+  border: 0.0625rem solid var(--gray--300);
+  padding-inline: 1.25rem;
+}
+
+/* input[type='number'] 기본 화살표 속성 제거 */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* 라디오 버튼 */
+.mypage__radio-group {
+  color: var(--content);
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  line-height: var(--line-height-normal);
+}
+
+.mypage__radio {
+  appearance: none;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 0.0625rem solid var(--gray--200);
+  border-radius: 50%;
+}
+
+.mypage__radio:checked {
+  border: 0.4375rem solid var(--primary);
+}
+
+/* 가입하기 버튼 */
+.mypage__button {
+  width: 8.125rem;
+  height: 3.125rem;
+  border: none;
+  border-radius: 0.25rem;
+  font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  line-height: var(--line-height-normal);
+}
+
+.mypage__button--update {
+  background-color: var(--primary);
+  color: var(--white);
+}
+
+.mypage__button--quit {
+  background-color: transparent;
+  color: var(--primary);
+  border: 0.0625rem solid var(--primary);
+}
+
+.mypage__button-wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  justify-content: center;
+  margin: 1rem;
+}

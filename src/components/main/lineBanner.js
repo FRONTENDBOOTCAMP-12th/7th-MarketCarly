@@ -1,6 +1,5 @@
-// src/components/main/LineBanner.js
 import { LitElement, html, css } from 'lit';
-import resetCSS from '../../Layout/resetCSS';
+import resetCSS from '@/Layout/resetCSS';
 
 export class LineBanner extends LitElement {
   static get styles() {
@@ -40,7 +39,7 @@ export class LineBanner extends LitElement {
 
   constructor() {
     super();
-    this.imageUrl = '/src/assets/images/line-banner-1.webp';
+    this.imageUrl = '/assets/images/line-banner-1.webp';
     this.altText = '더 풍성해진 10월의 퍼플위크';
   }
 

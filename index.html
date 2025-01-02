@@ -1,21 +1,22 @@
 <!doctype html>
 <html lang="ko-KR">
   <head>
-    <title>Vite Pure css</title>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>마켓칼리 | 7Carly</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/src/styles/base.css" />
     <link rel="stylesheet" href="/src/styles/reset.css" />
     <link rel="stylesheet" href="/src/styles/style.css" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script type="module" src="/src/main.js"></script>
   </head>
   <body>
     <div id="app">
+      <c-header></c-header>
       <main-banner></main-banner>
       <today-recommend-products></today-recommend-products>
       <recent-products></recent-products>
-      <line-banner></line-banner>
-      <today-recommend-products></today-recommend-products>
+      <c-footer></c-footer>
     </div>
   </body>
 </html>

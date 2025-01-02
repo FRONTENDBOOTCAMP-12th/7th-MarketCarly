@@ -1,8 +1,64 @@
 import { LitElement, html, css } from 'lit';
 import style from '/src/pages/login/login.css?inline';
 import resetCSS from '/src/styles/reset.css?inline';
+import pb from '/src/api/pocketbase.js';
+import Swal from 'sweetalert2';
 
 class Login extends LitElement {
+  async fetchData() {
+    const userId = this.shadowRoot.querySelector('#user-id');
+    const idValue = userId.value;
+    const idRegex = /^(?=.*[a-zA-Z])(?=.*[0-9]).{6,16}$/;
+    const isIdValid = idRegex.test(idValue);
+
+    const userPw = this.shadowRoot.querySelector('#user-pw');
+    const pwValue = userPw.value;
+    const pwRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^&*?-_=+]).{6,16}$/;
+    const isPwValid = pwRegex.test(pwValue);
+
+    try {
+      if (isIdValid && isPwValid) {
+        await pb.collection('users').authWithPassword(idValue, pwValue);
+
+        const { record, token } = JSON.parse(
+          localStorage.getItem('pocketbase_auth') ?? '{}'
+        );
+
+        localStorage.setItem(
+          'auth',
+          JSON.stringify({
+            isAuth: !!record,
+            user: record,
+            token: token,
+          })
+        );
+
+        Swal.fire({
+          title: '로그인 성공!',
+          text: '메인페이지로 이동합니다.',
+          icon: 'success',
+        }).then(() => {
+          location.href = '/';
+        });
+      } else {
+        Swal.fire('입력 정보가 올바르지 않습니다.');
+      }
+    } catch (error) {
+      Swal.fire({
+        title: '로그인 실패..',
+        text: '아이디 또는 비밀번호를 다시 확인해주세요.',
+        icon: 'error',
+      }).then(() => {
+        location.reload();
+      });
+    }
+  }
+
+  handleLogin(e) {
+    e.preventDefault();
+    this.fetchData();
+  }
+
   render() {
     return html`
       <style>
@@ -42,20 +98,24 @@ class Login extends LitElement {
               />
             </div>
             <div class="find-wrapper">
-              <button
-                type="button"
+              <a
+                href="/src/pages/login/"
                 class="login__find-button login__find-button--id"
+                >아이디 찾기</a
               >
-                아이디 찾기
-              </button>
-              <button
-                type="button"
+              <span class="find-separator" aria-hidden="true">|</span>
+              <a
+                href="/src/pages/login/"
                 class="login__find-button login__find-button--pw"
               >
                 비밀번호 찾기
-              </button>
+              </a>
             </div>
-            <button type="submit" class="login__button login__button--submit">
+            <button
+              type="submit"
+              class="login__button login__button--submit"
+              @click=${this.handleLogin}
+            >
               로그인
             </button>
             <a

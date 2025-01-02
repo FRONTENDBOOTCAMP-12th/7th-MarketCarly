@@ -1,0 +1,77 @@
+@import url('/src/styles/a11y.css');
+
+.mypage__form-group {
+  padding-block: 1.25rem;
+  padding-left: 0.3125rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.mypage__label-wrapper {
+  width: 8.75rem;
+}
+
+.mypage__label {
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  line-height: var(--line-height-normal);
+  text-align: left;
+}
+
+.mypage__input {
+  font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  font-size: var(--text-base);
+  font-weight: var(--font-regular);
+  line-height: var(--line-height-semirelaxed);
+  color: var(--gray--400);
+  width: 18.75rem;
+  height: 2.5rem;
+  border-radius: 0.25rem;
+  border: 0.0625rem solid var(--gray--300);
+  padding-inline: 1.25rem;
+}
+
+.mypage__button {
+  border: 0.0625rem solid var(--primary);
+  border-radius: 0.25rem;
+  background-color: transparent;
+  font-size: var(--text-base);
+  color: var(--primary);
+  font-weight: var(--font-semibold);
+  line-height: var(--line-height-normal);
+  width: 8.125rem;
+  height: 2.75rem;
+}
+
+/* 에러 메시지 */
+.mypage__error-message {
+  color: var(--info---error);
+  margin-left: 9.375rem;
+  font-size: var(--text-sm);
+  font-weight: var(--font-regular);
+  line-height: var(--line-height-relaxed);
+  display: none;
+}
+
+.is--valid {
+  display: block;
+}
+
+/* 주소 입력란 */
+.mypage__address {
+  margin-top: 0.625rem;
+  margin-left: 9.25rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.mypage__label,
+.mypage__span {
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  line-height: var(--line-height-normal);
+  width: 8.75rem;
+  text-align: left;
+}

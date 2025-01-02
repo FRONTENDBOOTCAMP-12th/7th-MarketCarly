@@ -1,5 +1,7 @@
 import { LitElement, html } from 'lit';
 import style from '/src/components/Register/FormGroup.css?inline';
+import resetCSS from '/src/styles/reset.css?inline';
+import pb from '/src/api/pocketbase';
 
 class FormGroup extends LitElement {
   static properties = {
@@ -12,37 +14,65 @@ class FormGroup extends LitElement {
     errorMessage: { type: String },
     errorId: { type: String },
     showAuthInput: { type: Boolean },
+    isValid: { type: Object },
+    showDetailAddress: { type: Boolean },
+    isAuthValid: { type: Boolean },
   };
 
   constructor() {
     super();
     this.showAuthInput = false;
+    this.isValid = {
+      isIdValid: false,
+      isPwValid: false,
+      isEmailValid: false,
+    };
+    this.showDetailAddress = false;
+    this.isAuthValid = false;
+  }
+
+  dispatchValidationEvent() {
+    this.dispatchEvent(
+      new CustomEvent('validation-updated', {
+        detail: {
+          isIdValid: this.isValid.isIdValid,
+          isPwValid: this.isValid.isPwValid,
+          isEmailValid: this.isValid.isEmailValid,
+        },
+        bubbles: true,
+        composed: true,
+      })
+    );
   }
 
   idValidation() {
     const idInput = this.shadowRoot.querySelector('#user-id');
-    const pwRegex = /^(?=.*[a-zA-Z])(?=.*[0-9]).{6,16}$/;
-    const isValid = pwRegex.test(idInput.value);
+    const idRegex = /^(?=.*[a-zA-Z])(?=.*[0-9]).{6,16}$/;
+    this.isValid.isIdValid = idRegex.test(idInput.value);
     const error = this.shadowRoot.querySelector('#id-error');
 
-    if (!isValid) {
+    if (!this.isValid.isIdValid) {
       error.classList.add('is--valid');
     } else {
       error.classList.remove('is--valid');
     }
+
+    this.dispatchValidationEvent();
   }
 
   pwValidation() {
     const pwInput = this.shadowRoot.querySelector('#user-pw');
     const pwRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^&*?-_=+]).{6,16}$/;
-    const isValid = pwRegex.test(pwInput.value);
+    this.isValid.isPwValid = pwRegex.test(pwInput.value);
     const error = this.shadowRoot.querySelector('#pw-error');
 
-    if (!isValid) {
+    if (!this.isValid.isPwValid) {
       error.classList.add('is--valid');
     } else {
       error.classList.remove('is--valid');
     }
+
+    this.dispatchValidationEvent();
   }
 
   pwCheck() {
@@ -61,14 +91,16 @@ class FormGroup extends LitElement {
   emailValidation() {
     const emailInput = this.shadowRoot.querySelector('#user-email');
     const emailRegex = /^[\w.-]+@[\w.-]+\.[a-zA-Z]{2,}$/;
-    const isValid = emailRegex.test(emailInput.value);
+    this.isValid.isEmailValid = emailRegex.test(emailInput.value);
     const error = this.shadowRoot.querySelector('#email-error');
 
-    if (!isValid) {
+    if (!this.isValid.isEmailValid) {
       error.classList.add('is--valid');
     } else {
       error.classList.remove('is--valid');
     }
+
+    this.dispatchValidationEvent();
   }
 
   showErrorMessage() {
@@ -83,14 +115,147 @@ class FormGroup extends LitElement {
     }
   }
 
-  handleButtonClick() {
-    const input = this.shadowRoot.querySelector(`#${this.id}`);
-    const value = Number(input.value);
+  authComplete() {
+    const authInput = this.shadowRoot.querySelector('#auth-number');
+    const authInputValue = authInput.value;
+    const authNumber = '12345';
 
-    if (this.id === 'user-phone' && input && value) {
-      this.showAuthInput = true;
+    if (authInputValue === authNumber) {
+      this.isAuthValid = true;
+      Swal.fire({
+        icon: 'success',
+        title: '인증 완료!',
+      });
     } else {
-      alert('휴대폰 번호를 입력해주세요');
+      Swal.fire({
+        icon: 'error',
+        title: '인증 실패..',
+        text: '인증 번호를 다시 입력해주세요',
+      });
+      authInput.value = '';
+    }
+
+    this.dispatchEvent(
+      new CustomEvent('auth-validation', {
+        detail: {
+          isAuthValid: this.isAuthValid,
+        },
+        bubbles: true,
+        composed: true,
+      })
+    );
+  }
+
+  kakaoAddressApi() {
+    new daum.Postcode({
+      oncomplete: (data) => {
+        let address = '';
+        let extraInfo = '';
+
+        if (data.userSelectedType === 'R') {
+          address = data.roadAddress;
+        } else {
+          address = data.jibunAddress;
+        }
+
+        if (data.userSelectedType === 'R') {
+          if (data.bname && /[동|로|가]$/g.test(data.bname)) {
+            extraInfo += data.bname;
+          }
+          if (data.buildingName && data.apartment === 'Y') {
+            extraInfo += extraInfo
+              ? `, ${data.buildingName}`
+              : data.buildingName;
+          }
+          if (extraInfo) {
+            extraInfo = `(${extraInfo})`;
+          }
+        }
+        const addressInput = this.shadowRoot.querySelector('#user-address');
+        addressInput.value = address + ' ' + extraInfo;
+
+        this.showDetailAddress = true;
+      },
+    }).open();
+  }
+
+  async idCheck() {
+    const idInput = this.shadowRoot.querySelector('#user-id');
+    const idValue = idInput.value;
+
+    try {
+      const record = await pb
+        .collection('users')
+        .getFirstListItem(`userId='${idValue}'`);
+
+      if (record) {
+        Swal.fire({
+          title: '중복된 아이디입니다.',
+          text: '다른 아이디를 입력해주세요.',
+        });
+        idInput.value = '';
+      }
+    } catch (error) {
+      if (error) {
+        Swal.fire('사용 가능한 아이디입니다.');
+      } else {
+        console.error('idCheck error');
+      }
+    }
+  }
+
+  async emailCheck() {
+    const emailInput = this.shadowRoot.querySelector('#user-email');
+    const emailValue = emailInput.value;
+
+    try {
+      const record = await pb
+        .collection('users')
+        .getFirstListItem(`email='${emailValue}'`);
+
+      if (record) {
+        Swal.fire('중복된 이메일입니다.');
+        emailInput.value = '';
+      }
+    } catch (error) {
+      if (error) {
+        Swal.fire('사용 가능한 이메일입니다.');
+      } else {
+        console.error('emailCheck error');
+      }
+    }
+  }
+
+  handleButtonClick() {
+    const phoneButton = this.shadowRoot.querySelector(
+      '.register__button--phone-check'
+    );
+    const addressButton = this.shadowRoot.querySelector(
+      '.register__button--address-search'
+    );
+    const idCheckButton = this.shadowRoot.querySelector(
+      '.register__button--check-id'
+    );
+    const emailCheckButton = this.shadowRoot.querySelector(
+      '.register__button--check-email'
+    );
+
+    if (phoneButton) {
+      const phoneInput = this.shadowRoot.querySelector('#user-phone');
+      const phoneNumber = Number(phoneInput.value);
+
+      if (phoneNumber) {
+        this.showAuthInput = true;
+        this.updateComplete.then(() => this.authComplete);
+      } else {
+        Swal.fire('휴대폰 번호를 입력해주세요');
+      }
+    } else if (addressButton) {
+      this.kakaoAddressApi();
+    } else if (idCheckButton) {
+      this.idCheck();
+    } else if (emailCheckButton) {
+      this.emailCheck();
     }
   }
 
@@ -98,13 +263,19 @@ class FormGroup extends LitElement {
     return html`
       <style>
         ${style}
+        ${resetCSS}
       </style>
       <div class="register__form-group">
-        <label
-          for="${this.id}"
-          class="register__label register__label--required"
-          >${this.label}</label
-        >
+        <div class="register__label-wrapper">
+          <label
+            for="${this.id}"
+            class="register__label register__label--required"
+            >${this.label}</label
+          ><span class="register__label-required" aria-label="필수 입력 요소"
+            >*</span
+          >
+        </div>
+
         ${this.type
           ? html`<input
               type="${this.type}"
@@ -149,10 +320,29 @@ class FormGroup extends LitElement {
             <button
               type="button"
               class="register__button register__button--check-auth"
+              @click=${this.authComplete}
             >
               인증번호 확인
             </button>
           </div>`
+        : ''}
+      ${this.showDetailAddress
+        ? html`
+            <div class="register__address">
+              <label
+                for="user-detail-address"
+                class="register__label--none sr-only"
+                >상세 주소</label
+              >
+              <input
+                type="text"
+                id="user-detail-address"
+                name="user-detail-address"
+                class="register__input"
+                placeholder="상세 주소를 입력하세요"
+              />
+            </div>
+          `
         : ''}
     `;
   }
