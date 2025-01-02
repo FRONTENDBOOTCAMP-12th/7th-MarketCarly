@@ -32,6 +32,23 @@ export class SearchBar extends LitElement {
           padding: 0;
           align-items: center;
         }
+
+        @media (max-width: 876px) {
+          .search__form {
+            width: 300px;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .search__form {
+            width: 350px;
+          }
+        }
+        @media (max-width: 600px) {
+          .search__form {
+            width: 250px;
+          }
+        }
       `,
     ];
   }

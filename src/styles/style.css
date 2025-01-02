@@ -4,7 +4,37 @@
 
 recent-products {
   position: fixed;
-  top: 20%;
-  left: 90vw;
+  top: 40%;
+  left: 95%;
   z-index: 999;
+}
+
+@media (max-width: 1920px) {
+  recent-products {
+    left: 90%;
+  }
+}
+
+@media (max-width: 1024px) {
+  recent-products {
+    left: 85%;
+  }
+}
+
+@media (max-width: 768px) {
+  recent-products {
+    left: 80%;
+  }
+}
+
+@media (max-width: 600px) {
+  recent-products {
+    display: none;
+  }
+}
+
+@media (max-width: 387px) {
+  recent-products {
+    display: none;
+  }
 }

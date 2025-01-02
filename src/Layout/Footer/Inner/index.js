@@ -6,7 +6,7 @@ export class FooterInner extends LitElement {
   static get styles() {
     return css`
       .inner {
-        width: 1050px;
+        max-width: 1050px;
         margin: 0 auto;
         display: flex;
         flex-direction: column;

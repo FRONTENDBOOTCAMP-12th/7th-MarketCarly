@@ -14,6 +14,7 @@ class ProductState {
       if (recentProducts.length > 0) {
         // 가장 마지막에 추가된 상품 선택
         this.product = recentProducts[recentProducts.length - 1];
+        this.updateDocumentTitle(); // 페이지 <title> 업데이트
         this.notifyListeners(); // 상태 변경 알림
         console.log('Loaded product from localStorage:', this.product);
       } else {
@@ -28,21 +29,31 @@ class ProductState {
   getProduct() {
     return this.product;
   }
-
   // 상태 변경 시 호출될 리스너 추가
   addListener(listener) {
     this.listeners.push(listener);
   }
-
   // 리스너 제거
   removeListener(listener) {
     this.listeners = this.listeners.filter((l) => l !== listener);
   }
-
   // 리스너에게 상태 변경 알림
   notifyListeners() {
     this.listeners.forEach((listener) => listener(this.product));
   }
-}
 
+  // 페이지 <title> 업데이트
+  updateDocumentTitle() {
+    if (this.product.title) {
+      document.title = `${this.product.title} - 상세 페이지`;
+    } else {
+      this.resetDocumentTitle();
+    }
+  }
+
+  // 기본 제목으로 재설정
+  resetDocumentTitle() {
+    document.title = '상품 상세 페이지';
+  }
+}
 export const productState = new ProductState();
