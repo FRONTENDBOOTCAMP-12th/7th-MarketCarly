@@ -121,6 +121,7 @@ class FilterSection extends LitElement {
           <button
             class="reset"
             @click=${this.handleClickReset}
+            aria-label="카테고리 초기화"
           >초기화</button>
         </div>
         ${this.filters.map(
@@ -129,6 +130,7 @@ class FilterSection extends LitElement {
               .filterTitle=${filter.title}
               .selectedCategoryCount=${filter.selectedCategoryCount}
               .categories=${filter.categories}
+              aria-labelledby="${filter.title}"
             ></filter-item>
           `
         )}
