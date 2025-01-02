@@ -235,7 +235,7 @@ export class ProductCard extends LitElement {
     }).then((result) => {
       if (result.isConfirmed) {
       } else if (result.isDenied) {
-        window.location.href = 'src/pages/cart/';
+        window.location.href = '/src/pages/cart/';
       }
     });
   }
@@ -266,7 +266,7 @@ export class ProductCard extends LitElement {
             ${this.brand
               ? html`<span class="product__brand">[${this.brand}]</span>`
               : ''}
-            <a href="src/pages/productDetail/" class="product-title"
+            <a href="/src/pages/productDetail/" class="product-title"
               >${this.title}</a
             >
           </div>
