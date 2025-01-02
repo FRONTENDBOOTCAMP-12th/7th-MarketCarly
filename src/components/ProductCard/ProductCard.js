@@ -191,8 +191,7 @@ export class ProductCard extends LitElement {
 
     const cartItem = {
       id: this.id,
-      delivery: this.delivery_type === '샛별 배송' ? '샛별 배송' : null,
-      origin: this.orgin,
+      delivery: this.delivery,
       seller: this.seller,
       allergy: this.allergy,
       origin: this.origin,

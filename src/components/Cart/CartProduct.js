@@ -65,6 +65,14 @@ class CartProduct extends LitElement {
     );
   }
 
+  handleClick() {
+    const event = new CustomEvent('product-click', {
+      bubbles: true,
+      composed: true,
+    });
+    this.dispatchEvent(event);
+  }
+
   handleCheckChange(e) {
     this.isChecked = e.target.checked;
     this.dispatchEvent(
@@ -128,6 +136,7 @@ class CartProduct extends LitElement {
             <img
               src=${this.productData.image}
               alt=${this.productData.title}
+              @click=${this.handleClick}
               class="cart-product__image"
             />
           </a>

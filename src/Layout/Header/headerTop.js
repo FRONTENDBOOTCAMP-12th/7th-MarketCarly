@@ -299,7 +299,11 @@ export class HeaderTop extends LitElement {
                   </button>
                 </li>
                 <li>
-                  <button class="top__icons-button" aria-label="장바구니">
+                  <button
+                    class="top__icons-button"
+                    aria-label="장바구니"
+                    @click=${() => (window.location.href = '/src/pages/cart/')}
+                  >
                     <img
                       src="/assets/icons/Cart2.svg"
                       alt=""
