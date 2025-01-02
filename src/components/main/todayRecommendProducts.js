@@ -241,6 +241,12 @@ export class TodayRecommendProducts extends LitElement {
       const mapProductsToCard = (products) => {
         return products.map((product) => ({
           id: product.id,
+          seller: product.seller,
+          allergy: product.allergy,
+          origin: product.origin,
+          weight_volume: product.weight_volume,
+          selling_unit: product.selling_unit,
+          product_type: product.product_type,
           delivery: product.delivery_type === '샛별 배송' ? '샛별 배송' : null,
           title: product.title,
           brand: product.brand,
@@ -375,6 +381,12 @@ export class TodayRecommendProducts extends LitElement {
                     <product-card
                       .id=${product.id}
                       .image=${product.image}
+                      .seller=${product.seller}
+                      .allergy=${product.allergy}
+                      .weight_volume=${product.weight_volume}
+                      .selling_unit=${product.selling_unit}
+                      .product_type=${[product.product_type]}
+                      product.product_type,
                       .delivery=${product.delivery}
                       .titleLink=${'#'}
                       .title=${product.title}

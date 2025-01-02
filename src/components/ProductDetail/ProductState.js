@@ -28,21 +28,17 @@ class ProductState {
   getProduct() {
     return this.product;
   }
-
   // 상태 변경 시 호출될 리스너 추가
   addListener(listener) {
     this.listeners.push(listener);
   }
-
   // 리스너 제거
   removeListener(listener) {
     this.listeners = this.listeners.filter((l) => l !== listener);
   }
-
   // 리스너에게 상태 변경 알림
   notifyListeners() {
     this.listeners.forEach((listener) => listener(this.product));
   }
 }
-
 export const productState = new ProductState();
