@@ -177,8 +177,46 @@ export class ProductCard extends LitElement {
     super.connectedCallback();
   }
 
+  getCommonProductData() {
+    return {
+      id: this.id,
+      image: this.image,
+      seller: this.seller,
+      allergy: this.allergy,
+      origin: this.origin,
+      weight_volume: this.weight_volume,
+      selling_unit: this.selling_unit,
+      product_type: this.product_type,
+      delivery: this.delivery,
+      title: this.title,
+      brand: this.brand,
+      description: this.description,
+      price: this.price,
+      originalPrice: this.originalPrice,
+      discount_rate: this.discount_rate,
+    };
+  }
+
   handleProductClick(e) {
     if (e.target.closest('.product__cart')) return;
+
+    let recentProducts =
+      JSON.parse(localStorage.getItem('recentProducts')) || [];
+    const productData = {
+      ...this.getCommonProductData(),
+      badges: this.badges,
+      isDiscounted: this.isDiscounted,
+    };
+
+    recentProducts = recentProducts.filter(
+      (p) => p.title !== productData.title
+    );
+    recentProducts.push(productData);
+    if (recentProducts.length > 4) {
+      recentProducts = recentProducts.slice(-4);
+    }
+    localStorage.setItem('recentProducts', JSON.stringify(recentProducts));
+    window.dispatchEvent(new CustomEvent('recentProductsUpdated'));
 
     const titleLink = this.renderRoot.querySelector('.product-title');
     if (titleLink) {
@@ -190,21 +228,7 @@ export class ProductCard extends LitElement {
     e.stopPropagation();
 
     const cartItem = {
-      id: this.id,
-      delivery: this.delivery,
-      seller: this.seller,
-      allergy: this.allergy,
-      origin: this.origin,
-      weight_volume: this.weight_volume,
-      selling_unit: this.selling_unit,
-      title: this.title,
-      brand: this.brand,
-      price: this.price,
-      originalPrice: this.originalPrice,
-      image: this.image,
-      discount_rate: this.discount_rate || 0,
-      description: this.description,
-      product_type: this.product_type,
+      ...this.getCommonProductData(),
       quantity: 1,
       isChecked: true,
     };

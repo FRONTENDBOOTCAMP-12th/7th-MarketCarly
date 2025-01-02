@@ -375,9 +375,7 @@ export class TodayRecommendProducts extends LitElement {
             >
               ${products.map(
                 (product) => html`
-                  <swiper-slide
-                    @click=${() => this.handleProductClick(product)}
-                  >
+                  <swiper-slide>
                     <product-card
                       .id=${product.id}
                       .image=${product.image}
