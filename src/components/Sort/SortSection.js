@@ -88,8 +88,16 @@ class SortSection extends LitElement {
         
             ${title === '추천순'
               ? html`
-                <span class="sort-options__icon"></span>
-                <div class="sort-options__message">
+                <span 
+                  class="sort-options__icon"
+                  aria-label="추천순 정렬 설명 아이콘" 
+                  aria-describedby="sort-tooltip"
+                ></span>
+                <div 
+                  class="sort-options__message" 
+                  role="tooltip"
+                  id="sort-tooltip"
+                >
                   소비자 인기도(판매량, 판매금액, 조회수 등), 상품 출시일, 수요 적합성, 상품 운영상 필요 등을 종합적으로 고려한 순서입니다.
                 </div>
               `

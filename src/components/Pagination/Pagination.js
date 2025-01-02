@@ -106,19 +106,51 @@ class Pagination extends LitElement {
     return html`
       <div class="pagination-container">
         <div class="pagination">
-          <a href="#" class="pagination__to-first" @click="${(e) => this.handleClickPageNum(1,e)}"></a>
-          <a href="#" class="pagination__to-previous" @click="${(e) => this.handleClickPageNum(this.currentPage - 1,e)}"></a>
+          <a 
+            href="#" 
+            class="pagination__to-first" 
+            @click="${(e) => this.handleClickPageNum(1,e)}"
+            aria-label="첫 페이지로 이동" 
+            role="button"
+            tabindex="0"
+          ></a>
+          <a 
+            href="#" 
+            class="pagination__to-previous" 
+            @click="${(e) => this.handleClickPageNum(this.currentPage - 1,e)}"
+            aria-label="이전 페이지로 이동" 
+            role="button"
+            tabindex="0"
+          ></a>
           ${pageNumbers.map(page => html`
             <a 
               href="#" 
               class="${this.currentPage === page ? 'current' : ''}" 
               @click="${(e) => this.handleClickPageNum(page, e)}"
+              aria-current="${this.currentPage === page ? 'page' : undefined}"
+              aria-label="${page}페이지로 이동"
+              role="button"
+              tabindex="0"
             >
               ${page}
             </a>
           `)}
-          <a href="#" class="pagination__to-next" @click="${(e) => this.handleClickPageNum(this.currentPage + 1,e)}"></a>
-          <a href="#" class="pagination__to-last" @click="${(e) => this.handleClickPageNum(this.totalPages,e)}"></a>
+          <a 
+            href="#" 
+            class="pagination__to-next" 
+            @click="${(e) => this.handleClickPageNum(this.currentPage + 1,e)}"
+            aria-label="다음 페이지로 이동" 
+            role="button"
+            tabindex="0"
+          ></a>
+          <a 
+            href="#" 
+            class="pagination__to-last" 
+            @click="${(e) => this.handleClickPageNum(this.totalPages,e)}"
+            aria-label="마지막 페이지로 이동" 
+            role="button"
+            tabindex="0"
+          ></a>
         </div>
       </div>
     `;
