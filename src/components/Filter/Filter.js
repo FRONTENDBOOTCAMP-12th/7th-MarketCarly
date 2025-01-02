@@ -164,6 +164,9 @@ class Filter extends LitElement {
     dropdown.classList.toggle('isActive');
     categoryList.classList.toggle('isActive');
     moreCategory.classList.toggle('isActive');
+
+    const isExpanded = categoryList.classList.contains('isActive');
+    categoryList.setAttribute('aria-expanded', isExpanded);
   }
 
   handleClickCategory(e) {
@@ -217,6 +220,7 @@ class Filter extends LitElement {
         <button 
           class="filter" 
           @click=${this.handleClickFilter}
+          aria-controls="category-list"
         >
           <div class="filter__info">
             <span class="name">${this.filterTitle}</span>
@@ -224,14 +228,19 @@ class Filter extends LitElement {
           </div>
           <span class="filter__dropdown"></span>
         </button>
-        <ul class="categories">
+        <ul class="categories" id="category-list">
           ${this.categories.map((category, index) => html`
             <li>
               <div 
                 class="category"
                 @click=${this.handleClickCategory}
+                tabindex="0"
               >
-                <input class="category__checkbox" type="checkbox" id="checkbox-${index}" />
+                <input 
+                  class="category__checkbox" 
+                  type="checkbox" 
+                  id="checkbox-${index}"
+                />
                 <label class="category__icon-check" for="checkbox-${index}"></label>
                 <span class="category__name">${category.name}</span>
                 <span class="category__items">${category.itemCount}</span>
@@ -239,7 +248,7 @@ class Filter extends LitElement {
             </li>
           `)}
         </ul>
-        <button class="more-category">
+        <button class="more-category" aria-label="카테고리 더 보기">
           <span class="more-category__text">카테고리 더 보기</span>
           <span class="more-category__arrow"></span>
         </button>

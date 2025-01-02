@@ -6,7 +6,6 @@ import '/src/components/Sort/SortSection.js';
 import '/src/components/Filter/FilterSection.js';
 import '/src/components/Pagination/Pagination.js';
 import '/src/components/ProductCard/ProductCard.js';
-// import '/src/styles/base.css';
 
 class ProductList extends LitElement {
   constructor() {
@@ -275,11 +274,11 @@ class ProductList extends LitElement {
         <section class="products">
           <div class="sort">
             <span>총 ${this.filteredProducts.length}건</span>
-            <sort-section></sort-section>
+            <sort-section aria-label="상품 정렬 옵션"></sort-section>
           </div>
             ${this.activeFilters && Object.keys(this.activeFilters).length > 0
               ? html`
-                <div class="active-filters">
+                <div class="active-filters" aria-label="선택된 카테고리 리스트">
                   <div class="active-filter">
                     ${Object.entries(this.activeFilters).map(
                       ([filterKey, categories]) => categories.map(
@@ -288,8 +287,9 @@ class ProductList extends LitElement {
                           <button
                             class="active-filter__remove"
                             @click=${() => this.removeFilter(filterKey, category)}
+                            aria-label="${category} 카테고리 선택 취소 버튼"
                           >
-                            <img src="/assets/icons/Cancel.svg" />
+                            <img src="/assets/icons/Cancel.svg" alt="카테고리 선택 취소 아이콘" />
                           </button>
                         `
                       )
@@ -298,7 +298,7 @@ class ProductList extends LitElement {
               `
             : ''}
           <div class="cards">
-            <ul class="cards-list">
+            <ul class="cards-list" aria-label="상품 리스트">
               ${this.paginatedProducts.map(
                 (product) => html`
                   <li>

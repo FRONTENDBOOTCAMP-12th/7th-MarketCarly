@@ -56,6 +56,8 @@ class Sort extends LitElement {
       <button
         class="sort-option ${this.isSelected ? 'isSelected' : ''}"
         @click=${this.handleClickSort}
+        aria-label="${this.sortTitle}으로 상품 정렬하기"
+        aria-pressed="${this.isSelected}"
       >
         ${this.sortTitle}
       </button>
