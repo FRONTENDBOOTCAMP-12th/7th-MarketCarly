@@ -15,6 +15,12 @@ export class ProductCard extends LitElement {
           width: 100%;
         }
 
+        @media (max-width: 428px) {
+          .product {
+            padding: 50px;
+          }
+        }
+
         .product__link {
           display: block;
           text-decoration: none;

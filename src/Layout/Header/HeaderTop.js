@@ -17,6 +17,8 @@ export class HeaderTop extends LitElement {
         .top__inner {
           max-width: 65.625rem;
           margin: 0 auto;
+          padding: 0; 
+          box-sizing: border-box;
         }
 
         .top__login {
@@ -67,6 +69,7 @@ export class HeaderTop extends LitElement {
           max-width: 1050px;
           margin: 0 auto;
           gap: 1rem;
+          box-sizing: border-box
         }
 
         .top__logo {
@@ -84,9 +87,10 @@ export class HeaderTop extends LitElement {
           display: flex;
           gap: 0.75rem;
           align-items: center;
+          flex-wrap: wrap;
         }
 
-        .logo__link {
+        .logo__links {
           font-size: var(--text-lg);
           font-weight: var(--font-bold);
           color: #c4c4c4;
@@ -148,19 +152,49 @@ export class HeaderTop extends LitElement {
           padding-right: 0;
         }
 
-        @media (max-width: 900px) {
-          .search__form {
-            gap: none;
+        @media (max-width: 1024px) {
+          .top__search {
+            padding: 1rem 0.5rem; 
           }
         }
 
         @media (max-width: 850px) {
+          .top__logo {
+            flex-direction: column; 
+            gap: 1rem; 
+            align-items: center; 
+          }
+
           .logo__links {
             width: 200px;
+            display: flex;
+            font-size: var(--text-sm);
+            justify-content: center;
+            width: auto; 
+            gap: 0.5rem;
+            margin: 0;
+          }
+
+          .logo__divide {
+            display:none;
+          }
+
+          .logo__badge {
+            position: relative;
+            width: 6px;
+            height: 6px;
+            top: -11px;
+            right: 4px;
           }
 
           .top__icons-list {
-            width: 150px;
+            width: 90px;
+            gap:0.5rem
+          }
+
+        @media (max-width: 900px) {
+          .search__form {
+            gap: none;
           }
         }
       `,
