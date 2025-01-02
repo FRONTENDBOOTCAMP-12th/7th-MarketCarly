@@ -8,7 +8,7 @@ export default css`
     /*  --------------------------- 색상 ---------------------------  */
     --black: #000000;
     --white: #ffffff;
-    --primary: #248d52;
+    --primary: #225D3C;
     --secondary: #1bea5a;
     --content: #333;
     --gray--50: #f9f9f9;
