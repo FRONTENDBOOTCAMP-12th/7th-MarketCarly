@@ -48,16 +48,16 @@ class Cart extends LitElement {
   getCartData() {
     this.cartData = JSON.parse(localStorage.getItem('cart')) || [];
 
-    this.refrigeratedItems = this.cartData.filter(
-      (item) => item.temperature === '냉장'
+    this.refrigeratedItems = this.cartData.filter((item) =>
+      item.temperature.includes('냉장')
     );
 
-    this.frozenItems = this.cartData.filter(
-      (item) => item.temperature === '냉동'
+    this.frozenItems = this.cartData.filter((item) =>
+      item.temperature.includes('냉동')
     );
 
-    this.roomTempItems = this.cartData.filter(
-      (item) => item.temperature === '상온'
+    this.roomTempItems = this.cartData.filter((item) =>
+      item.temperature.includes('상온')
     );
 
     this.checkCount = this.cartData.filter((item) => item.isChecked).length;
@@ -100,6 +100,7 @@ class Cart extends LitElement {
       this.cartData.forEach((data) => {
         data.isChecked = true;
       });
+
       this.checkCount = this.cartData.length;
       this.saveData();
       this.notifyCartUpdate();
@@ -109,6 +110,7 @@ class Cart extends LitElement {
   handleProductCheckChange() {
     const checkArr = [];
     const cartProducts = this.shadowRoot.querySelectorAll('cart-product');
+
     let count = 0;
 
     cartProducts.forEach((product) => {
@@ -119,12 +121,12 @@ class Cart extends LitElement {
       }
     });
 
+    this.checkCount = count;
+
     this.isAllChecked = checkArr.every((checkState) => checkState);
 
     const cartCheckbox = this.shadowRoot.querySelector('#cart__checkbox');
     cartCheckbox.checked = this.isAllChecked;
-
-    this.checkCount = count;
 
     this.cartData.forEach((data, index) => {
       data.isChecked = checkArr[index];
@@ -136,46 +138,58 @@ class Cart extends LitElement {
 
   handleDeleteCheck() {
     const cartProduct = this.shadowRoot.querySelectorAll('cart-product');
+    const remainingCheckedItems = [];
+
     cartProduct.forEach((product) => {
       const checkProduct = product.shadowRoot.querySelector('#check-product');
-
       if (checkProduct.checked) {
-        product.style.display = 'none';
+        product.remove();
+      } else {
+        remainingCheckedItems.push(product);
       }
     });
 
     this.cartData = this.cartData.filter((data) => !data.isChecked);
+
+    this.checkCount = this.cartData.filter((data) => data.isChecked).length;
+
+    this.isAllChecked =
+      this.checkCount > 0 && this.checkCount === this.cartData.length;
+    const cartCheckbox = this.shadowRoot.querySelector('#cart__checkbox');
+    if (cartCheckbox) {
+      cartCheckbox.checked = this.isAllChecked;
+    }
 
     this.saveData();
     this.notifyCartUpdate();
   }
 
   handleDeleteProduct(e) {
-    const cartProduct = e.target;
     const { productId } = e.detail;
 
     Swal.fire({
       text: '장바구니에서 삭제하시겠습니까?',
       showCancelButton: true,
       confirmButtonText: '삭제하기',
-    }).then((isConfirmed) => {
-      cartProduct.style.display = 'none';
-      if (isConfirmed) {
+    }).then((result) => {
+      if (result.isConfirmed) {
         this.cartData = this.cartData.filter((data) => data.id !== productId);
 
         this.saveData();
 
-        this.refrigeratedItems = this.cartData.filter(
-          (item) => item.temperature === '냉장'
+        this.refrigeratedItems = this.cartData.filter((item) =>
+          item.temperature.includes('냉장')
         );
-        this.frozenItems = this.cartData.filter(
-          (item) => item.temperature === '냉동'
+        this.frozenItems = this.cartData.filter((item) =>
+          item.temperature.includes('냉동')
         );
-        this.roomTempItems = this.cartData.filter(
-          (item) => item.temperature === '상온'
+        this.roomTempItems = this.cartData.filter((item) =>
+          item.temperature.includes('상온')
         );
 
         this.notifyCartUpdate();
+
+        this.checkCount = this.cartData.length;
       }
     });
   }
