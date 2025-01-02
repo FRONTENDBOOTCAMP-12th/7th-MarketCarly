@@ -54,7 +54,7 @@ class MenuCategory extends LitElement {
         }
 
         .menu-item:hover img {
-          filter: brightness(0) saturate(100%) invert(30%) sepia(70%) saturate(700%) hue-rotate(260deg) brightness(100%) contrast(95%);
+          filter: brightness(0.5) saturate(200%) sepia(100%) hue-rotate(145deg) saturate(300%);
         }
           
         .toggle-button {
