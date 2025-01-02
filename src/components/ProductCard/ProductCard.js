@@ -191,6 +191,13 @@ export class ProductCard extends LitElement {
 
     const cartItem = {
       id: this.id,
+      delivery: this.delivery_type === '샛별 배송' ? '샛별 배송' : null,
+      origin: this.orgin,
+      seller: this.seller,
+      allergy: this.allergy,
+      origin: this.origin,
+      weight_volume: this.weight_volume,
+      selling_unit: this.selling_unit,
       title: this.title,
       brand: this.brand,
       price: this.price,
@@ -198,7 +205,7 @@ export class ProductCard extends LitElement {
       image: this.image,
       discount_rate: this.discount_rate || 0,
       description: this.description,
-      temperature: this.temperature || '상온',
+      temperature: this.product_type || '상온',
       quantity: 1,
       isChecked: true,
     };
