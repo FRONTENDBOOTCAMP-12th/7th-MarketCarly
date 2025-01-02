@@ -16,12 +16,14 @@ class ProductState {
         this.product = recentProducts[recentProducts.length - 1];
         this.updateDocumentTitle(); // 페이지 <title> 업데이트
         this.notifyListeners(); // 상태 변경 알림
-        console.log('Loaded product from localStorage:', this.product);
       } else {
-        console.error('No recentProducts found in localStorage.');
+        console.error('최근 본 상품의 저장 정보가 없습니다');
       }
     } catch (error) {
-      console.error('Failed to load product from localStorage:', error);
+      console.error(
+        '로컬스토리지에서 상품 정보를 가져오지 못 했습니다:',
+        error
+      );
     }
   }
 

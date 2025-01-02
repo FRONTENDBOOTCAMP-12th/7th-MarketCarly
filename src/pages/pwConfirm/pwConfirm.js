@@ -34,8 +34,6 @@ class PwConfirm extends LitElement {
     const idInput = this.shadowRoot.querySelector('#user-id');
     const userId = idInput.value;
 
-    console.log(userId);
-
     try {
       await pb
         .collection('users')

@@ -208,7 +208,6 @@ export class ProductCard extends LitElement {
       quantity: 1,
       isChecked: true,
     };
-    console.log('생성된 cartItem:', cartItem);
 
     const existingCart = JSON.parse(localStorage.getItem('cart') || '[]');
     const existingItemIndex = existingCart.findIndex(
