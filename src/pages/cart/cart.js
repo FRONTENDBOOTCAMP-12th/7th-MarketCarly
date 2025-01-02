@@ -58,17 +58,9 @@ class Cart extends LitElement {
 
     this.roomTempItems = this.cartData.filter((item) =>
       item.product_type?.includes('상온')
-
     );
 
     this.checkCount = this.cartData.filter((item) => item.isChecked).length;
-    console.log(
-      '상품별 온도:',
-      this.cartData.map((item) => item.temperature)
-    );
-    console.log('냉장 상품:', this.refrigeratedItems);
-    console.log('냉동 상품:', this.frozenItems);
-    console.log('상온 상품:', this.roomTempItems);
   }
 
   handleLoginDirect() {
@@ -108,7 +100,6 @@ class Cart extends LitElement {
       this.cartData.forEach((data) => {
         data.isChecked = true;
       });
-
       this.checkCount = this.cartData.length;
       this.saveData();
       this.notifyCartUpdate();
@@ -118,7 +109,6 @@ class Cart extends LitElement {
   handleProductCheckChange() {
     const checkArr = [];
     const cartProducts = this.shadowRoot.querySelectorAll('cart-product');
-
     let count = 0;
 
     cartProducts.forEach((product) => {
@@ -129,12 +119,12 @@ class Cart extends LitElement {
       }
     });
 
-    this.checkCount = count;
-
     this.isAllChecked = checkArr.every((checkState) => checkState);
 
     const cartCheckbox = this.shadowRoot.querySelector('#cart__checkbox');
     cartCheckbox.checked = this.isAllChecked;
+
+    this.checkCount = count;
 
     this.cartData.forEach((data, index) => {
       data.isChecked = checkArr[index];
@@ -146,27 +136,15 @@ class Cart extends LitElement {
 
   handleDeleteCheck() {
     const cartProduct = this.shadowRoot.querySelectorAll('cart-product');
-    const remainingCheckedItems = [];
-
     cartProduct.forEach((product) => {
       const checkProduct = product.shadowRoot.querySelector('#check-product');
+
       if (checkProduct.checked) {
-        product.remove();
-      } else {
-        remainingCheckedItems.push(product);
+        product.style.display = 'none';
       }
     });
 
     this.cartData = this.cartData.filter((data) => !data.isChecked);
-
-    this.checkCount = this.cartData.filter((data) => data.isChecked).length;
-
-    this.isAllChecked =
-      this.checkCount > 0 && this.checkCount === this.cartData.length;
-    const cartCheckbox = this.shadowRoot.querySelector('#cart__checkbox');
-    if (cartCheckbox) {
-      cartCheckbox.checked = this.isAllChecked;
-    }
 
     this.saveData();
     this.notifyCartUpdate();
@@ -184,14 +162,16 @@ class Cart extends LitElement {
   }
 
   handleDeleteProduct(e) {
+    const cartProduct = e.target;
     const { productId } = e.detail;
 
     Swal.fire({
       text: '장바구니에서 삭제하시겠습니까?',
       showCancelButton: true,
       confirmButtonText: '삭제하기',
-    }).then((result) => {
-      if (result.isConfirmed) {
+    }).then((isConfirmed) => {
+      cartProduct.style.display = 'none';
+      if (isConfirmed) {
         this.cartData = this.cartData.filter((data) => data.id !== productId);
 
         this.saveData();
@@ -207,8 +187,6 @@ class Cart extends LitElement {
         );
 
         this.notifyCartUpdate();
-
-        this.checkCount = this.cartData.length;
       }
     });
   }
@@ -287,8 +265,6 @@ class Cart extends LitElement {
                               @check-change=${this.handleProductCheckChange}
                               @product-click=${() =>
                                 this.handleProductDetailClick(item)}
-                              @product-click=${() =>
-                                this.handleProductDetailClick(item)}
                               @delete=${this.handleDeleteProduct}
                             ></cart-product>
                           `
@@ -327,8 +303,6 @@ class Cart extends LitElement {
                               @delete=${this.handleDeleteProduct}
                               @product-click=${() =>
                                 this.handleProductDetailClick(item)}
-                              @product-click=${() =>
-                                this.handleProductDetailClick(item)}
                             ></cart-product>
                           `
                         )}
@@ -363,8 +337,6 @@ class Cart extends LitElement {
                             <cart-product
                               .productData=${item}
                               @check-change=${this.handleProductCheckChange}
-                              @product-click=${() =>
-                                this.handleProductDetailClick(item)}
                               @product-click=${() =>
                                 this.handleProductDetailClick(item)}
                               @delete=${this.handleDeleteProduct}

@@ -85,7 +85,6 @@ class ProductInfo extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    console.log('ProductInfo: 컴포넌트 연결');
 
     // 로컬 스토리지에서 데이터 로드
     productState.loadProductFromLocalStorage();
@@ -98,7 +97,6 @@ class ProductInfo extends LitElement {
 
     // 상태 변경 리스너
     this.handleProductChange = (product) => {
-      console.log('ProductInfo: 리스너 호출, 받은 product:', product);
       this.product = product;
       this.requestUpdate(); // 강제 렌더링
     };

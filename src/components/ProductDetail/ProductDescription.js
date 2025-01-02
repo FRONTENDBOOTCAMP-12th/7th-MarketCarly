@@ -49,7 +49,6 @@ export class ProductDescription extends LitElement {
 
     // 상태 변경 구독
     this.handleProductChange = (product) => {
-      console.log('ProductDescription: 상태 변경 감지', product);
       this.product = product || {};
       this.requestUpdate();
     };

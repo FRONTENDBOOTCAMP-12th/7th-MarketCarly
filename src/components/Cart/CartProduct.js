@@ -133,12 +133,11 @@ class CartProduct extends LitElement {
           >장바구니 품목 선택</label
         >
 
-        <figure class="cart-product__figure">
+        <figure class="cart-product__figure" @click=${this.handleClick}>
           <a href="/src/pages/productDetail/" class="cart-product__detail-page">
             <img
               src=${this.productData.image}
               alt=${this.productData.title}
-              @click=${this.handleClick}
               class="cart-product__image"
             />
           </a>
