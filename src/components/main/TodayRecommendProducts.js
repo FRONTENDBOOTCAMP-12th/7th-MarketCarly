@@ -90,12 +90,12 @@ export class TodayRecommendProducts extends LitElement {
           right: -40px;
         }
 
-        @media (max-width: 1024px) {
+        @media (max-width: 1080px) {
           .swiper-button[slot='button-prev'] {
-            left: -20px;
+            left: 10px;
           }
           .swiper-button[slot='button-next'] {
-            right: -20px;
+            right: 10px;
           }
         }
 
@@ -107,7 +107,18 @@ export class TodayRecommendProducts extends LitElement {
             right: 30px;
           }
         }
+        @media (max-width: 600px) {
+          .swiper-button[slot='button-prev'] {
+            display: none;
+          }
 
+          .swiper-button[slot='button-next'] {
+            display: none;
+          }
+        }
+
+        @media (max-width: 500px) {
+        }
         .view-all-button {
           width: 100%;
           height: 100%;
@@ -357,9 +368,13 @@ export class TodayRecommendProducts extends LitElement {
                 "prevEl": ".swiper-button[slot=button-prev]",
                 "nextEl": ".swiper-button[slot=button-next]"
               }'
-              autoplay='{"delay": 3000, "disableOnInteraction": false}'
+              autoplay='{"delay": 300000, "disableOnInteraction": false}'
               breakpoints='{
-                "320": {
+                "0": {
+                  "slidesPerView": 1,
+                  "spaceBetween": 10
+                },
+                "480": {
                   "slidesPerView": 2,
                   "spaceBetween": 10
                 },

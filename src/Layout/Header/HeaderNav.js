@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import resetCSS from '../resetCSS.ts';
 import baseCSS from '../base.ts';
-import '../../components/MenuCategory/MenuCategory'
+import '../../components/MenuCategory/MenuCategory';
 
 export class HeaderNav extends LitElement {
   static get styles() {
@@ -52,6 +52,8 @@ export class HeaderNav extends LitElement {
           background-color: var(--white);
           font-weight: 400;
           font-size: 0.75rem;
+          word-break: keep-all;
+          white-space: nowrap;
         }
 
         .nav__delivery-info--highlight {
@@ -60,6 +62,40 @@ export class HeaderNav extends LitElement {
 
         .nav__delivery-info--text {
           color: var(--gray-500, #6b6b6b);
+        }
+
+        @media (max-width: 760px) {
+          .nav {
+            overflow-x: scroll;
+            scrollbar-width: none;
+          }
+
+          .nav::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+          }
+
+          .nav__menu {
+            font-size: var(--text-md);
+
+            & a {
+              word-break: keep-all;
+              width: 100px;
+              padding: 0px;
+            }
+          }
+        }
+
+        @media (max-width: 450px) {
+          .nav__delivery-info {
+            width: 90px;
+            gap: 0.125rem;
+            padding: 0.125rem 0.5rem;
+
+            border: 1px solid var(--gray-300, #a6a6a6);
+            border-radius: 16px;
+            font-size: 0.625rem;
+          }
         }
       `,
     ];

@@ -41,12 +41,12 @@ export class SearchBar extends LitElement {
 
         @media (max-width: 768px) {
           .search__form {
-            width: 350px;
+            width: 300px;
           }
         }
         @media (max-width: 600px) {
           .search__form {
-            width: 250px;
+            width: 220px;
           }
         }
       `,
