@@ -1,163 +1,157 @@
 import { LitElement, html, css } from 'lit';
+import resetCSS from '/src/Layout/resetCSS.ts';
+import baseCSS from '/src/Layout/base.ts';
 
-class AddCartComponent extends LitElement {
-  static styles = css`
-    .product-container {
-      width: 396px;
-      height: 292px;
-      background-color: var(--white);
-      border-radius: 10px;
-      box-shadow: 0 4px 10px var(--gray--300);
-      padding: 24px 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 28px;
-      box-sizing: border-box;
-    }
+class AddCart extends LitElement {
+  static get styles() {
+    return [
+      resetCSS,
+      baseCSS,
+      css`
+        .product-container {
+          width: 24.75rem; 
+          height: 18.25rem; 
+          background-color: var(--white);
+          border-radius: 0.625rem; 
+          box-shadow: 0 0.25rem 0.625rem var(--gray--300);
+          padding: 1.5rem 1.25rem; 
+          display: flex;
+          flex-direction: column;
+          gap: 1.75rem;
+          box-sizing: border-box;
+        }
 
-    .product-info {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
+        .product-info {
+          display: flex;
+          flex-direction: column;
+          gap: 0.75rem; 
+        }
 
-    .product-title {
-      margin: 0;
-      font-size: var(--text-lg);
-      color: var(--content);
-    }
+        .product-title {
+          margin: 0;
+          font-size: var(--text-lg);
+          color: var(--content);
+        }
 
-    .product-controls {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+        .product-controls {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
 
-    .product-price {
-      font-size: var(--text-xl);
-      font-weight: var(--font-bold);
-      margin: 0;
-    }
+        .product-price {
+          font-size: var(--text-xl);
+          font-weight: var(--font-bold);
+          margin: 0;
+        }
 
-    .quantity-control {
-      display: flex;
-      gap: 8px;
-    }
+        .quantity-control {
+          display: flex;
+          gap: 0.5rem;
+        }
 
-    .quantity-btn {
-      width: 30px;
-      height: 30px;
-      background-color: var(--gray--50);
-      border: 1px solid var(--gray--200);
-      font-size: var(--text-lg);
-      cursor: pointer;
-    }
+        .quantity-btn {
+          width: 1.875rem;
+          height: 1.875rem; 
+          background-color: var(--gray--50);
+          border: 0.063rem solid var(--gray--200); 
+          font-size: var(--text-lg);
+          cursor: pointer;
+        }
 
-    .total-container {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
+        .total-container {
+          display: flex;
+          flex-direction: column;
+          gap: 0.25rem; 
+        }
 
-    .total-row {
-      display: flex;
-      justify-content: space-between;
-    }
+        .total-row {
+          display: flex;
+          justify-content: space-between;
+        }
 
-    .label {
-      font-size: var(--text-sm);
-      color: var(--gray--600);
-    }
+        .label {
+          font-size: var(--text-sm);
+          color: var(--gray--600);
+        }
 
-    #total-price {
-      font-size: var(--text-2xl);
-      font-weight: var(--font-bold);
-      margin: 0;
-    }
+        #total-price {
+          font-size: var(--text-2xl);
+          font-weight: var(--font-bold);
+          margin: 0;
+        }
 
-    .reward-info {
-      display: flex;
-      justify-content: flex-end;
-      gap: 4px;
-      align-items: center;
-    }
+        .reward-info {
+          display: flex;
+          justify-content: flex-end;
+          gap: 0.25rem;
+          align-items: center;
+        }
 
-    .reward-badge {
-      background-color: var(--accent--yellow);
-      color: var(--white);
-      font-size: var(--text-xs);
-      font-weight: var(--font-bold);
-      padding: 2px 5px;
-      border-radius: 3px;
-    }
+        .reward-badge {
+          background-color: var(--accent--yellow);
+          color: var(--white);
+          font-size: var(--text-xs);
+          font-weight: var(--font-bold);
+          padding: 0.125rem 0.313rem; 
+          border-radius: 0.188rem; 
+        }
 
-    .reward-text {
-      font-size: var(--text-xs);
-      color: var(--content);
-    }
+        .reward-text {
+          font-size: var(--text-xs);
+          color: var(--content);
+        }
 
-    .button-container {
-      display: flex;
-      gap: 8px;
-    }
+        .button-container {
+          display: flex;
+          gap: 0.5rem;
+        }
 
-    .cancel-btn {
-      flex: 1;
-      height: 40px;
-      border: none;
-      font-size: var(--text-sm);
-      font-weight: var(--font-bold);
-      border-radius: 5px;
-      cursor: pointer;
-      background-color: var(--gray--50);
-      color: var(--gray--800);
-      transition: background-color 0.3s ease;
-    }
+        .cancel-btn {
+          flex: 1;
+          height: 2.5rem; 
+          border: none;
+          font-size: var(--text-sm);
+          font-weight: var(--font-bold);
+          border-radius: 0.313rem; 
+          cursor: pointer;
+          background-color: var(--gray--50);
+          color: var(--gray--800);
+          transition: background-color 0.3s ease;
+        }
 
-    .cancel-btn:hover {
-      background-color: var(--gray--100);
-    }
+        .cancel-btn:hover {
+          background-color: var(--gray--100);
+        }
 
-    .cart-btn {
-      flex: 1;
-      height: 40px;
-      border: none;
-      font-size: var(--text-sm);
-      font-weight: var(--font-bold);
-      border-radius: 5px;
-      cursor: pointer;
-      background-color: var(--primary);
-      color: var(--white);
-      transition: background-color 0.3s ease;
-    }
+        .cart-btn {
+          flex: 1;
+          height: 2.5rem;
+          border: none;
+          font-size: var(--text-sm);
+          font-weight: var(--font-bold);
+          border-radius: 0.313rem; 
+          cursor: pointer;
+          background-color: var(--primary);
+          color: var(--white);
+          transition: background-color 0.3s ease;
+        }
 
-    .cart-btn:hover {
-      background-color: var(--secondary);
-    }
+        .cart-btn:hover {
+          background-color: var(--secondary);
+        }
 
-    .cart-btn:active {
-      background-color: var(--secondary);
-    }
-  `;
+        .cart-btn:active {
+          background-color: var(--secondary);
+        }
+      `,
+    ];
+  }
 
   constructor() {
     super();
     this.unitPrice = 4980;
     this.quantity = 1;
-  }
-
-  firstUpdated() {
-    // base.css와 reset.css를 동적으로 추가
-    const shadow = this.shadowRoot;
-    const linkBase = document.createElement('link');
-    linkBase.setAttribute('rel', 'stylesheet');
-    linkBase.setAttribute('href', '/src/styles/base.css');
-    
-    const linkReset = document.createElement('link');
-    linkReset.setAttribute('rel', 'stylesheet');
-    linkReset.setAttribute('href', '/src/styles/reset.css');
-    
-    shadow.prepend(linkBase, linkReset);
   }
 
   updateTotalPrice() {
@@ -180,7 +174,7 @@ class AddCartComponent extends LitElement {
   }
 
   closeComponent() {
-    this.remove(); // 현재 컴포넌트를 DOM에서 제거
+    this.remove();
   }
 
   render() {
@@ -216,4 +210,4 @@ class AddCartComponent extends LitElement {
   }
 }
 
-customElements.define('add-cart', AddCartComponent);
+customElements.define('add-cart', AddCart);
