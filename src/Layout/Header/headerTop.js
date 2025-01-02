@@ -184,11 +184,13 @@ export class HeaderTop extends LitElement {
   }
 
   getAuth() {
-    const auth = JSON.parse(localStorage.getItem('auth') || '');
+    const auth = JSON.parse(localStorage.getItem('auth')) || '';
     this.isAuth = auth.isAuth;
 
     const { user } = auth;
-    this.userName = user.name;
+    if (user) {
+      this.userName = user.name;
+    }
   }
 
   handleLogout() {
@@ -197,8 +199,8 @@ export class HeaderTop extends LitElement {
       icon: 'question',
       showCancelButton: true,
       confirmButtonText: '로그아웃',
-    }).then((isConfirmed) => {
-      if (isConfirmed) {
+    }).then((result) => {
+      if (result.isConfirmed) {
         localStorage.removeItem('auth');
         location.href = '/';
       }
