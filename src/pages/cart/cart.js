@@ -60,11 +60,7 @@ class Cart extends LitElement {
       item.product_type?.includes('상온')
     );
 
-    this.checkCount = this.cartData.filter((item) => item.isChecked).length;
-  }
-
-  handleLoginDirect() {
-    location.href = '/src/pages/login/';
+    this.checkCount = this.cartData.length;
   }
 
   handleDropDownRefrigerated() {
@@ -93,22 +89,24 @@ class Cart extends LitElement {
       this.cartData.forEach((data) => {
         data.isChecked = false;
       });
+
       this.checkCount = 0;
-      this.saveData();
-      this.notifyCartUpdate();
     } else {
       this.cartData.forEach((data) => {
         data.isChecked = true;
       });
+
       this.checkCount = this.cartData.length;
-      this.saveData();
-      this.notifyCartUpdate();
     }
+
+    this.saveData();
+    this.notifyCartUpdate();
   }
 
   handleProductCheckChange() {
     const checkArr = [];
     const cartProducts = this.shadowRoot.querySelectorAll('cart-product');
+
     let count = 0;
 
     cartProducts.forEach((product) => {
@@ -119,12 +117,12 @@ class Cart extends LitElement {
       }
     });
 
+    this.checkCount = count;
+
     this.isAllChecked = checkArr.every((checkState) => checkState);
 
     const cartCheckbox = this.shadowRoot.querySelector('#cart__checkbox');
     cartCheckbox.checked = this.isAllChecked;
-
-    this.checkCount = count;
 
     this.cartData.forEach((data, index) => {
       data.isChecked = checkArr[index];
@@ -136,42 +134,41 @@ class Cart extends LitElement {
 
   handleDeleteCheck() {
     const cartProduct = this.shadowRoot.querySelectorAll('cart-product');
+
     cartProduct.forEach((product) => {
       const checkProduct = product.shadowRoot.querySelector('#check-product');
 
       if (checkProduct.checked) {
-        product.style.display = 'none';
+        product.remove();
       }
     });
 
     this.cartData = this.cartData.filter((data) => !data.isChecked);
 
+    this.checkCount = this.cartData.filter((data) => data.isChecked).length;
+
+    this.isAllChecked =
+      this.checkCount > 0 && this.checkCount === this.cartData.length;
+
+    const cartCheckbox = this.shadowRoot.querySelector('#cart__checkbox');
+
+    if (cartCheckbox) {
+      cartCheckbox.checked = this.isAllChecked;
+    }
+
     this.saveData();
     this.notifyCartUpdate();
   }
 
-  handleProductDetailClick(product) {
-    const currentProducts =
-      JSON.parse(localStorage.getItem('recentProducts')) || [];
-
-    const filterProduct = currentProducts.filter((p) => p.id !== product.id);
-    filterProduct.push(product);
-    localStorage.setItem('recentProducts', JSON.stringify(filterProduct));
-    window.dispatchEvent(new CustomEvent('recentProductsUpdated'));
-    location.href = `/src/pages/productDetail/`;
-  }
-
   handleDeleteProduct(e) {
-    const cartProduct = e.target;
     const { productId } = e.detail;
 
     Swal.fire({
       text: '장바구니에서 삭제하시겠습니까?',
       showCancelButton: true,
       confirmButtonText: '삭제하기',
-    }).then((isConfirmed) => {
-      cartProduct.style.display = 'none';
-      if (isConfirmed) {
+    }).then((result) => {
+      if (result.isConfirmed) {
         this.cartData = this.cartData.filter((data) => data.id !== productId);
 
         this.saveData();
@@ -187,6 +184,8 @@ class Cart extends LitElement {
         );
 
         this.notifyCartUpdate();
+
+        this.checkCount = this.cartData.length;
       }
     });
   }
@@ -362,7 +361,9 @@ class Cart extends LitElement {
                 : html`<button
                     type="button"
                     class="cart__button cart__button-loginDirect"
-                    @click=${this.handleLoginDirect}
+                    @click=${() => {
+                      location.href = '/src/pages/login/';
+                    }}
                   >
                     로그인
                   </button>`}

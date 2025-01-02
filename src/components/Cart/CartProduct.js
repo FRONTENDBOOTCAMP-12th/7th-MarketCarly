@@ -77,6 +77,8 @@ class CartProduct extends LitElement {
 
   handleCheckChange(e) {
     this.isChecked = e.target.checked;
+    this.productData.isChecked = this.isChecked;
+
     this.dispatchEvent(
       new CustomEvent('check-change', {
         detail: { isChecked: this.isChecked },
@@ -85,7 +87,6 @@ class CartProduct extends LitElement {
       })
     );
 
-    this.productData.isChecked = this.isChecked;
     this.saveData();
     this.notifyCartUpdate();
   }
