@@ -383,10 +383,10 @@ export class TodayRecommendProducts extends LitElement {
                       .image=${product.image}
                       .seller=${product.seller}
                       .allergy=${product.allergy}
+                      .origin=${product.origin}
                       .weight_volume=${product.weight_volume}
                       .selling_unit=${product.selling_unit}
-                      .product_type=${[product.product_type]}
-                      product.product_type,
+                      .product_type=${product.product_type}
                       .delivery=${product.delivery}
                       .titleLink=${'#'}
                       .title=${product.title}

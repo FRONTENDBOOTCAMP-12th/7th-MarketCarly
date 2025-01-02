@@ -58,11 +58,21 @@ class CartProduct extends LitElement {
   handleDelete() {
     this.dispatchEvent(
       new CustomEvent('delete', {
-        detail: { productId: this.productData.id },
+        detail: {
+          productId: this.productData.id,
+        },
         bubbles: true,
         composed: true,
       })
     );
+  }
+
+  handleClick() {
+    const event = new CustomEvent('product-click', {
+      bubbles: true,
+      composed: true,
+    });
+    this.dispatchEvent(event);
   }
 
   handleCheckChange(e) {
@@ -128,6 +138,7 @@ class CartProduct extends LitElement {
             <img
               src=${this.productData.image}
               alt=${this.productData.title}
+              @click=${this.handleClick}
               class="cart-product__image"
             />
           </a>

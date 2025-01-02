@@ -49,18 +49,26 @@ class Cart extends LitElement {
     this.cartData = JSON.parse(localStorage.getItem('cart')) || [];
 
     this.refrigeratedItems = this.cartData.filter((item) =>
-      item.temperature.includes('냉장')
+      item.product_type?.includes('냉장')
     );
 
     this.frozenItems = this.cartData.filter((item) =>
-      item.temperature.includes('냉동')
+      item.product_type?.includes('냉동')
     );
 
     this.roomTempItems = this.cartData.filter((item) =>
-      item.temperature.includes('상온')
+      item.product_type?.includes('상온')
+
     );
 
     this.checkCount = this.cartData.filter((item) => item.isChecked).length;
+    console.log(
+      '상품별 온도:',
+      this.cartData.map((item) => item.temperature)
+    );
+    console.log('냉장 상품:', this.refrigeratedItems);
+    console.log('냉동 상품:', this.frozenItems);
+    console.log('상온 상품:', this.roomTempItems);
   }
 
   handleLoginDirect() {
@@ -164,6 +172,17 @@ class Cart extends LitElement {
     this.notifyCartUpdate();
   }
 
+  handleProductDetailClick(product) {
+    const currentProducts =
+      JSON.parse(localStorage.getItem('recentProducts')) || [];
+
+    const filterProduct = currentProducts.filter((p) => p.id !== product.id);
+    filterProduct.push(product);
+    localStorage.setItem('recentProducts', JSON.stringify(filterProduct));
+    window.dispatchEvent(new CustomEvent('recentProductsUpdated'));
+    location.href = `/src/pages/productDetail/`;
+  }
+
   handleDeleteProduct(e) {
     const { productId } = e.detail;
 
@@ -178,13 +197,13 @@ class Cart extends LitElement {
         this.saveData();
 
         this.refrigeratedItems = this.cartData.filter((item) =>
-          item.temperature.includes('냉장')
+          item.product_type.includes('냉장')
         );
         this.frozenItems = this.cartData.filter((item) =>
-          item.temperature.includes('냉동')
+          item.product_type.includes('냉동')
         );
         this.roomTempItems = this.cartData.filter((item) =>
-          item.temperature.includes('상온')
+          item.product_type.includes('상온')
         );
 
         this.notifyCartUpdate();
@@ -266,6 +285,10 @@ class Cart extends LitElement {
                             <cart-product
                               .productData=${item}
                               @check-change=${this.handleProductCheckChange}
+                              @product-click=${() =>
+                                this.handleProductDetailClick(item)}
+                              @product-click=${() =>
+                                this.handleProductDetailClick(item)}
                               @delete=${this.handleDeleteProduct}
                             ></cart-product>
                           `
@@ -302,6 +325,10 @@ class Cart extends LitElement {
                               .productData=${item}
                               @check-change=${this.handleProductCheckChange}
                               @delete=${this.handleDeleteProduct}
+                              @product-click=${() =>
+                                this.handleProductDetailClick(item)}
+                              @product-click=${() =>
+                                this.handleProductDetailClick(item)}
                             ></cart-product>
                           `
                         )}
@@ -336,6 +363,10 @@ class Cart extends LitElement {
                             <cart-product
                               .productData=${item}
                               @check-change=${this.handleProductCheckChange}
+                              @product-click=${() =>
+                                this.handleProductDetailClick(item)}
+                              @product-click=${() =>
+                                this.handleProductDetailClick(item)}
                               @delete=${this.handleDeleteProduct}
                             ></cart-product>
                           `
