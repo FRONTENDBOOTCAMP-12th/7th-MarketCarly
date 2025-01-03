@@ -368,7 +368,7 @@ export class TodayRecommendProducts extends LitElement {
                 "prevEl": ".swiper-button[slot=button-prev]",
                 "nextEl": ".swiper-button[slot=button-next]"
               }'
-              autoplay='{"delay": 300000, "disableOnInteraction": false}'
+              autoplay='{"delay": 3000, "disableOnInteraction": false}'
               breakpoints='{
                 "0": {
                   "slidesPerView": 1,
