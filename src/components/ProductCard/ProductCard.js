@@ -288,6 +288,8 @@ export class ProductCard extends LitElement {
           <button
             class="product__cart"
             aria-label="장바구니 담기"
+            width="45"
+            height="45"
             @click=${this.handleCartClick}
           >
             <img src="/assets/icons/Cart.svg" alt="장바구니 아이콘" />

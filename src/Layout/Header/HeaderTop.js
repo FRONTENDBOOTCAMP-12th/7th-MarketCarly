@@ -112,8 +112,8 @@ export class HeaderTop extends LitElement {
           position: relative;
           width: 7px;
           height: 7px;
-          top: -5px;
-          right: -5px;
+          top: -13px;
+          right: 4px;
         }
 
         .top__icons,
@@ -287,6 +287,8 @@ export class HeaderTop extends LitElement {
                 <img
                   src="/assets/icons/logo.svg"
                   alt="마켓칼리"
+                  width="82"
+                  height="42"
                   class="logo__image"
                 />
               </a>
@@ -299,6 +301,8 @@ export class HeaderTop extends LitElement {
                   뷰티칼리
                   <img
                     src="/assets/icons/new1.svg"
+                    width="7"
+                    height="7"
                     alt="New"
                     class="logo__badge"
                   />
@@ -320,6 +324,8 @@ export class HeaderTop extends LitElement {
                   >
                     <img
                       src="/assets/icons/edit.svg"
+                      width="27"
+                      height="27"
                       alt=""
                       aria-hidden="true"
                     />
@@ -330,6 +336,8 @@ export class HeaderTop extends LitElement {
                     <img
                       src="/assets/icons/Heart.svg"
                       alt=""
+                      width="36"
+                      height="36"
                       aria-hidden="true"
                     />
                   </button>
@@ -343,6 +351,8 @@ export class HeaderTop extends LitElement {
                     <img
                       src="/assets/icons/Cart2.svg"
                       alt=""
+                      width="36"
+                      height="36"
                       aria-hidden="true"
                     />
                   </button>

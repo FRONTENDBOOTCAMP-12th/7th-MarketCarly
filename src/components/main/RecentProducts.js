@@ -194,6 +194,8 @@ export class RecentProducts extends LitElement {
             class="recent__button-icon"
             src="/assets/icons/Direction=Up.svg"
             alt=""
+            width="24"
+            height="24"
             aria-hidden="true"
           />
         </button>
@@ -233,6 +235,8 @@ export class RecentProducts extends LitElement {
             class="recent__button-icon"
             src="/assets/icons/Direction=Down.svg"
             alt=""
+            width="24"
+            height="24"
             aria-hidden="true"
           />
         </button>

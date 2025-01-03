@@ -63,7 +63,13 @@ export class SearchBar extends LitElement {
           placeholder="검색어를 입력해주세요"
         />
         <button type="submit" class="search__button" aria-label="검색">
-          <img src="/assets/icons/Search.svg" alt="" aria-hidden="true" />
+          <img
+            src="/assets/icons/Search.svg"
+            width="36"
+            height="36"
+            alt=""
+            aria-hidden="true"
+          />
         </button>
       </form>
     `;
