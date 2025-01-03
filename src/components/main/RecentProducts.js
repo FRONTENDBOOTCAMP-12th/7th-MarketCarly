@@ -143,18 +143,6 @@ export class RecentProducts extends LitElement {
     window.removeEventListener('recentProductsUpdated');
   }
 
-  handlePrevClick() {
-    if (this.swiper) {
-      this.swiper.slideTo(this.swiper.activeIndex - 1);
-    }
-  }
-
-  handleNextClick() {
-    if (this.swiper) {
-      this.swiper.slideTo(this.swiper.activeIndex + 1);
-    }
-  }
-
   initSwiper() {
     const swiperContainer = this.shadowRoot.querySelector('.recent__content');
     this.swiper = new Swiper(swiperContainer, {
@@ -163,6 +151,10 @@ export class RecentProducts extends LitElement {
       slidesPerView: 2,
       spaceBetween: 10,
       loop: true,
+      keyboard: {
+        enabled: true,
+        onlyInViewport: true,
+      },
       navigation: {
         nextEl: this.shadowRoot.querySelector('[aria-label="다음 상품 보기"]'),
         prevEl: this.shadowRoot.querySelector(
@@ -184,11 +176,11 @@ export class RecentProducts extends LitElement {
 
   render() {
     return html`
-      <aside class="recent">
+      <nav class="recent">
         <button
           class="recent__button"
-          @click=${this.handlePrevClick}
           aria-label="최근 본 상품 상단 이동 버튼"
+          tabindex="0"
         >
           <img
             class="recent__button-icon"
@@ -205,7 +197,7 @@ export class RecentProducts extends LitElement {
         </header>
 
         <div class="recent__content">
-          <ul class="recent__list">
+          <ul class="recent__list" aria-live="polite">
             ${[...this.products].reverse().map(
               (product) => html`
                 <li class="recent__item">
@@ -213,11 +205,13 @@ export class RecentProducts extends LitElement {
                     href="/src/pages/productDetail/"
                     class="recent__link"
                     @click=${() => this.handleProductClick(product)}
+                    tabindex="0"
                   >
                     <img
                       class="recent__image"
                       src=${product.image}
                       alt=${product.title}
+                      tabindex="-1"
                     />
                   </a>
                 </li>
@@ -226,11 +220,7 @@ export class RecentProducts extends LitElement {
           </ul>
         </div>
 
-        <button
-          class="recent__button"
-          @click=${this.handleNextClick}
-          aria-label="다음 상품 보기"
-        >
+        <button class="recent__button" aria-label="다음 상품 보기" tabindex="0">
           <img
             class="recent__button-icon"
             src="/assets/icons/Direction=Down.svg"
@@ -240,7 +230,7 @@ export class RecentProducts extends LitElement {
             aria-hidden="true"
           />
         </button>
-      </aside>
+      </nav>
     `;
   }
 }
