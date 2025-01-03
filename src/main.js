@@ -5,3 +5,4 @@ import './components/main/RecentProducts.js';
 // import './Layout/Header';
 import './Layout/Header/index.js';
 import './Layout/Footer/index.js';
+import './components/PopupAd/PopupAd.js';

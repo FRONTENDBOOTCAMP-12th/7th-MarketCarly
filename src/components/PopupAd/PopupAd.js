@@ -1,4 +1,4 @@
-import {LitElement, html} from 'lit';
+import { LitElement, html } from 'lit';
 import styles from '/src/components/PopupAd/PopupAd.css?inline';
 import resetCSS from '/src/styles/reset.css?inline';
 
@@ -14,21 +14,35 @@ class PopupAd extends LitElement {
     }
   }
 
+  removeBlurEffect() {
+    const mainBanner = document.querySelector('main-banner');
+    const recommendProducts = document.querySelector(
+      'today-recommend-products'
+    );
+
+    if (mainBanner) mainBanner.style.filter = 'none';
+    if (recommendProducts) recommendProducts.style.filter = 'none';
+  }
+
   handleCloseToday() {
     const popup = this.shadowRoot.querySelector('.popup');
     popup.style.display = 'none';
     const today = new Date().toISOString().split('T')[0];
     localStorage.setItem('popup-hidden-today', today); // 로컬 스토리지에 날짜 저장
+    this.removeBlurEffect();
   }
 
   handleClosePopUp() {
     const popup = this.shadowRoot.querySelector('.popup');
     popup.style.display = 'none';
+    this.removeBlurEffect();
   }
 
   render() {
     return html`
-      <style>${styles}, ${resetCSS}</style>
+      <style>
+        ${styles}, ${resetCSS}
+      </style>
       <div class="popup">
         <div class="popup-content">
           <div class="popup-image"></div>
@@ -39,10 +53,18 @@ class PopupAd extends LitElement {
             </p>
           </div>
           <div class="popup-footer">
-            <div id="close-today" class="footer-btn" @click=${this.handleCloseToday}>
+            <div
+              id="close-today"
+              class="footer-btn"
+              @click=${this.handleCloseToday}
+            >
               오늘 하루 안 보기
             </div>
-            <div id="close-popup" class="footer-btn" @click=${this.handleClosePopUp}>
+            <div
+              id="close-popup"
+              class="footer-btn"
+              @click=${this.handleClosePopUp}
+            >
               닫기
             </div>
           </div>
